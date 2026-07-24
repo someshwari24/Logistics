@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Hakuna Express support page with frequently asked questions about signup, orders, assistants, payments, delivery, and complaints."
+    >
+
+    <title>Support | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #eaf5fb;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            color: white;
+            background-color: #5c6bc0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-container {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            min-height: 70px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            padding: 10px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition:
+                background-color 0.2s,
+                color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #303f9f;
+            background-color: white;
+        }
+
+        .menu-button {
+            display: none;
+            padding: 8px 12px;
+            color: white;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .hero-section {
+            padding: 50px 20px 35px;
+            text-align: center;
+            color: white;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(63, 81, 181, 0.95),
+                    rgba(92, 107, 192, 0.85)
+                );
+        }
+
+        .hero-section h1 {
+            margin-bottom: 12px;
+            font-size: 36px;
+        }
+
+        .hero-section p {
+            max-width: 650px;
+            margin: 0 auto;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .notice-bar {
+            width: calc(100% - 30px);
+            max-width: 850px;
+            margin: 25px auto 0;
+            padding: 14px 18px;
+            color: #8b1d1d;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.5;
+            background-color: #fde2e2;
+            border: 1px solid #f5b5b5;
+            border-radius: 8px;
+        }
+
+        main {
+            width: calc(100% - 30px);
+            max-width: 850px;
+            margin: 30px auto 45px;
+        }
+
+        .section-heading {
+            margin-bottom: 22px;
+            color: #3f4d8b;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .faq-item {
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #dfe5ec;
+            border-radius: 9px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 18px 20px;
+            color: #333;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #f7f8fc;
+            border: none;
+            cursor: pointer;
+        }
+
+        .faq-question:hover {
+            background-color: #edf0fb;
+        }
+
+        .faq-question:focus-visible {
+            outline: 3px solid rgba(92, 107, 192, 0.4);
+            outline-offset: -3px;
+        }
+
+        .faq-icon {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background-color: #5c6bc0;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: normal;
+            transition: transform 0.25s;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 18px 20px;
+            color: #555;
+            line-height: 1.65;
+            border-top: 1px solid #e2e6ec;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .support-card {
+            margin-top: 35px;
+            padding: 25px;
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .support-card h2 {
+            margin-bottom: 10px;
+            color: #3f4d8b;
+        }
+
+        .support-card p {
+            margin-bottom: 18px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .support-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .support-link {
+            display: inline-block;
+            padding: 11px 18px;
+            color: white;
+            background-color: #5c6bc0;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .support-link:hover {
+            background-color: #3f51b5;
+        }
+
+        .secondary-link {
+            color: #3f51b5;
+            background-color: #e8eaf6;
+        }
+
+        .secondary-link:hover {
+            color: white;
+            background-color: #5c6bc0;
+        }
+
+        footer {
+            padding: 22px 15px;
+            color: white;
+            text-align: center;
+            background-color: #3f4d8b;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .header-container {
+                flex-wrap: wrap;
+                padding: 10px 0;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                padding-bottom: 8px;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .logo {
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero-section {
+                padding-top: 38px;
+            }
+
+            .hero-section h1 {
+                font-size: 29px;
+            }
+
+            .section-heading {
+                font-size: 24px;
+            }
+
+            .faq-question {
+                padding: 16px;
+                font-size: 15px;
+            }
+
+            .faq-answer {
+                padding: 16px;
+            }
+
+            .support-actions {
+                flex-direction: column;
+            }
+
+            .support-link {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+
+        <a
+            href="home.html"
+            class="logo-link"
+            aria-label="Hakuna Express home"
+        >
+            <img
+                src="hakunalogo.jpg"
+                alt="Hakuna Express logo"
+                class="logo"
+            >
+
+            <span class="brand-name">
+                Hakuna Express
+            </span>
+        </a>
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Open navigation menu"
+            aria-controls="navigationLinks"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+        <nav
+            id="navigationLinks"
+            class="nav-links"
+            aria-label="Main navigation"
+        >
+            <a href="home.html">Home</a>
+
+            <a href="about.html">About</a>
+
+            <a
+                href="support.html"
+                class="active"
+                aria-current="page"
+            >
+                Support
+            </a>
+
+            <a href="login.html">User Login</a>
+
+            <a href="signup.html">Sign Up</a>
+
+            <a href="assistant-login.html">
+                Assistant Login
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="hero-section">
+    <h1>How Can We Help?</h1>
+
+    <p>
+        Find answers to common questions about creating an account,
+        placing orders, communicating with assistants, tracking
+        deliveries, and reporting problems.
+    </p>
+</section>
+
+<div
+    class="notice-bar"
+    role="note"
+>
+    Please review item details carefully before confirming a purchase.
+    Returns may not be available for items bought from local stores.
+</div>
+
+<main>
+    <h2 class="section-heading">
+        Frequently Asked Questions
+    </h2>
+
+    <section
+        class="faq-list"
+        aria-label="Frequently asked questions"
+    >
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>How do I create a customer account?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Open the Sign Up page and enter your name, username,
+                email address, and password. After successful registration,
+                use the User Login page to access your account.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>How do I submit my shopping request?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Log in to your customer account and open the dashboard.
+                Enter the items you need, shopping date, delivery address,
+                pincode, mobile number, and any other required details.
+                Then submit the request.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>How is a shopping assistant assigned?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                After your shopping request is submitted, the system
+                assigns an available assistant based on your order details.
+                When an assistant is assigned, you can view their details
+                and use the provided WhatsApp link to communicate.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>How can I track my order?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Open the Track Order page from your dashboard or delivery
+                confirmation page. Enter your order ID to view the latest
+                status submitted by the assigned assistant.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>How do I confirm that my order was delivered?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Open the Confirm Delivery page after logging in. Select
+                Received when your order reaches you. You can also choose
+                Not Received or Problem with Assistant when appropriate.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>What should I do if there is a problem?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Use the delivery confirmation page to report that an order
+                was not received or that there was a problem with the
+                assistant. You can also submit a complaint through the
+                complaint option available in your account.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>Can I return purchased items?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Return eligibility depends on the local shop and the type
+                of product purchased. Some items may not be returnable.
+                Confirm the product, quantity, size, brand, and price with
+                your assistant before the purchase is completed.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>How is my personal information handled?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Your information is used to manage your account, process
+                shopping requests, assign assistants, and support delivery.
+                Avoid sharing passwords, OTPs, bank PINs, or unnecessary
+                sensitive information through WhatsApp or other messages.
+            </div>
+        </article>
+
+        <article class="faq-item">
+            <button
+                type="button"
+                class="faq-question"
+                aria-expanded="false"
+            >
+                <span>Can assistants access every customer order?</span>
+
+                <span
+                    class="faq-icon"
+                    aria-hidden="true"
+                >
+                    +
+                </span>
+            </button>
+
+            <div class="faq-answer">
+                Assistants should only be able to view orders assigned to
+                their own account. They can update the delivery status of
+                those assigned orders through the assistant portal.
+            </div>
+        </article>
+
+    </section>
+
+    <section class="support-card">
+        <h2>Need More Information?</h2>
+
+        <p>
+            Review the terms and conditions for information about account
+            use, shopping responsibilities, delivery confirmation, and
+            complaint handling.
+        </p>
+
+        <div class="support-actions">
+            <a
+                href="terms.html"
+                class="support-link"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Read Terms and Conditions
+            </a>
+
+            <a
+                href="login.html"
+                class="support-link secondary-link"
+            >
+                Go to User Login
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>
+        &copy; <span id="currentYear"></span>
+        Hakuna Express. All rights reserved.
+    </p>
+</footer>
+
+<script>
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const navigationLinks =
+        document.getElementById("navigationLinks");
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+            const isOpen =
+                navigationLinks.classList.toggle("open");
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuButton.textContent =
+                isOpen ? "✕" : "☰";
+        }
+    );
+
+    navigationLinks
+        .querySelectorAll("a")
+        .forEach(function (link) {
+            link.addEventListener(
+                "click",
+                function () {
+                    navigationLinks.classList.remove(
+                        "open"
+                    );
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuButton.textContent = "☰";
+                }
+            );
+        });
+
+    const faqQuestions =
+        document.querySelectorAll(
+            ".faq-question"
+        );
+
+    faqQuestions.forEach(function (question) {
+        question.addEventListener(
+            "click",
+            function () {
+                const currentItem =
+                    question.closest(".faq-item");
+
+                const wasOpen =
+                    currentItem.classList.contains(
+                        "active"
+                    );
+
+                document
+                    .querySelectorAll(".faq-item")
+                    .forEach(function (item) {
+                        item.classList.remove("active");
+
+                        item
+                            .querySelector(".faq-question")
+                            .setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+                    });
+
+                if (!wasOpen) {
+                    currentItem.classList.add("active");
+
+                    question.setAttribute(
+                        "aria-expanded",
+                        "true"
+                    );
+                }
+            }
+        );
+    });
+
+    document.getElementById(
+        "currentYear"
+    ).textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
+</html>

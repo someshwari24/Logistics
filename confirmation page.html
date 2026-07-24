@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Confirm Delivery | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f7fa;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 25px;
+            color: white;
+            background-color: #5c6bc0;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand h1 {
+            font-size: 24px;
+        }
+
+        .brand p {
+            margin-top: 3px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-button {
+            padding: 9px 14px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dashboard-button {
+            background-color: #28a745;
+        }
+
+        .dashboard-button:hover {
+            background-color: #218838;
+        }
+
+        .logout-button {
+            background-color: #d32f2f;
+        }
+
+        .logout-button:hover {
+            background-color: #b71c1c;
+        }
+
+        .dashboard-container {
+            width: calc(100% - 30px);
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 25px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-message {
+            margin-bottom: 20px;
+            color: #444;
+            font-size: 18px;
+        }
+
+        .welcome-message span {
+            color: #3f51b5;
+            font-weight: bold;
+        }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding: 15px;
+            background-color: #f5f7ff;
+            border-radius: 8px;
+        }
+
+        .filter-section label {
+            font-weight: bold;
+        }
+
+        .filter-dropdown {
+            min-width: 210px;
+            padding: 9px;
+            font-size: 15px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .filter-dropdown:focus {
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.15);
+        }
+
+        .message {
+            min-height: 22px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .loading-message {
+            color: #3f51b5;
+        }
+
+        .success-message {
+            color: #2e7d32;
+        }
+
+        .error-message {
+            color: #d32f2f;
+        }
+
+        .order {
+            margin-bottom: 18px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            border-left: 5px solid #5c6bc0;
+            border-radius: 9px;
+        }
+
+        .order-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 13px;
+        }
+
+        .order-header h3 {
+            color: #3f51b5;
+            word-break: break-word;
+        }
+
+        .order-id {
+            margin-top: 4px;
+            color: #777;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 18px;
+            margin-bottom: 16px;
+        }
+
+        .order-details p {
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .status-badge {
+            display: inline-block;
+            flex-shrink: 0;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            color: #7a5400;
+            background-color: #fff3cd;
+        }
+
+        .status-received {
+            color: #1b5e20;
+            background-color: #d8f3dc;
+        }
+
+        .status-not-received {
+            color: #8b1d1d;
+            background-color: #fde2e2;
+        }
+
+        .status-problem-with-assistant {
+            color: #7a4d00;
+            background-color: #fff0c2;
+        }
+
+        .status-delivered {
+            color: #1b5e20;
+            background-color: #d8f3dc;
+        }
+
+        .status-cancelled,
+        .status-returned {
+            color: #8b1d1d;
+            background-color: #fde2e2;
+        }
+
+        .status-other {
+            color: #334155;
+            background-color: #e2e8f0;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .button {
+            padding: 9px 13px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .confirm-button {
+            color: white;
+            background-color: #28a745;
+        }
+
+        .confirm-button:hover {
+            background-color: #218838;
+        }
+
+        .not-received-button {
+            color: white;
+            background-color: #dc3545;
+        }
+
+        .not-received-button:hover {
+            background-color: #bd2130;
+        }
+
+        .problem-button {
+            color: #222;
+            background-color: #ffc107;
+        }
+
+        .problem-button:hover {
+            background-color: #e0a800;
+        }
+
+        .track-button {
+            color: white;
+            background-color: #5c6bc0;
+        }
+
+        .track-button:hover {
+            background-color: #3f51b5;
+        }
+
+        .confirmed-text {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            padding: 35px 20px;
+            color: #666;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .bottom-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .main-track-button {
+            padding: 11px 22px;
+            color: white;
+            background-color: #5c6bc0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .main-track-button:hover {
+            background-color: #3f51b5;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .dashboard-container {
+                margin-top: 20px;
+                padding: 18px;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-dropdown {
+                width: 100%;
+            }
+
+            .order-header {
+                flex-direction: column;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <h1>Confirm Delivery</h1>
+        <p>Hakuna Express</p>
+    </div>
+
+    <div class="header-actions">
+        <button
+            type="button"
+            class="header-button dashboard-button"
+            id="dashboardButton"
+        >
+            Dashboard
+        </button>
+
+        <button
+            type="button"
+            class="header-button logout-button"
+            id="logoutButton"
+        >
+            Logout
+        </button>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+    <p class="welcome-message">
+        Hi <span id="username">User</span>,
+    </p>
+
+    <section class="filter-section">
+        <label for="statusFilter">
+            Filter by confirmation status:
+        </label>
+
+        <select
+            id="statusFilter"
+            class="filter-dropdown"
+        >
+            <option value="all">All Orders</option>
+            <option value="received">Received</option>
+            <option value="not_received">Not Received</option>
+            <option value="problem_with_assistant">
+                Problem with Assistant
+            </option>
+            <option value="pending">Pending Confirmation</option>
+        </select>
+    </section>
+
+    <p
+        id="message"
+        class="message"
+        aria-live="polite"
+    ></p>
+
+    <section id="ordersDisplay"></section>
+
+    <div class="bottom-actions">
+        <button
+            type="button"
+            class="main-track-button"
+            id="trackOrderButton"
+        >
+            Track Your Order
+        </button>
+    </div>
+
+</main>
+
+<script>
+    /*
+      Leave this empty when the frontend and backend
+      are served from the same Express application.
+    */
+    const API_BASE_URL = "";
+
+    let allOrders = [];
+
+    function showMessage(message, type = "") {
+        const messageElement =
+            document.getElementById("message");
+
+        messageElement.textContent = message;
+
+        if (type === "loading") {
+            messageElement.className =
+                "message loading-message";
+        } else if (type === "success") {
+            messageElement.className =
+                "message success-message";
+        } else if (type === "error") {
+            messageElement.className =
+                "message error-message";
+        } else {
+            messageElement.className = "message";
+        }
+    }
+
+    function clearUserSession() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userToken");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("currentOrderId");
+    }
+
+    function redirectToLogin() {
+        clearUserSession();
+        window.location.href = "login.html";
+    }
+
+    function getUserToken() {
+        return (
+            localStorage.getItem("token") ||
+            localStorage.getItem("userToken")
+        );
+    }
+
+    function handleExpiredSession() {
+        alert(
+            "Your session has expired. Please log in again."
+        );
+
+        redirectToLogin();
+    }
+
+    function formatStatus(status) {
+        if (!status) {
+            return "Pending";
+        }
+
+        return String(status)
+            .replaceAll("_", " ")
+            .replace(/\b\w/g, function (letter) {
+                return letter.toUpperCase();
+            });
+    }
+
+    function getStatusClass(status) {
+        const normalizedStatus = String(
+            status || "pending"
+        )
+            .toLowerCase()
+            .replaceAll("_", "-")
+            .replaceAll(" ", "-");
+
+        const supportedStatuses = [
+            "pending",
+            "received",
+            "not-received",
+            "problem-with-assistant",
+            "delivered",
+            "cancelled",
+            "returned"
+        ];
+
+        return supportedStatuses.includes(normalizedStatus)
+            ? `status-${normalizedStatus}`
+            : "status-other";
+    }
+
+    function formatDate(dateValue) {
+        if (!dateValue) {
+            return "Not available";
+        }
+
+        const date = new Date(dateValue);
+
+        if (Number.isNaN(date.getTime())) {
+            return String(dateValue);
+        }
+
+        return date.toLocaleDateString();
+    }
+
+    function getConfirmationStatus(order) {
+        return (
+            order.confirmationStatus ||
+            order.deliveryConfirmation ||
+            order.customerConfirmation ||
+            (
+                [
+                    "received",
+                    "not_received",
+                    "problem_with_assistant"
+                ].includes(order.status)
+                    ? order.status
+                    : "pending"
+            )
+        );
+    }
+
+    function createDetail(label, value) {
+        const paragraph = document.createElement("p");
+
+        const strong = document.createElement("strong");
+        strong.textContent = `${label}: `;
+
+        const text = document.createTextNode(
+            value === undefined ||
+            value === null ||
+            value === ""
+                ? "Not available"
+                : String(value)
+        );
+
+        paragraph.appendChild(strong);
+        paragraph.appendChild(text);
+
+        return paragraph;
+    }
+
+    function createActionButton(
+        label,
+        className,
+        status,
+        orderId
+    ) {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = `button ${className}`;
+        button.textContent = label;
+
+        button.addEventListener("click", function () {
+            submitDelivery(status, orderId, button);
+        });
+
+        return button;
+    }
+
+    function createOrderCard(order) {
+        const orderCard = document.createElement("article");
+        orderCard.className = "order";
+
+        const orderId =
+            order._id || order.orderId || "";
+
+        const confirmationStatus =
+            getConfirmationStatus(order);
+
+        const orderHeader =
+            document.createElement("div");
+
+        orderHeader.className = "order-header";
+
+        const titleContainer =
+            document.createElement("div");
+
+        const title =
+            document.createElement("h3");
+
+        title.textContent =
+            order.item || "Order";
+
+        const orderIdText =
+            document.createElement("p");
+
+        orderIdText.className = "order-id";
+        orderIdText.textContent =
+            `Order ID: ${orderId || "Not available"}`;
+
+        titleContainer.appendChild(title);
+        titleContainer.appendChild(orderIdText);
+
+        const statusBadge =
+            document.createElement("span");
+
+        statusBadge.className =
+            `status-badge ${
+                getStatusClass(confirmationStatus)
+            }`;
+
+        statusBadge.textContent =
+            formatStatus(confirmationStatus);
+
+        orderHeader.appendChild(titleContainer);
+        orderHeader.appendChild(statusBadge);
+
+        const orderDetails =
+            document.createElement("div");
+
+        orderDetails.className = "order-details";
+
+        const completeAddress = [
+            order.address,
+            order.city,
+            order.state
+        ]
+            .filter(Boolean)
+            .join(", ");
+
+        const addressWithPincode =
+            order.pincode
+                ? `${completeAddress} - ${order.pincode}`
+                : completeAddress;
+
+        orderDetails.appendChild(
+            createDetail(
+                "Address",
+                addressWithPincode
+            )
+        );
+
+        orderDetails.appendChild(
+            createDetail(
+                "Mobile",
+                order.mobile
+            )
+        );
+
+        orderDetails.appendChild(
+            createDetail(
+                "Shopping Date",
+                formatDate(
+                    order.shoppingDate ||
+                    order.date
+                )
+            )
+        );
+
+        orderDetails.appendChild(
+            createDetail(
+                "Delivery Status",
+                formatStatus(
+                    order.deliveryStatus ||
+                    order.assistantStatus ||
+                    (
+                        [
+                            "received",
+                            "not_received",
+                            "problem_with_assistant"
+                        ].includes(order.status)
+                            ? "Not available"
+                            : order.status
+                    )
+                )
+            )
+        );
+
+        const buttonRow =
+            document.createElement("div");
+
+        buttonRow.className = "button-row";
+
+        if (confirmationStatus === "received") {
+            const confirmedText =
+                document.createElement("p");
+
+            confirmedText.className =
+                "confirmed-text";
+
+            confirmedText.textContent =
+                "✓ You confirmed that this order was received.";
+
+            buttonRow.appendChild(confirmedText);
+        } else {
+            buttonRow.appendChild(
+                createActionButton(
+                    "Received",
+                    "confirm-button",
+                    "received",
+                    orderId
+                )
+            );
+
+            buttonRow.appendChild(
+                createActionButton(
+                    "Not Received",
+                    "not-received-button",
+                    "not_received",
+                    orderId
+                )
+            );
+
+            buttonRow.appendChild(
+                createActionButton(
+                    "Problem with Assistant",
+                    "problem-button",
+                    "problem_with_assistant",
+                    orderId
+                )
+            );
+        }
+
+        if (orderId) {
+            const trackButton =
+                document.createElement("button");
+
+            trackButton.type = "button";
+            trackButton.className =
+                "button track-button";
+
+            trackButton.textContent =
+                "Track This Order";
+
+            trackButton.addEventListener(
+                "click",
+                function () {
+                    openTrackOrder(orderId);
+                }
+            );
+
+            buttonRow.appendChild(trackButton);
+        }
+
+        orderCard.appendChild(orderHeader);
+        orderCard.appendChild(orderDetails);
+        orderCard.appendChild(buttonRow);
+
+        return orderCard;
+    }
+
+    async function fetchUserInfo() {
+        const token = getUserToken();
+
+        if (!token) {
+            alert("Please log in first.");
+            redirectToLogin();
+            return;
+        }
+
+        const savedUserName =
+            localStorage.getItem("userName") ||
+            localStorage.getItem("username");
+
+        if (savedUserName) {
+            document.getElementById(
+                "username"
+            ).textContent = savedUserName;
+        }
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/me`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch {
+                data = {};
+            }
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                handleExpiredSession();
+                return;
+            }
+
+            if (!response.ok) {
+                console.error(
+                    data.message ||
+                    "Unable to load user details."
+                );
+                return;
+            }
+
+            const userName =
+                data.name ||
+                data.username ||
+                data.user?.name ||
+                data.user?.username ||
+                "User";
+
+            document.getElementById(
+                "username"
+            ).textContent = userName;
+
+            localStorage.setItem(
+                "userName",
+                userName
+            );
+
+        } catch (error) {
+            console.error(
+                "User information error:",
+                error
+            );
+        }
+    }
+
+    async function fetchUserOrders() {
+        const token = getUserToken();
+
+        if (!token) {
+            redirectToLogin();
+            return;
+        }
+
+        showMessage(
+            "Loading your orders...",
+            "loading"
+        );
+
+        document.getElementById(
+            "ordersDisplay"
+        ).innerHTML = "";
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/get-user-address`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch {
+                data = {};
+            }
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                handleExpiredSession();
+                return;
+            }
+
+            if (!response.ok) {
+                showMessage(
+                    data.message ||
+                    "Unable to load your orders.",
+                    "error"
+                );
+                return;
+            }
+
+            allOrders =
+                Array.isArray(data)
+                    ? data
+                    : Array.isArray(data.orders)
+                        ? data.orders
+                        : [];
+
+            showMessage("");
+            filterOrders();
+
+        } catch (error) {
+            console.error(
+                "Fetch orders error:",
+                error
+            );
+
+            showMessage(
+                "Unable to connect to the server.",
+                "error"
+            );
+        }
+    }
+
+    function filterOrders() {
+        const selectedFilter =
+            document.getElementById(
+                "statusFilter"
+            ).value;
+
+        let filteredOrders = allOrders;
+
+        if (selectedFilter !== "all") {
+            filteredOrders = allOrders.filter(
+                function (order) {
+                    const status =
+                        getConfirmationStatus(order);
+
+                    return status === selectedFilter;
+                }
+            );
+        }
+
+        renderOrders(filteredOrders);
+    }
+
+    function renderOrders(orders) {
+        const ordersDisplay =
+            document.getElementById(
+                "ordersDisplay"
+            );
+
+        ordersDisplay.innerHTML = "";
+
+        if (!Array.isArray(orders) ||
+            orders.length === 0) {
+            const emptyState =
+                document.createElement("div");
+
+            emptyState.className = "empty-state";
+
+            const heading =
+                document.createElement("h3");
+
+            heading.textContent =
+                "No orders found";
+
+            const paragraph =
+                document.createElement("p");
+
+            paragraph.textContent =
+                "There are no orders in this category.";
+
+            emptyState.appendChild(heading);
+            emptyState.appendChild(paragraph);
+            ordersDisplay.appendChild(emptyState);
+
+            return;
+        }
+
+        orders.forEach(function (order) {
+            ordersDisplay.appendChild(
+                createOrderCard(order)
+            );
+        });
+    }
+
+    async function submitDelivery(
+        status,
+        orderId,
+        clickedButton
+    ) {
+        const token = getUserToken();
+
+        if (!token) {
+            handleExpiredSession();
+            return;
+        }
+
+        if (
+            !orderId ||
+            !/^[a-fA-F0-9]{24}$/.test(orderId)
+        ) {
+            showMessage(
+                "This order does not have a valid order ID.",
+                "error"
+            );
+            return;
+        }
+
+        let confirmationMessage;
+
+        if (status === "received") {
+            confirmationMessage =
+                "Confirm that you received this order?";
+        } else if (status === "not_received") {
+            confirmationMessage =
+                "Confirm that you did not receive this order?";
+        } else {
+            confirmationMessage =
+                "Report a problem with the assigned assistant?";
+        }
+
+        if (!confirm(confirmationMessage)) {
+            return;
+        }
+
+        const orderCard =
+            clickedButton.closest(".order");
+
+        const cardButtons =
+            orderCard
+                ? orderCard.querySelectorAll(
+                    "button"
+                )
+                : [clickedButton];
+
+        cardButtons.forEach(function (button) {
+            button.disabled = true;
+        });
+
+        showMessage(
+            "Updating delivery confirmation...",
+            "loading"
+        );
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/confirm-delivery`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        orderId,
+                        status
+                    })
+                }
+            );
+
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch {
+                data = {};
+            }
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                handleExpiredSession();
+                return;
+            }
+
+            if (!response.ok) {
+                showMessage(
+                    data.message ||
+                    "Unable to update delivery confirmation.",
+                    "error"
+                );
+                return;
+            }
+
+            showMessage(
+                data.message ||
+                "Delivery confirmation updated successfully.",
+                "success"
+            );
+
+            await fetchUserOrders();
+
+        } catch (error) {
+            console.error(
+                "Delivery confirmation error:",
+                error
+            );
+
+            showMessage(
+                "Unable to connect to the server.",
+                "error"
+            );
+
+        } finally {
+            cardButtons.forEach(function (button) {
+                button.disabled = false;
+            });
+        }
+    }
+
+    function openTrackOrder(orderId) {
+        if (orderId) {
+            localStorage.setItem(
+                "currentOrderId",
+                orderId
+            );
+        }
+
+        /*
+          Change this to "orderUpdates.html"
+          if that is your existing tracking filename.
+        */
+        window.location.href = "orderUpdates.html";
+    }
+
+    function logout() {
+        const shouldLogout = confirm(
+            "Are you sure you want to log out?"
+        );
+
+        if (!shouldLogout) {
+            return;
+        }
+
+        redirectToLogin();
+    }
+
+    document
+        .getElementById("statusFilter")
+        .addEventListener(
+            "change",
+            filterOrders
+        );
+
+    document
+        .getElementById("trackOrderButton")
+        .addEventListener(
+            "click",
+            function () {
+                openTrackOrder(
+                    localStorage.getItem(
+                        "currentOrderId"
+                    )
+                );
+            }
+        );
+
+    document
+        .getElementById("dashboardButton")
+        .addEventListener(
+            "click",
+            function () {
+                window.location.href =
+                    "UserDashboard.html";
+            }
+        );
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            logout
+        );
+
+    async function initializePage() {
+        if (!getUserToken()) {
+            alert("Please log in first.");
+            redirectToLogin();
+            return;
+        }
+
+        await Promise.all([
+            fetchUserInfo(),
+            fetchUserOrders()
+        ]);
+    }
+
+    initializePage();
+</script>
+
+</body>
+</html>

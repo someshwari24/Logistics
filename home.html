@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Hakuna Express connects customers with local shopping assistants for convenient shopping and delivery."
+    >
+
+    <title>Home | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f8fb;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            color: white;
+            background-color: #5c6bc0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+        }
+
+        .header-container {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            min-height: 72px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            padding: 10px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition:
+                background-color 0.2s,
+                color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #303f9f;
+            background-color: white;
+        }
+
+        .menu-button {
+            display: none;
+            padding: 8px 12px;
+            color: white;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .announcement-bar {
+            padding: 10px 15px;
+            color: #234d20;
+            text-align: center;
+            font-weight: bold;
+            background-color: #d9f7d4;
+            border-bottom: 1px solid #b8e5b0;
+        }
+
+        .hero-section {
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(63, 81, 181, 0.96),
+                    rgba(92, 107, 192, 0.88)
+                );
+        }
+
+        .hero-container {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 65px 0;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 45px;
+        }
+
+        .hero-content {
+            color: white;
+        }
+
+        .hero-label {
+            display: inline-block;
+            margin-bottom: 18px;
+            padding: 7px 13px;
+            color: #303f9f;
+            background-color: white;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 20px;
+            font-size: clamp(38px, 6vw, 64px);
+            line-height: 1.08;
+        }
+
+        .hero-content h1 span {
+            color: #d9f7d4;
+        }
+
+        .hero-content p {
+            max-width: 610px;
+            margin-bottom: 28px;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            transition:
+                transform 0.2s,
+                background-color 0.2s;
+        }
+
+        .primary-button {
+            color: #303f9f;
+            background-color: white;
+        }
+
+        .secondary-button {
+            color: white;
+            border: 2px solid white;
+        }
+
+        .primary-button:hover,
+        .secondary-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .secondary-button:hover {
+            color: #303f9f;
+            background-color: white;
+        }
+
+        .hero-image-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 470px;
+            height: 360px;
+            object-fit: cover;
+            background-color: white;
+            border: 8px solid rgba(255, 255, 255, 0.25);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        .section {
+            padding: 70px 20px;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-heading {
+            margin-bottom: 14px;
+            color: #3f4d8b;
+            text-align: center;
+            font-size: 34px;
+        }
+
+        .section-description {
+            max-width: 720px;
+            margin: 0 auto 40px;
+            color: #666;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .step-card {
+            padding: 24px;
+            text-align: center;
+            background-color: white;
+            border-radius: 13px;
+            box-shadow: 0 7px 22px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.25s,
+                box-shadow 0.25s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        .step-card img {
+            width: 100%;
+            height: 175px;
+            margin-bottom: 18px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            margin: -38px auto 15px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background-color: #5c6bc0;
+            border: 3px solid white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .step-card h3 {
+            margin-bottom: 10px;
+            color: #3f4d8b;
+            font-size: 21px;
+        }
+
+        .step-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .features-section {
+            background-color: #e8eaf6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .feature-card {
+            padding: 28px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.07);
+        }
+
+        .feature-icon {
+            margin-bottom: 14px;
+            font-size: 36px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: #3f4d8b;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.65;
+        }
+
+        .video-section {
+            text-align: center;
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+        }
+
+        video {
+            width: 100%;
+            display: block;
+            border-radius: 9px;
+        }
+
+        .cta-section {
+            padding: 65px 20px;
+            color: white;
+            text-align: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    #3f51b5,
+                    #7986cb
+                );
+        }
+
+        .cta-section h2 {
+            margin-bottom: 14px;
+            font-size: 34px;
+        }
+
+        .cta-section p {
+            max-width: 650px;
+            margin: 0 auto 25px;
+            line-height: 1.7;
+        }
+
+        footer {
+            padding: 26px 15px;
+            color: white;
+            text-align: center;
+            background-color: #303f70;
+        }
+
+        .footer-links {
+            margin-bottom: 14px;
+        }
+
+        .footer-links a {
+            margin: 0 8px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 950px) {
+            .header-container {
+                flex-wrap: wrap;
+                padding: 10px 0;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                padding-bottom: 8px;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                text-align: center;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .logo {
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero-container {
+                padding: 45px 0;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .primary-button,
+            .secondary-button {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-image {
+                height: 260px;
+            }
+
+            .section {
+                padding: 55px 15px;
+            }
+
+            .section-heading {
+                font-size: 28px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="announcement-bar">
+    Hakuna Express is now live — submit your shopping request today.
+</div>
+
+<header>
+    <div class="header-container">
+
+        <a
+            href="home.html"
+            class="logo-link"
+            aria-label="Hakuna Express home"
+        >
+            <img
+                src="hakunalogo.jpg"
+                alt="Hakuna Express logo"
+                class="logo"
+            >
+
+            <span class="brand-name">
+                Hakuna Express
+            </span>
+        </a>
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Open navigation menu"
+            aria-controls="navigationLinks"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+        <nav
+            id="navigationLinks"
+            class="nav-links"
+            aria-label="Main navigation"
+        >
+            <a
+                href="home.html"
+                class="active"
+                aria-current="page"
+            >
+                Home
+            </a>
+
+            <a href="about.html">About</a>
+            <a href="support.html">Support</a>
+            <a href="login.html">User Login</a>
+            <a href="signup.html">Sign Up</a>
+            <a href="assistant-login.html">
+                Assistant Login
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<main>
+
+    <section class="hero-section">
+        <div class="hero-container">
+
+            <div class="hero-content">
+                <span class="hero-label">
+                    Local shopping made simple
+                </span>
+
+                <h1>
+                    Your trusted
+                    <span>shopping assistant</span>
+                </h1>
+
+                <p>
+                    Hakuna Express connects customers with local shopping
+                    assistants who help purchase requested items, provide
+                    order updates, and coordinate delivery.
+                </p>
+
+                <div class="hero-buttons">
+                    <a
+                        href="signup.html"
+                        class="primary-button"
+                    >
+                        Create an Account
+                    </a>
+
+                    <a
+                        href="login.html"
+                        class="secondary-button"
+                    >
+                        Place an Order
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-image-wrapper">
+                <img
+                    src="vdo.jpg"
+                    alt="Hakuna Express shopping and delivery service"
+                    class="hero-image"
+                >
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-container">
+
+            <h2 class="section-heading">
+                How Hakuna Express Works
+            </h2>
+
+            <p class="section-description">
+                Submit your shopping request, get connected with an
+                assistant, receive updates, and confirm your delivery.
+            </p>
+
+            <div class="steps-grid">
+
+                <article class="step-card">
+                    <img
+                        src="book.jpg"
+                        alt="Customer submitting a shopping request"
+                    >
+
+                    <div class="step-number">1</div>
+
+                    <h3>Submit Your Request</h3>
+
+                    <p>
+                        Create an account and provide the products,
+                        address, contact information, and preferred
+                        shopping date.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <img
+                        src="india.png"
+                        alt="Local assistant shopping for requested items"
+                    >
+
+                    <div class="step-number">2</div>
+
+                    <h3>Assistant Assigned</h3>
+
+                    <p>
+                        An available shopping assistant is assigned to
+                        your order and can communicate with you regarding
+                        product details.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <img
+                        src="usa.jpg"
+                        alt="Customer receiving order status updates"
+                    >
+
+                    <div class="step-number">3</div>
+
+                    <h3>Track the Order</h3>
+
+                    <p>
+                        Follow the latest status updates submitted by the
+                        assistant through the order tracking page.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <img
+                        src="trucku.jpg"
+                        alt="Order being delivered to the customer"
+                    >
+
+                    <div class="step-number">4</div>
+
+                    <h3>Confirm Delivery</h3>
+
+                    <p>
+                        Verify the delivered products and confirm whether
+                        the order was received successfully.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section features-section">
+        <div class="section-container">
+
+            <h2 class="section-heading">
+                Why Choose Hakuna Express?
+            </h2>
+
+            <p class="section-description">
+                The platform is designed to make communication,
+                shopping coordination, and delivery tracking easier.
+            </p>
+
+            <div class="features-grid">
+
+                <article class="feature-card">
+                    <div
+                        class="feature-icon"
+                        aria-hidden="true"
+                    >
+                        🛍️
+                    </div>
+
+                    <h3>Personal Shopping Help</h3>
+
+                    <p>
+                        Customers can send detailed shopping requests and
+                        communicate directly with their assigned assistant.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div
+                        class="feature-icon"
+                        aria-hidden="true"
+                    >
+                        📦
+                    </div>
+
+                    <h3>Order Status Tracking</h3>
+
+                    <p>
+                        Assistants can update the order status so customers
+                        can check the latest progress at any time.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div
+                        class="feature-icon"
+                        aria-hidden="true"
+                    >
+                        🤝
+                    </div>
+
+                    <h3>Transparent Communication</h3>
+
+                    <p>
+                        Customers can discuss products, prices, receipts,
+                        expected delivery time, and any order concerns.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section video-section">
+        <div class="section-container">
+
+            <h2 class="section-heading">
+                See How It Works
+            </h2>
+
+            <p class="section-description">
+                Watch this introduction to understand the Hakuna Express
+                shopping and delivery process.
+            </p>
+
+            <div class="video-container">
+                <video controls preload="metadata">
+                    <source
+                        src="mov_bbb.mp4"
+                        type="video/mp4"
+                    >
+
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Start Shopping?</h2>
+
+        <p>
+            Create your Hakuna Express account, submit your first
+            shopping request, and track your order from one place.
+        </p>
+
+        <a
+            href="signup.html"
+            class="primary-button"
+        >
+            Get Started
+        </a>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>
+        &copy; <span id="currentYear"></span>
+        Hakuna Express. All rights reserved.
+    </p>
+</footer>
+
+<script>
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const navigationLinks =
+        document.getElementById("navigationLinks");
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+            const isOpen =
+                navigationLinks.classList.toggle("open");
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuButton.textContent =
+                isOpen ? "✕" : "☰";
+        }
+    );
+
+    navigationLinks
+        .querySelectorAll("a")
+        .forEach(function (link) {
+            link.addEventListener(
+                "click",
+                function () {
+                    navigationLinks.classList.remove(
+                        "open"
+                    );
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuButton.textContent = "☰";
+                }
+            );
+        });
+
+    document.getElementById(
+        "currentYear"
+    ).textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
+</html>

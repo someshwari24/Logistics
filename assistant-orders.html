@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Assigned Orders | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #eef3fb;
+            color: #333;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 25px;
+            color: white;
+            background-color: #4a63d4;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand h1 {
+            font-size: 24px;
+        }
+
+        .brand p {
+            margin-top: 3px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .assistant-name {
+            font-size: 14px;
+        }
+
+        .header-button {
+            padding: 9px 14px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh-button {
+            background-color: #28a745;
+        }
+
+        .refresh-button:hover {
+            background-color: #218838;
+        }
+
+        .logout-button {
+            background-color: #d32f2f;
+        }
+
+        .logout-button:hover {
+            background-color: #b71c1c;
+        }
+
+        .container {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .top-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .top-section h2 {
+            color: #3f51b5;
+        }
+
+        .update-page-link {
+            display: inline-block;
+            padding: 10px 16px;
+            color: white;
+            background-color: #4a63d4;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .update-page-link:hover {
+            background-color: #3549aa;
+        }
+
+        .message {
+            min-height: 22px;
+            margin: 18px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success-message {
+            color: #2e7d32;
+        }
+
+        .error-message {
+            color: #d32f2f;
+        }
+
+        .loading-message {
+            color: #4a63d4;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #e2e2e2;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            color: white;
+            background-color: #4a63d4;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background-color: #f7f9ff;
+        }
+
+        .order-id {
+            max-width: 170px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .item-cell {
+            max-width: 220px;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            color: #7a5400;
+            background-color: #fff3cd;
+        }
+
+        .status-packed {
+            color: #0d47a1;
+            background-color: #dbeafe;
+        }
+
+        .status-shipped,
+        .status-in-transit {
+            color: #5d3a00;
+            background-color: #ffe8b3;
+        }
+
+        .status-out-for-delivery {
+            color: #6a1b9a;
+            background-color: #f3e5f5;
+        }
+
+        .status-delivered {
+            color: #1b5e20;
+            background-color: #d8f3dc;
+        }
+
+        .status-returned,
+        .status-cancelled {
+            color: #8b1d1d;
+            background-color: #fde2e2;
+        }
+
+        .update-button {
+            padding: 8px 14px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .update-button:hover {
+            background-color: #218838;
+        }
+
+        .empty-state {
+            display: none;
+            padding: 35px 20px;
+            text-align: center;
+            color: #666;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        @media (max-width: 750px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .top-section {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .update-page-link {
+                text-align: center;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <h1>Hakuna Assistant</h1>
+        <p>Assigned Orders</p>
+    </div>
+
+    <div class="header-actions">
+        <span class="assistant-name">
+            Welcome,
+            <strong id="assistantName">Assistant</strong>
+        </span>
+
+        <button
+            type="button"
+            class="header-button refresh-button"
+            id="refreshButton"
+        >
+            Refresh
+        </button>
+
+        <button
+            type="button"
+            class="header-button logout-button"
+            id="logoutButton"
+        >
+            Logout
+        </button>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="top-section">
+        <div>
+            <h2>Your Assigned Orders</h2>
+            <p>
+                View your orders and update their current delivery status.
+            </p>
+        </div>
+
+        <a
+            href="assistant-update.html"
+            class="update-page-link"
+        >
+            Update Order Manually
+        </a>
+    </section>
+
+    <p
+        id="message"
+        class="message"
+        aria-live="polite"
+    ></p>
+
+    <div
+        id="tableWrapper"
+        class="table-wrapper"
+    >
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>City</th>
+                    <th>Item</th>
+                    <th>Shopping Date</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="ordersTableBody"></tbody>
+        </table>
+    </div>
+
+    <section
+        id="emptyState"
+        class="empty-state"
+    >
+        <h3>No assigned orders</h3>
+        <p>
+            No orders are currently assigned to your account.
+        </p>
+    </section>
+
+</main>
+
+<script>
+    /*
+      Keep this empty when frontend and backend
+      are served from the same Express server.
+    */
+    const API_BASE_URL = "";
+
+    function showMessage(message, type = "") {
+        const messageElement =
+            document.getElementById("message");
+
+        messageElement.textContent = message;
+
+        if (type === "success") {
+            messageElement.className =
+                "message success-message";
+        } else if (type === "error") {
+            messageElement.className =
+                "message error-message";
+        } else if (type === "loading") {
+            messageElement.className =
+                "message loading-message";
+        } else {
+            messageElement.className = "message";
+        }
+    }
+
+    function clearAssistantSession() {
+        localStorage.removeItem("assistantToken");
+        localStorage.removeItem("assistantPhone");
+        localStorage.removeItem("assistantName");
+        localStorage.removeItem("selectedOrderId");
+    }
+
+    function redirectToAssistantLogin() {
+        clearAssistantSession();
+        window.location.href = "assistant-login.html";
+    }
+
+    function formatStatus(status) {
+        if (!status) {
+            return "Unknown";
+        }
+
+        return status
+            .replaceAll("_", " ")
+            .replace(/\b\w/g, function (letter) {
+                return letter.toUpperCase();
+            });
+    }
+
+    function getStatusClass(status) {
+        const normalizedStatus =
+            String(status || "")
+                .toLowerCase()
+                .replaceAll("_", "-")
+                .replaceAll(" ", "-");
+
+        const supportedClasses = [
+            "pending",
+            "packed",
+            "shipped",
+            "in-transit",
+            "out-for-delivery",
+            "delivered",
+            "returned",
+            "cancelled"
+        ];
+
+        return supportedClasses.includes(normalizedStatus)
+            ? `status-${normalizedStatus}`
+            : "status-pending";
+    }
+
+    function formatDate(dateValue) {
+        if (!dateValue) {
+            return "Not available";
+        }
+
+        const date = new Date(dateValue);
+
+        if (Number.isNaN(date.getTime())) {
+            return dateValue;
+        }
+
+        return date.toLocaleDateString();
+    }
+
+    function formatDateTime(dateValue) {
+        if (!dateValue) {
+            return "Not available";
+        }
+
+        const date = new Date(dateValue);
+
+        if (Number.isNaN(date.getTime())) {
+            return dateValue;
+        }
+
+        return date.toLocaleString();
+    }
+
+    function createTextCell(value, className = "") {
+        const cell = document.createElement("td");
+
+        cell.textContent =
+            value === undefined ||
+            value === null ||
+            value === ""
+                ? "Not available"
+                : value;
+
+        if (className) {
+            cell.className = className;
+        }
+
+        return cell;
+    }
+
+    function createOrderRow(order) {
+        const row = document.createElement("tr");
+
+        const orderId =
+            order._id || order.orderId || "";
+
+        row.appendChild(
+            createTextCell(
+                orderId,
+                "order-id"
+            )
+        );
+
+        row.appendChild(
+            createTextCell(
+                order.name ||
+                order.customerName ||
+                "Not available"
+            )
+        );
+
+        row.appendChild(
+            createTextCell(
+                order.city || "Not available"
+            )
+        );
+
+        row.appendChild(
+            createTextCell(
+                order.item || "Not available",
+                "item-cell"
+            )
+        );
+
+        row.appendChild(
+            createTextCell(
+                formatDate(
+                    order.date ||
+                    order.shoppingDate
+                )
+            )
+        );
+
+        const statusCell =
+            document.createElement("td");
+
+        const statusBadge =
+            document.createElement("span");
+
+        statusBadge.className =
+            `status-badge ${getStatusClass(order.status)}`;
+
+        statusBadge.textContent =
+            formatStatus(order.status);
+
+        statusCell.appendChild(statusBadge);
+        row.appendChild(statusCell);
+
+        row.appendChild(
+            createTextCell(
+                formatDateTime(order.updatedAt)
+            )
+        );
+
+        const actionCell =
+            document.createElement("td");
+
+        const updateButton =
+            document.createElement("button");
+
+        updateButton.type = "button";
+        updateButton.className = "update-button";
+        updateButton.textContent = "Update";
+
+        updateButton.addEventListener(
+            "click",
+            function () {
+                openUpdatePage(orderId);
+            }
+        );
+
+        actionCell.appendChild(updateButton);
+        row.appendChild(actionCell);
+
+        return row;
+    }
+
+    async function loadOrders() {
+        const token =
+            localStorage.getItem("assistantToken");
+
+        const tableBody =
+            document.getElementById("ordersTableBody");
+
+        const tableWrapper =
+            document.getElementById("tableWrapper");
+
+        const emptyState =
+            document.getElementById("emptyState");
+
+        const refreshButton =
+            document.getElementById("refreshButton");
+
+        if (!token) {
+            alert("Please log in as an assistant.");
+            redirectToAssistantLogin();
+            return;
+        }
+
+        refreshButton.disabled = true;
+        refreshButton.textContent = "Loading...";
+
+        tableBody.innerHTML = "";
+        tableWrapper.style.display = "none";
+        emptyState.style.display = "none";
+
+        showMessage(
+            "Loading assigned orders...",
+            "loading"
+        );
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/assistant/orders`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+            let data;
+
+            try {
+                data = await response.json();
+            } catch {
+                data = {};
+            }
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                alert(
+                    "Your assistant session has expired. Please log in again."
+                );
+
+                redirectToAssistantLogin();
+                return;
+            }
+
+            if (!response.ok) {
+                showMessage(
+                    data.message ||
+                    "Unable to load assigned orders.",
+                    "error"
+                );
+
+                return;
+            }
+
+            const orders =
+                Array.isArray(data)
+                    ? data
+                    : Array.isArray(data.orders)
+                        ? data.orders
+                        : [];
+
+            if (orders.length === 0) {
+                showMessage("");
+                emptyState.style.display = "block";
+                return;
+            }
+
+            orders.forEach(function (order) {
+                tableBody.appendChild(
+                    createOrderRow(order)
+                );
+            });
+
+            tableWrapper.style.display = "block";
+
+            showMessage(
+                `${orders.length} assigned order${
+                    orders.length === 1 ? "" : "s"
+                } loaded.`,
+                "success"
+            );
+
+        } catch (error) {
+            console.error(
+                "Load orders error:",
+                error
+            );
+
+            showMessage(
+                "Unable to connect to the server. Please try again.",
+                "error"
+            );
+
+        } finally {
+            refreshButton.disabled = false;
+            refreshButton.textContent = "Refresh";
+        }
+    }
+
+    function openUpdatePage(orderId) {
+        if (!orderId) {
+            showMessage(
+                "This order does not contain a valid order ID.",
+                "error"
+            );
+            return;
+        }
+
+        localStorage.setItem(
+            "selectedOrderId",
+            orderId
+        );
+
+        window.location.href =
+            "assistant-update.html";
+    }
+
+    document
+        .getElementById("refreshButton")
+        .addEventListener(
+            "click",
+            loadOrders
+        );
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            function () {
+                const shouldLogout = confirm(
+                    "Are you sure you want to log out?"
+                );
+
+                if (shouldLogout) {
+                    redirectToAssistantLogin();
+                }
+            }
+        );
+
+    const savedAssistantName =
+        localStorage.getItem("assistantName");
+
+    document.getElementById(
+        "assistantName"
+    ).textContent =
+        savedAssistantName || "Assistant";
+
+    loadOrders();
+</script>
+
+</body>
+</html>

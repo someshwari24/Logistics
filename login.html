@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Login | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #a0d2eb;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #5c6bc0;
+            padding: 12px 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+            min-height: 50px;
+        }
+
+        .header-container img {
+            width: 110px;
+            max-height: 50px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 9px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #8dbed6;
+        }
+
+        .login-wrapper {
+            min-height: calc(100vh - 74px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.96);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #3f51b5;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 22px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.15);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 11px;
+            background-color: #5c6bc0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #3f51b5;
+        }
+
+        .login-button:disabled {
+            background-color: #9fa8da;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        .error-message {
+            color: #d32f2f;
+        }
+
+        .success-message {
+            color: #2e7d32;
+        }
+
+        .signup-link {
+            margin-top: 18px;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .signup-link a {
+            color: #3f51b5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 750px) {
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .nav-links a {
+                padding: 7px;
+                font-size: 13px;
+            }
+
+            .login-wrapper {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+        <img src="hakunalogo.jpg" alt="Hakuna Express Logo">
+
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="support.html">Support</a>
+            <a href="Login.html">User Login</a>
+            <a href="sign up.html">Sign Up</a>
+            <a href="assistant _login.html">Assistant Login</a>
+        </nav>
+    </div>
+</header>
+
+<main class="login-wrapper">
+    <section class="login-container">
+        <h2>User Login</h2>
+
+        <p class="subtitle">
+            Login to book and track your shopping request.
+        </p>
+
+        <form id="loginForm" novalidate>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        minlength="8"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        id="passwordToggle"
+                        onclick="togglePasswordVisibility()"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+                id="loginButton"
+            >
+                Login
+            </button>
+        </form>
+
+        <p id="loginMessage" class="message" aria-live="polite"></p>
+
+        <p class="signup-link">
+            Don't have an account?
+            <a href="sign up.html">Create an account</a>
+        </p>
+    </section>
+</main>
+
+<script>
+    const API_BASE_URL = "http://localhost:3000";
+
+    function togglePasswordVisibility() {
+        const passwordInput =
+            document.getElementById("password");
+
+        const passwordToggle =
+            document.getElementById("passwordToggle");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            passwordToggle.textContent = "🙈";
+            passwordToggle.setAttribute(
+                "aria-label",
+                "Hide password"
+            );
+        } else {
+            passwordInput.type = "password";
+            passwordToggle.textContent = "👁";
+            passwordToggle.setAttribute(
+                "aria-label",
+                "Show password"
+            );
+        }
+    }
+
+    function showMessage(message, type) {
+        const loginMessage =
+            document.getElementById("loginMessage");
+
+        loginMessage.textContent = message;
+
+        loginMessage.className =
+            type === "success"
+                ? "message success-message"
+                : "message error-message";
+    }
+
+    document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const loginButton =
+                document.getElementById("loginButton");
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+            showMessage("", "error");
+
+            if (!email || !password) {
+                showMessage(
+                    "Please enter your email and password.",
+                    "error"
+                );
+                return;
+            }
+
+            const emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email)) {
+                showMessage(
+                    "Please enter a valid email address.",
+                    "error"
+                );
+                return;
+            }
+
+            if (password.length < 8) {
+                showMessage(
+                    "Password must contain at least 8 characters.",
+                    "error"
+                );
+                return;
+            }
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Logging in...";
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/login`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            email,
+                            password
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showMessage(
+                        data.message || "Login failed.",
+                        "error"
+                    );
+                    return;
+                }
+
+                localStorage.removeItem("assistantToken");
+                localStorage.removeItem("assistantPhone");
+
+                localStorage.setItem("token", data.token);
+                localStorage.setItem(
+                    "username",
+                    data.username || ""
+                );
+                localStorage.setItem(
+                    "name",
+                    data.name || ""
+                );
+
+                showMessage(
+                    "Login successful. Redirecting...",
+                    "success"
+                );
+
+                setTimeout(function () {
+                    window.location.href =
+                        "UserDashboard.html";
+                }, 1000);
+
+            } catch (error) {
+                console.error("Login error:", error);
+
+                showMessage(
+                    "Unable to connect to the server. Make sure the backend is running.",
+                    "error"
+                );
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        });
+
+    if (localStorage.getItem("token")) {
+        window.location.href = "UserDashboard.html";
+    }
+</script>
+
+</body>
+</html>

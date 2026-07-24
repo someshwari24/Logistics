@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #a0d2eb;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #5c6bc0;
+            padding: 12px 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+            min-height: 50px;
+        }
+
+        .header-container img {
+            width: 110px;
+            max-height: 50px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 9px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #8dbed6;
+        }
+
+        .signup-wrapper {
+            min-height: calc(100vh - 74px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 430px;
+            background-color: rgba(255, 255, 255, 0.96);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .signup-container h2 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #3f51b5;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 22px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.15);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        .signup-button {
+            width: 100%;
+            padding: 11px;
+            background-color: #5c6bc0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .signup-button:hover {
+            background-color: #3f51b5;
+        }
+
+        .signup-button:disabled {
+            background-color: #9fa8da;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        .error-message {
+            color: #d32f2f;
+        }
+
+        .success-message {
+            color: #2e7d32;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #3f51b5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .password-help {
+            margin-top: 5px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        @media (max-width: 750px) {
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .nav-links a {
+                padding: 7px;
+                font-size: 13px;
+            }
+
+            .signup-wrapper {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+        <img src="hakunalogo.jpg" alt="Hakuna Express Logo">
+
+        <nav class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="support.html">Support</a>
+            <a href="Login.html">User Login</a>
+            <a href="sign up.html">Sign Up</a>
+            <a href="assistant _login.html">Assistant Login</a>
+        </nav>
+    </div>
+</header>
+
+<main class="signup-wrapper">
+    <section class="signup-container">
+        <h2>Create an Account</h2>
+
+        <p class="subtitle">
+            Register to book your personal shopping assistant.
+        </p>
+
+        <form id="signupForm" novalidate>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    minlength="2"
+                    maxlength="60"
+                    autocomplete="name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    minlength="3"
+                    maxlength="30"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword('password', this)"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+                </div>
+
+                <p class="password-help">
+                    Use at least 8 characters, including a number and special character.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Re-enter your password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword('confirmPassword', this)"
+                        aria-label="Show confirm password"
+                    >
+                        👁
+                    </button>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                class="signup-button"
+                id="signupButton"
+            >
+                Sign Up
+            </button>
+        </form>
+
+        <p id="formMessage" class="message" aria-live="polite"></p>
+
+        <p class="login-link">
+            Already have an account?
+            <a href="Login.html">Login here</a>
+        </p>
+    </section>
+</main>
+
+<script>
+    const API_BASE_URL = "http://localhost:3000";
+
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+
+        if (input.type === "password") {
+            input.type = "text";
+            button.textContent = "🙈";
+            button.setAttribute("aria-label", "Hide password");
+        } else {
+            input.type = "password";
+            button.textContent = "👁";
+            button.setAttribute("aria-label", "Show password");
+        }
+    }
+
+    function showMessage(message, type) {
+        const formMessage = document.getElementById("formMessage");
+
+        formMessage.textContent = message;
+        formMessage.className =
+            type === "success"
+                ? "message success-message"
+                : "message error-message";
+    }
+
+    document
+        .getElementById("signupForm")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const signupButton = document.getElementById("signupButton");
+
+            const name = document
+                .getElementById("name")
+                .value
+                .trim();
+
+            const username = document
+                .getElementById("username")
+                .value
+                .trim();
+
+            const email = document
+                .getElementById("email")
+                .value
+                .trim()
+                .toLowerCase();
+
+            const password = document
+                .getElementById("password")
+                .value;
+
+            const confirmPassword = document
+                .getElementById("confirmPassword")
+                .value;
+
+            showMessage("", "error");
+
+            if (!name || !username || !email || !password || !confirmPassword) {
+                showMessage("Please fill in all fields.", "error");
+                return;
+            }
+
+            if (name.length < 2) {
+                showMessage(
+                    "Full name must contain at least 2 characters.",
+                    "error"
+                );
+                return;
+            }
+
+            if (username.length < 3) {
+                showMessage(
+                    "Username must contain at least 3 characters.",
+                    "error"
+                );
+                return;
+            }
+
+            const emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email)) {
+                showMessage(
+                    "Please enter a valid email address.",
+                    "error"
+                );
+                return;
+            }
+
+            const passwordPattern =
+                /^(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+
+            if (!passwordPattern.test(password)) {
+                showMessage(
+                    "Password must contain at least 8 characters, one number and one special character.",
+                    "error"
+                );
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage(
+                    "Passwords do not match.",
+                    "error"
+                );
+                return;
+            }
+
+            signupButton.disabled = true;
+            signupButton.textContent = "Creating account...";
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/signup`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name,
+                            username,
+                            email,
+                            password
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showMessage(
+                        data.message || "Registration failed.",
+                        "error"
+                    );
+                    return;
+                }
+
+                showMessage(
+                    data.message || "User registered successfully.",
+                    "success"
+                );
+
+                document.getElementById("signupForm").reset();
+
+                setTimeout(function () {
+                    window.location.href = "Login.html";
+                }, 1500);
+
+            } catch (error) {
+                console.error("Signup error:", error);
+
+                showMessage(
+                    "Unable to connect to the server. Make sure the backend is running.",
+                    "error"
+                );
+            } finally {
+                signupButton.disabled = false;
+                signupButton.textContent = "Sign Up";
+            }
+        });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Update Order | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #cce0f5;
+            color: #333;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 25px;
+            color: white;
+            background-color: #4a63d4;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .assistant-name {
+            font-size: 14px;
+        }
+
+        .header-button {
+            padding: 9px 14px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .orders-button {
+            background-color: #28a745;
+        }
+
+        .orders-button:hover {
+            background-color: #218838;
+        }
+
+        .logout-button {
+            background-color: #d32f2f;
+        }
+
+        .logout-button:hover {
+            background-color: #b71c1c;
+        }
+
+        .update-wrapper {
+            min-height: calc(100vh - 65px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .update-container {
+            width: 100%;
+            max-width: 470px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .update-container h1 {
+            margin-bottom: 8px;
+            color: #3f51b5;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            margin-bottom: 25px;
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            outline: none;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4a63d4;
+            box-shadow: 0 0 0 2px rgba(74, 99, 212, 0.15);
+        }
+
+        input[readonly] {
+            background-color: #f1f3f7;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        .help-text {
+            margin-top: 6px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .preview-area {
+            min-height: 18px;
+            margin-top: 8px;
+            color: #555;
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .submit-button,
+        .clear-button {
+            flex: 1;
+            padding: 11px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .submit-button {
+            background-color: #4a63d4;
+        }
+
+        .submit-button:hover {
+            background-color: #3549aa;
+        }
+
+        .submit-button:disabled {
+            background-color: #9fa8da;
+            cursor: not-allowed;
+        }
+
+        .clear-button {
+            background-color: #6c757d;
+        }
+
+        .clear-button:hover {
+            background-color: #565e64;
+        }
+
+        .message {
+            min-height: 20px;
+            margin-top: 17px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .success-message {
+            color: #2e7d32;
+        }
+
+        .error-message {
+            color: #d32f2f;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .update-container {
+                padding: 22px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        Hakuna Assistant
+    </div>
+
+    <div class="header-actions">
+        <span class="assistant-name">
+            Welcome,
+            <strong id="assistantName">Assistant</strong>
+        </span>
+
+        <button
+            type="button"
+            class="header-button orders-button"
+            id="ordersButton"
+        >
+            Assigned Orders
+        </button>
+
+        <button
+            type="button"
+            class="header-button logout-button"
+            id="logoutButton"
+        >
+            Logout
+        </button>
+    </div>
+</header>
+
+<main class="update-wrapper">
+    <section class="update-container">
+
+        <h1>Update Order</h1>
+
+        <p class="subtitle">
+            Enter the order ID or select an order from the assigned-orders page.
+        </p>
+
+        <form id="updateForm" novalidate>
+
+            <div class="form-group">
+                <label for="orderId">
+                    Order ID
+                </label>
+
+                <input
+                    type="text"
+                    id="orderId"
+                    name="orderId"
+                    placeholder="Enter the 24-character order ID"
+                    maxlength="24"
+                    autocomplete="off"
+                    required
+                >
+
+                <p class="help-text" id="orderIdHelp">
+                    Enter the MongoDB order ID assigned to you.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="status">
+                    Delivery Status
+                </label>
+
+                <select
+                    id="status"
+                    name="status"
+                    required
+                >
+                    <option value="">
+                        Select order status
+                    </option>
+
+                    <option value="pending">
+                        Pending
+                    </option>
+
+                    <option value="packed">
+                        Packed
+                    </option>
+
+                    <option value="shipped">
+                        Shipped
+                    </option>
+
+                    <option value="in_transit">
+                        In Transit
+                    </option>
+
+                    <option value="out_for_delivery">
+                        Out for Delivery
+                    </option>
+
+                    <option value="delivered">
+                        Delivered
+                    </option>
+
+                    <option value="returned">
+                        Returned
+                    </option>
+
+                    <option value="cancelled">
+                        Cancelled
+                    </option>
+                </select>
+
+                <div
+                    id="previewArea"
+                    class="preview-area"
+                ></div>
+            </div>
+
+            <div class="form-group">
+                <label for="note">
+                    Update Note
+                    <span style="font-weight: normal;">
+                        (optional)
+                    </span>
+                </label>
+
+                <textarea
+                    id="note"
+                    name="note"
+                    maxlength="500"
+                    placeholder="Example: Package handed over to courier"
+                ></textarea>
+
+                <p class="help-text">
+                    This field works only if your backend stores update notes.
+                </p>
+            </div>
+
+            <div class="button-row">
+                <button
+                    type="submit"
+                    class="submit-button"
+                    id="submitButton"
+                >
+                    Submit Update
+                </button>
+
+                <button
+                    type="button"
+                    class="clear-button"
+                    id="clearButton"
+                >
+                    Clear
+                </button>
+            </div>
+        </form>
+
+        <p
+            id="updateMessage"
+            class="message"
+            aria-live="polite"
+        ></p>
+
+    </section>
+</main>
+
+<script>
+    /*
+      Leave empty when the frontend is served
+      by the same Express application.
+    */
+    const API_BASE_URL = "";
+
+    function showMessage(message, type = "") {
+        const updateMessage =
+            document.getElementById("updateMessage");
+
+        updateMessage.textContent = message;
+
+        if (type === "success") {
+            updateMessage.className =
+                "message success-message";
+        } else if (type === "error") {
+            updateMessage.className =
+                "message error-message";
+        } else {
+            updateMessage.className = "message";
+        }
+    }
+
+    function clearAssistantSession() {
+        localStorage.removeItem("assistantToken");
+        localStorage.removeItem("assistantPhone");
+        localStorage.removeItem("assistantName");
+        localStorage.removeItem("selectedOrderId");
+    }
+
+    function redirectToAssistantLogin() {
+        clearAssistantSession();
+
+        window.location.href =
+            "assistant-login.html";
+    }
+
+    function checkAssistantSession() {
+        const token =
+            localStorage.getItem("assistantToken");
+
+        if (!token) {
+            alert(
+                "Please log in as an assistant."
+            );
+
+            redirectToAssistantLogin();
+            return false;
+        }
+
+        const assistantName =
+            localStorage.getItem("assistantName");
+
+        document.getElementById(
+            "assistantName"
+        ).textContent =
+            assistantName || "Assistant";
+
+        return true;
+    }
+
+    function formatStatus(status) {
+        return status
+            .replaceAll("_", " ")
+            .replace(/\b\w/g, function (letter) {
+                return letter.toUpperCase();
+            });
+    }
+
+    function loadSelectedOrder() {
+        const selectedOrderId =
+            localStorage.getItem("selectedOrderId");
+
+        if (!selectedOrderId) {
+            return;
+        }
+
+        const orderIdInput =
+            document.getElementById("orderId");
+
+        orderIdInput.value = selectedOrderId;
+        orderIdInput.readOnly = true;
+
+        document.getElementById(
+            "orderIdHelp"
+        ).textContent =
+            "Order selected from the assigned-orders page.";
+    }
+
+    function clearForm() {
+        const selectedOrderId =
+            localStorage.getItem("selectedOrderId");
+
+        document
+            .getElementById("updateForm")
+            .reset();
+
+        document.getElementById(
+            "previewArea"
+        ).textContent = "";
+
+        showMessage("");
+
+        if (selectedOrderId) {
+            document.getElementById(
+                "orderId"
+            ).value = selectedOrderId;
+        }
+    }
+
+    document
+        .getElementById("status")
+        .addEventListener(
+            "change",
+            function () {
+                const previewArea =
+                    document.getElementById(
+                        "previewArea"
+                    );
+
+                if (!this.value) {
+                    previewArea.textContent = "";
+                    return;
+                }
+
+                previewArea.textContent =
+                    `Selected status: ${
+                        formatStatus(this.value)
+                    }`;
+            }
+        );
+
+    document
+        .getElementById("updateForm")
+        .addEventListener(
+            "submit",
+            async function (event) {
+                event.preventDefault();
+
+                const token =
+                    localStorage.getItem(
+                        "assistantToken"
+                    );
+
+                if (!token) {
+                    alert(
+                        "Your assistant session has expired."
+                    );
+
+                    redirectToAssistantLogin();
+                    return;
+                }
+
+                const orderId =
+                    document
+                        .getElementById("orderId")
+                        .value
+                        .trim();
+
+                const status =
+                    document
+                        .getElementById("status")
+                        .value;
+
+                const note =
+                    document
+                        .getElementById("note")
+                        .value
+                        .trim();
+
+                const submitButton =
+                    document.getElementById(
+                        "submitButton"
+                    );
+
+                showMessage("");
+
+                if (!orderId) {
+                    showMessage(
+                        "Please enter an order ID.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (
+                    !/^[a-fA-F0-9]{24}$/.test(orderId)
+                ) {
+                    showMessage(
+                        "Order ID must contain exactly 24 hexadecimal characters.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (!status) {
+                    showMessage(
+                        "Please select an order status.",
+                        "error"
+                    );
+                    return;
+                }
+
+                submitButton.disabled = true;
+                submitButton.textContent =
+                    "Updating order...";
+
+                try {
+                    const response = await fetch(
+                        `${API_BASE_URL}/assistant_update`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+                            },
+
+                            body: JSON.stringify({
+                                orderId,
+                                status,
+                                note
+                            })
+                        }
+                    );
+
+                    let data;
+
+                    try {
+                        data = await response.json();
+                    } catch {
+                        data = {};
+                    }
+
+                    if (
+                        response.status === 401 ||
+                        response.status === 403
+                    ) {
+                        alert(
+                            "Your assistant session has expired. Please log in again."
+                        );
+
+                        redirectToAssistantLogin();
+                        return;
+                    }
+
+                    if (!response.ok) {
+                        showMessage(
+                            data.message ||
+                            "Unable to update the order.",
+                            "error"
+                        );
+                        return;
+                    }
+
+                    showMessage(
+                        data.message ||
+                        "Order updated successfully.",
+                        "success"
+                    );
+
+                    localStorage.removeItem(
+                        "selectedOrderId"
+                    );
+
+                    document
+                        .getElementById("updateForm")
+                        .reset();
+
+                    const orderIdInput =
+                        document.getElementById(
+                            "orderId"
+                        );
+
+                    orderIdInput.readOnly = false;
+
+                    document.getElementById(
+                        "orderIdHelp"
+                    ).textContent =
+                        "Enter the MongoDB order ID assigned to you.";
+
+                    document.getElementById(
+                        "previewArea"
+                    ).textContent = "";
+
+                    setTimeout(function () {
+                        window.location.href =
+                            "assistant-orders.html";
+                    }, 1200);
+
+                } catch (error) {
+                    console.error(
+                        "Update order error:",
+                        error
+                    );
+
+                    showMessage(
+                        "Unable to connect to the server. Please try again.",
+                        "error"
+                    );
+
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent =
+                        "Submit Update";
+                }
+            }
+        );
+
+    document
+        .getElementById("clearButton")
+        .addEventListener(
+            "click",
+            clearForm
+        );
+
+    document
+        .getElementById("ordersButton")
+        .addEventListener(
+            "click",
+            function () {
+                window.location.href =
+                    "assistant-orders.html";
+            }
+        );
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            function () {
+                const shouldLogout = confirm(
+                    "Are you sure you want to log out?"
+                );
+
+                if (shouldLogout) {
+                    redirectToAssistantLogin();
+                }
+            }
+        );
+
+    if (checkAssistantSession()) {
+        loadSelectedOrder();
+    }
+</script>
+
+</body>
+</html>

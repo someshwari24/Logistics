@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Learn about Hakuna Express, our mission, vision, core values, and commitment to convenient local shopping assistance."
+    >
+
+    <title>About | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f8fb;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            color: white;
+            background-color: #5c6bc0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+        }
+
+        .header-container {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            min-height: 72px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            padding: 10px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition:
+                background-color 0.2s,
+                color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #303f9f;
+            background-color: white;
+        }
+
+        .menu-button {
+            display: none;
+            padding: 8px 12px;
+            color: white;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .hero-section {
+            padding: 65px 20px;
+            color: white;
+            text-align: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    #3f51b5,
+                    #7986cb
+                );
+        }
+
+        .hero-section h1 {
+            margin-bottom: 16px;
+            font-size: clamp(36px, 6vw, 54px);
+        }
+
+        .hero-section p {
+            max-width: 760px;
+            margin: 0 auto;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        main {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            margin: 45px auto 60px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .about-card {
+            padding: 30px;
+            background-color: white;
+            border-radius: 13px;
+            box-shadow: 0 7px 22px rgba(0, 0, 0, 0.08);
+        }
+
+        .about-card h2 {
+            margin-bottom: 14px;
+            color: #3f4d8b;
+            font-size: 27px;
+        }
+
+        .about-card p {
+            color: #555;
+            line-height: 1.75;
+        }
+
+        .about-card p + p {
+            margin-top: 14px;
+        }
+
+        .full-width-card {
+            grid-column: 1 / -1;
+        }
+
+        .mission-list {
+            margin-top: 16px;
+            padding-left: 22px;
+        }
+
+        .mission-list li {
+            margin-bottom: 11px;
+            color: #555;
+            line-height: 1.65;
+        }
+
+        .values-section {
+            margin-top: 45px;
+        }
+
+        .section-heading {
+            margin-bottom: 12px;
+            color: #3f4d8b;
+            text-align: center;
+            font-size: 34px;
+        }
+
+        .section-description {
+            max-width: 730px;
+            margin: 0 auto 35px;
+            color: #666;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .value-card {
+            padding: 26px;
+            text-align: center;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+            transition:
+                transform 0.25s,
+                box-shadow 0.25s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 11px 24px rgba(0, 0, 0, 0.11);
+        }
+
+        .value-icon {
+            margin-bottom: 14px;
+            font-size: 36px;
+        }
+
+        .value-card h3 {
+            margin-bottom: 10px;
+            color: #3f4d8b;
+            font-size: 21px;
+        }
+
+        .value-card p {
+            color: #666;
+            line-height: 1.65;
+        }
+
+        .story-section {
+            margin-top: 45px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .story-content {
+            padding: 30px;
+            background-color: white;
+            border-radius: 13px;
+            box-shadow: 0 7px 22px rgba(0, 0, 0, 0.08);
+        }
+
+        .story-content h2 {
+            margin-bottom: 15px;
+            color: #3f4d8b;
+            font-size: 29px;
+        }
+
+        .story-content p {
+            color: #555;
+            line-height: 1.75;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 340px;
+            object-fit: cover;
+            background-color: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-section {
+            margin-top: 50px;
+            padding: 45px 25px;
+            color: white;
+            text-align: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    #3f51b5,
+                    #7986cb
+                );
+            border-radius: 14px;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 12px;
+            font-size: 31px;
+        }
+
+        .cta-section p {
+            max-width: 650px;
+            margin: 0 auto 22px;
+            line-height: 1.7;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 22px;
+            color: #303f9f;
+            background-color: white;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cta-button:hover {
+            background-color: #eef0ff;
+        }
+
+        footer {
+            padding: 25px 15px;
+            color: white;
+            text-align: center;
+            background-color: #303f70;
+        }
+
+        .footer-links {
+            margin-bottom: 13px;
+        }
+
+        .footer-links a {
+            margin: 0 8px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 950px) {
+            .header-container {
+                flex-wrap: wrap;
+                padding: 10px 0;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                padding-bottom: 8px;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                text-align: center;
+            }
+
+            .values-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .story-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .logo {
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero-section {
+                padding: 48px 18px;
+            }
+
+            .hero-section p {
+                font-size: 16px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width-card {
+                grid-column: auto;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-heading {
+                font-size: 28px;
+            }
+
+            .story-image {
+                height: 250px;
+            }
+
+            .cta-section h2 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+
+        <a
+            href="home.html"
+            class="logo-link"
+            aria-label="Hakuna Express home"
+        >
+            <img
+                src="hakunalogo.jpg"
+                alt="Hakuna Express logo"
+                class="logo"
+            >
+
+            <span class="brand-name">
+                Hakuna Express
+            </span>
+        </a>
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Open navigation menu"
+            aria-controls="navigationLinks"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+        <nav
+            id="navigationLinks"
+            class="nav-links"
+            aria-label="Main navigation"
+        >
+            <a href="home.html">Home</a>
+
+            <a
+                href="about.html"
+                class="active"
+                aria-current="page"
+            >
+                About
+            </a>
+
+            <a href="support.html">Support</a>
+
+            <a href="login.html">User Login</a>
+
+            <a href="signup.html">Sign Up</a>
+
+            <a href="assistant-login.html">
+                Assistant Login
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="hero-section">
+    <h1>About Hakuna Express</h1>
+
+    <p>
+        Hakuna Express is a shopping-assistance platform designed to
+        connect customers with trusted local assistants who can purchase
+        requested items, provide updates, and coordinate delivery.
+    </p>
+</section>
+
+<main>
+
+    <section class="about-grid">
+
+        <article class="about-card">
+            <h2>Our Mission</h2>
+
+            <p>
+                Our mission is to make local shopping more convenient by
+                connecting customers with reliable shopping assistants.
+            </p>
+
+            <ul class="mission-list">
+                <li>
+                    Provide a simple and efficient way to submit shopping
+                    requests.
+                </li>
+
+                <li>
+                    Help customers communicate clearly with their assigned
+                    assistants.
+                </li>
+
+                <li>
+                    Support transparent shopping through receipts, status
+                    updates, and delivery confirmation.
+                </li>
+
+                <li>
+                    Continuously improve the platform based on customer and
+                    assistant needs.
+                </li>
+            </ul>
+        </article>
+
+        <article class="about-card">
+            <h2>Our Vision</h2>
+
+            <p>
+                Our vision is to become a dependable platform for personal
+                shopping assistance, making it easier for customers to
+                purchase products from local markets and receive them
+                conveniently.
+            </p>
+
+            <p>
+                We aim to create a trusted community where customers and
+                assistants can work together through clear communication,
+                responsible service, and transparent order handling.
+            </p>
+        </article>
+
+        <article class="about-card full-width-card">
+            <h2>What We Do</h2>
+
+            <p>
+                Customers can create an account, submit a detailed shopping
+                request, receive an assigned assistant, communicate through
+                WhatsApp, track the order status, and confirm delivery.
+            </p>
+
+            <p>
+                Shopping assistants can view their assigned orders, purchase
+                requested products, provide receipts, communicate expected
+                delivery times, and update the order status through the
+                assistant portal.
+            </p>
+        </article>
+
+    </section>
+
+    <section class="values-section">
+
+        <h2 class="section-heading">
+            Our Core Values
+        </h2>
+
+        <p class="section-description">
+            These values guide the way Hakuna Express supports customers,
+            assistants, and responsible shopping experiences.
+        </p>
+
+        <div class="values-grid">
+
+            <article class="value-card">
+                <div
+                    class="value-icon"
+                    aria-hidden="true"
+                >
+                    🛡️
+                </div>
+
+                <h3>Integrity</h3>
+
+                <p>
+                    We encourage honesty, accurate order updates,
+                    responsible communication, and transparent pricing.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div
+                    class="value-icon"
+                    aria-hidden="true"
+                >
+                    👥
+                </div>
+
+                <h3>Customer First</h3>
+
+                <p>
+                    We focus on making the shopping process understandable,
+                    convenient, and helpful for every customer.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div
+                    class="value-icon"
+                    aria-hidden="true"
+                >
+                    ⭐
+                </div>
+
+                <h3>Excellence</h3>
+
+                <p>
+                    We aim for professional service, careful order handling,
+                    and dependable communication.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div
+                    class="value-icon"
+                    aria-hidden="true"
+                >
+                    💡
+                </div>
+
+                <h3>Innovation</h3>
+
+                <p>
+                    We continue learning and improving the platform to
+                    provide a better shopping and delivery experience.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div
+                    class="value-icon"
+                    aria-hidden="true"
+                >
+                    🤝
+                </div>
+
+                <h3>Respect</h3>
+
+                <p>
+                    Customers and assistants should communicate politely
+                    and treat each other with dignity.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div
+                    class="value-icon"
+                    aria-hidden="true"
+                >
+                    🔍
+                </div>
+
+                <h3>Transparency</h3>
+
+                <p>
+                    Clear product details, receipts, order statuses, and
+                    delivery confirmation help build trust.
+                </p>
+            </article>
+
+        </div>
+    </section>
+
+    <section class="story-section">
+
+        <div class="story-content">
+            <h2>Our Story</h2>
+
+            <p>
+                Hakuna Express was created to simplify shopping for people
+                who may not have the time or ability to visit local stores.
+                The platform allows customers to submit requests and connect
+                with assistants who can help complete those purchases.
+            </p>
+
+            <p>
+                The project combines account management, assistant
+                assignment, WhatsApp communication, order tracking,
+                delivery confirmation, and complaint handling in one
+                application.
+            </p>
+        </div>
+
+        <img
+            src="vdo.jpg"
+            alt="Hakuna Express shopping assistance service"
+            class="story-image"
+        >
+
+    </section>
+
+    <section class="cta-section">
+        <h2>Start Your Shopping Request</h2>
+
+        <p>
+            Create an account and submit your shopping details to connect
+            with a local shopping assistant.
+        </p>
+
+        <a
+            href="signup.html"
+            class="cta-button"
+        >
+            Create an Account
+        </a>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-links">
+        <a href="home.html">Home</a>
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>
+        &copy; <span id="currentYear"></span>
+        Hakuna Express. All rights reserved.
+    </p>
+</footer>
+
+<script>
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const navigationLinks =
+        document.getElementById("navigationLinks");
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+            const isOpen =
+                navigationLinks.classList.toggle("open");
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuButton.textContent =
+                isOpen ? "✕" : "☰";
+        }
+    );
+
+    navigationLinks
+        .querySelectorAll("a")
+        .forEach(function (link) {
+            link.addEventListener(
+                "click",
+                function () {
+                    navigationLinks.classList.remove(
+                        "open"
+                    );
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuButton.textContent = "☰";
+                }
+            );
+        });
+
+    document.getElementById(
+        "currentYear"
+    ).textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
+</html>

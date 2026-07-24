@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Terms and conditions for customers and shopping assistants using Hakuna Express."
+    >
+
+    <title>Terms and Conditions | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f7fb;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            color: white;
+            background-color: #5c6bc0;
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-container {
+            width: calc(100% - 30px);
+            max-width: 1200px;
+            min-height: 70px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            padding: 9px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #303f9f;
+            background-color: white;
+        }
+
+        .menu-button {
+            display: none;
+            padding: 8px 12px;
+            color: white;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .hero {
+            padding: 48px 20px 38px;
+            color: white;
+            text-align: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    #3f51b5,
+                    #7986cb
+                );
+        }
+
+        .hero h1 {
+            margin-bottom: 12px;
+            font-size: 36px;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        main {
+            width: calc(100% - 30px);
+            max-width: 900px;
+            margin: 35px auto;
+        }
+
+        .terms-card {
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .last-updated {
+            margin-bottom: 24px;
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .terms-section {
+            margin-bottom: 32px;
+        }
+
+        .terms-section:last-of-type {
+            margin-bottom: 15px;
+        }
+
+        .terms-section h2 {
+            margin-bottom: 12px;
+            color: #3f4d8b;
+            font-size: 23px;
+        }
+
+        .terms-section p {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .terms-section ul {
+            padding-left: 24px;
+        }
+
+        .terms-section li {
+            margin-bottom: 10px;
+            line-height: 1.65;
+        }
+
+        .important-note {
+            margin: 30px 0;
+            padding: 18px;
+            color: #7a4d00;
+            line-height: 1.65;
+            background-color: #fff4cc;
+            border-left: 5px solid #ffc107;
+            border-radius: 7px;
+        }
+
+        .acceptance-box {
+            margin-top: 30px;
+            padding: 22px;
+            text-align: center;
+            background-color: #f5f7ff;
+            border: 1px solid #d9def7;
+            border-radius: 9px;
+        }
+
+        .acceptance-box p {
+            margin-bottom: 17px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .action-button {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .accept-button {
+            color: white;
+            background-color: #28a745;
+        }
+
+        .accept-button:hover {
+            background-color: #218838;
+        }
+
+        .home-button {
+            color: #3f51b5;
+            background-color: #e8eaf6;
+        }
+
+        .home-button:hover {
+            color: white;
+            background-color: #5c6bc0;
+        }
+
+        footer {
+            margin-top: 45px;
+            padding: 22px 15px;
+            color: white;
+            text-align: center;
+            background-color: #3f4d8b;
+        }
+
+        @media (max-width: 900px) {
+            .header-container {
+                flex-wrap: wrap;
+                padding: 10px 0;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                padding-bottom: 8px;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            .terms-card {
+                padding: 20px;
+            }
+
+            .terms-section h2 {
+                font-size: 21px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+
+        <a
+            href="home.html"
+            class="logo-link"
+            aria-label="Hakuna Express home"
+        >
+            <img
+                src="hakunalogo.jpg"
+                alt="Hakuna Express logo"
+                class="logo"
+            >
+
+            <span class="brand-name">
+                Hakuna Express
+            </span>
+        </a>
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Open navigation menu"
+            aria-controls="navigationLinks"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+        <nav
+            id="navigationLinks"
+            class="nav-links"
+            aria-label="Main navigation"
+        >
+            <a href="home.html">Home</a>
+
+            <a href="about.html">About</a>
+
+            <a href="support.html">Support</a>
+
+            <a href="login.html">User Login</a>
+
+            <a href="signup.html">Sign Up</a>
+
+            <a href="assistant-login.html">
+                Assistant Login
+            </a>
+
+            <a
+                href="terms.html"
+                class="active"
+                aria-current="page"
+            >
+                Terms
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Terms and Conditions</h1>
+
+    <p>
+        These terms explain the responsibilities of customers,
+        shopping assistants, and Hakuna Express while using the platform.
+    </p>
+</section>
+
+<main>
+    <article class="terms-card">
+
+        <p class="last-updated">
+            Last updated:
+            <span id="lastUpdatedDate"></span>
+        </p>
+
+        <p class="intro">
+            By creating an account, submitting an order, accepting an
+            assistant assignment, or otherwise using Hakuna Express,
+            you agree to follow these terms and use the platform
+            responsibly.
+        </p>
+
+        <section class="terms-section">
+            <h2>1. Customer Responsibilities</h2>
+
+            <p>
+                Customers using Hakuna Express agree to the following:
+            </p>
+
+            <ul>
+                <li>
+                    Provide accurate and complete information, including
+                    your name, delivery address, city, state, pincode,
+                    mobile number, shopping date, and requested items.
+                </li>
+
+                <li>
+                    Review shopping details carefully before submitting
+                    an order.
+                </li>
+
+                <li>
+                    Communicate respectfully with the assigned assistant
+                    through WhatsApp or any other approved communication
+                    method.
+                </li>
+
+                <li>
+                    Clearly specify the required product, brand, size,
+                    quantity, price range, and any acceptable alternatives.
+                </li>
+
+                <li>
+                    Confirm the delivery status honestly through the
+                    delivery confirmation page.
+                </li>
+
+                <li>
+                    Select Received only after receiving the requested
+                    products.
+                </li>
+
+                <li>
+                    Select Not Received or Problem with Assistant only
+                    when the chosen option accurately describes the issue.
+                </li>
+
+                <li>
+                    Ask the assistant for the original receipt, bill,
+                    or a clear photograph of the receipt.
+                </li>
+
+                <li>
+                    Avoid sharing passwords, OTPs, bank PINs, card CVVs,
+                    or unnecessary sensitive information with assistants.
+                </li>
+
+                <li>
+                    Not misuse the platform, submit false orders,
+                    provide false confirmation updates, or harass an
+                    assistant.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>2. Shopping Assistant Responsibilities</h2>
+
+            <p>
+                Shopping assistants using Hakuna Express agree to the
+                following:
+            </p>
+
+            <ul>
+                <li>
+                    Handle every assigned shopping request professionally,
+                    carefully, and respectfully.
+                </li>
+
+                <li>
+                    View and update only orders assigned to their own
+                    assistant account.
+                </li>
+
+                <li>
+                    Confirm product details, cost, quantity, brand, and
+                    acceptable alternatives with the customer before
+                    purchasing when clarification is required.
+                </li>
+
+                <li>
+                    Provide the customer with the receipt or bill, either
+                    physically or through WhatsApp.
+                </li>
+
+                <li>
+                    Clearly communicate the expected purchase and delivery
+                    time.
+                </li>
+
+                <li>
+                    Update order status accurately through the assistant
+                    update page.
+                </li>
+
+                <li>
+                    Not mark an order as delivered before the order has
+                    actually been delivered.
+                </li>
+
+                <li>
+                    Use customer contact details only for handling the
+                    assigned shopping request.
+                </li>
+
+                <li>
+                    Not share, sell, store unnecessarily, or misuse
+                    customer personal information.
+                </li>
+
+                <li>
+                    Not request passwords, OTPs, bank PINs, card CVVs,
+                    or other confidential banking information.
+                </li>
+
+                <li>
+                    Not request or collect payment through suspicious,
+                    misleading, or unsafe methods.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>3. Payments and Receipts</h2>
+
+            <ul>
+                <li>
+                    Hakuna Express may not directly process customer
+                    payments unless a payment feature is explicitly
+                    provided on the platform.
+                </li>
+
+                <li>
+                    Any payment arrangement made outside the platform is
+                    the responsibility of the customer and assistant.
+                </li>
+
+                <li>
+                    Customers should verify the product cost and receipt
+                    before making or confirming payment.
+                </li>
+
+                <li>
+                    Assistants should provide accurate purchase costs and
+                    should not add undisclosed charges.
+                </li>
+
+                <li>
+                    Hakuna Express does not request OTPs, bank PINs,
+                    passwords, or card CVVs.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>4. Returns, Refunds, and Product Quality</h2>
+
+            <ul>
+                <li>
+                    Return and refund availability depends on the policy
+                    of the local shop from which the item was purchased.
+                </li>
+
+                <li>
+                    Some items, including food, medicines, customised
+                    products, opened products, or perishable goods, may
+                    not be returnable.
+                </li>
+
+                <li>
+                    Customers should confirm product details before the
+                    assistant completes the purchase.
+                </li>
+
+                <li>
+                    Hakuna Express does not guarantee that a local shop
+                    will accept a return or provide a refund.
+                </li>
+
+                <li>
+                    Product quality issues should be reported as soon as
+                    possible with the receipt and relevant proof.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>5. Order and Delivery Status</h2>
+
+            <ul>
+                <li>
+                    Order status information is based on updates submitted
+                    by the assigned assistant.
+                </li>
+
+                <li>
+                    Delivery times are estimates and may change because
+                    of store availability, travel conditions, weather,
+                    traffic, or other unexpected circumstances.
+                </li>
+
+                <li>
+                    Customers should verify the delivered items before
+                    confirming receipt.
+                </li>
+
+                <li>
+                    A customer may report an order as Not Received or
+                    Problem with Assistant when necessary.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>6. Complaints and Disputes</h2>
+
+            <ul>
+                <li>
+                    Customers should provide accurate order details and
+                    supporting information when submitting a complaint.
+                </li>
+
+                <li>
+                    Duplicate or false complaints may be rejected.
+                </li>
+
+                <li>
+                    Hakuna Express may review order details, status
+                    history, receipts, and relevant communication when
+                    investigating a complaint.
+                </li>
+
+                <li>
+                    The platform may suspend or restrict accounts involved
+                    in fraud, harassment, repeated misuse, or violations
+                    of these terms.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>7. Privacy and Data Use</h2>
+
+            <ul>
+                <li>
+                    Customer information may be used to create accounts,
+                    process shopping requests, assign assistants,
+                    communicate about orders, and handle complaints.
+                </li>
+
+                <li>
+                    Only information necessary for completing an assigned
+                    order should be shown to the assistant.
+                </li>
+
+                <li>
+                    Users and assistants are responsible for protecting
+                    their login credentials.
+                </li>
+
+                <li>
+                    Hakuna Express may store account and order information
+                    required for operating the platform.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>8. Account Suspension and Termination</h2>
+
+            <ul>
+                <li>
+                    Hakuna Express may suspend or terminate an account
+                    that violates these terms.
+                </li>
+
+                <li>
+                    Reasons may include fraud, false orders, false
+                    delivery confirmations, misuse of personal data,
+                    harassment, or unauthorised account access.
+                </li>
+
+                <li>
+                    Access may also be restricted when necessary to
+                    protect customers, assistants, or the platform.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>9. Platform Availability</h2>
+
+            <ul>
+                <li>
+                    Hakuna Express may experience temporary interruptions,
+                    maintenance, technical errors, or service delays.
+                </li>
+
+                <li>
+                    The platform does not guarantee continuous or
+                    error-free availability.
+                </li>
+
+                <li>
+                    Features may be added, modified, or removed as the
+                    platform develops.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>10. Limitation of Responsibility</h2>
+
+            <ul>
+                <li>
+                    Hakuna Express provides a platform that connects
+                    customers with shopping assistants.
+                </li>
+
+                <li>
+                    The platform is not the manufacturer or local seller
+                    of the products purchased.
+                </li>
+
+                <li>
+                    Hakuna Express is not responsible for losses caused
+                    by inaccurate information provided by a customer or
+                    assistant.
+                </li>
+
+                <li>
+                    Users remain responsible for reviewing products,
+                    receipts, payments, and delivery details.
+                </li>
+            </ul>
+        </section>
+
+        <section class="terms-section">
+            <h2>11. Changes to These Terms</h2>
+
+            <ul>
+                <li>
+                    These terms may be updated when platform features,
+                    policies, or legal requirements change.
+                </li>
+
+                <li>
+                    Continued use of Hakuna Express after an update means
+                    that you accept the revised terms.
+                </li>
+            </ul>
+        </section>
+
+        <div class="important-note">
+            <strong>Important:</strong>
+            Do not share passwords, OTPs, bank PINs, card CVVs, or other
+            confidential financial information with a customer,
+            assistant, or anyone claiming to represent Hakuna Express.
+        </div>
+
+        <section class="acceptance-box">
+            <p>
+                By selecting “Accept and Go Back,” you confirm that you
+                have read and understood these terms. This button returns
+                you to the previous page and does not create a separate
+                legal record unless your backend stores the acceptance.
+            </p>
+
+            <div class="button-row">
+                <button
+                    type="button"
+                    class="action-button accept-button"
+                    id="acceptButton"
+                >
+                    Accept and Go Back
+                </button>
+
+                <button
+                    type="button"
+                    class="action-button home-button"
+                    id="homeButton"
+                >
+                    Go to Home
+                </button>
+            </div>
+        </section>
+
+    </article>
+</main>
+
+<footer>
+    <p>
+        &copy; <span id="currentYear"></span>
+        Hakuna Express. All rights reserved.
+    </p>
+</footer>
+
+<script>
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const navigationLinks =
+        document.getElementById("navigationLinks");
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+            const isOpen =
+                navigationLinks.classList.toggle("open");
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuButton.textContent =
+                isOpen ? "✕" : "☰";
+        }
+    );
+
+    navigationLinks
+        .querySelectorAll("a")
+        .forEach(function (link) {
+            link.addEventListener(
+                "click",
+                function () {
+                    navigationLinks.classList.remove(
+                        "open"
+                    );
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuButton.textContent = "☰";
+                }
+            );
+        });
+
+    function acceptAndGoBack() {
+        /*
+          This stores acceptance only in this browser.
+
+          For production, store terms acceptance in your
+          backend with user ID, terms version, and timestamp.
+        */
+        localStorage.setItem(
+            "termsAccepted",
+            "true"
+        );
+
+        localStorage.setItem(
+            "termsAcceptedAt",
+            new Date().toISOString()
+        );
+
+        if (
+            document.referrer &&
+            window.history.length > 1
+        ) {
+            window.history.back();
+        } else {
+            window.location.href = "home.html";
+        }
+    }
+
+    document
+        .getElementById("acceptButton")
+        .addEventListener(
+            "click",
+            acceptAndGoBack
+        );
+
+    document
+        .getElementById("homeButton")
+        .addEventListener(
+            "click",
+            function () {
+                window.location.href =
+                    "home.html";
+            }
+        );
+
+    document.getElementById(
+        "currentYear"
+    ).textContent =
+        new Date().getFullYear();
+
+    document.getElementById(
+        "lastUpdatedDate"
+    ).textContent =
+        new Date().toLocaleDateString(
+            undefined,
+            {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        );
+</script>
+
+</body>
+</html>
