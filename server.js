@@ -41,7 +41,7 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// Allows HTML, CSS, JavaScript and image files to be served
+// Serve HTML, CSS, JS and images
 app.use(express.static(path.join(__dirname)));
 
 /* -------------------------------------------------
@@ -141,7 +141,6 @@ const assistantSchema = new mongoose.Schema(
 );
 
 const Assistant = mongoose.model("Assistant", assistantSchema);
-
 /* -------------------------------------------------
    ORDER / ADDRESS SCHEMA
 ------------------------------------------------- */
@@ -438,8 +437,15 @@ function createAssistantToken(assistant) {
 }
 
 async function getAssistantDetails(city, state) {
-  const escapedCity = city.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const escapedState = state.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapedCity = city.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+
+  const escapedState = state.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
 
   return Assistant.findOne({
     city: {
@@ -451,7 +457,6 @@ async function getAssistantDetails(city, state) {
     isAvailable: true,
   });
 }
-
 /* -------------------------------------------------
    AUTHENTICATION MIDDLEWARE
 ------------------------------------------------- */
@@ -680,7 +685,6 @@ app.get(
     }
   }
 );
-
 /* -------------------------------------------------
    SUBMIT SHOPPING REQUEST
 ------------------------------------------------- */
@@ -754,7 +758,8 @@ app.post(
 
       if (!assistant) {
         return res.status(404).json({
-          message: "No assistant is available in your city and state.",
+          message:
+            "No assistant is available in your city and state.",
         });
       }
 
@@ -1143,7 +1148,8 @@ app.post(
     try {
       let { assistantNumber } = req.body;
 
-      assistantNumber = assistantNumber?.replace(/[^\d]/g, "");
+      assistantNumber =
+        assistantNumber?.replace(/[^\d]/g, "");
 
       if (!assistantNumber) {
         return res.status(400).json({
@@ -1218,6 +1224,8 @@ app.use((error, req, res, next) => {
    START SERVER
 ------------------------------------------------- */
 
-app.listen(PORT, () => {
-  console.log(`🚀 Hakuna Express server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(
+    `🚀 Hakuna Express server running on port ${PORT}`
+  );
 });
