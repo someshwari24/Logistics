@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>User Login | Hakuna Express</title>
 
@@ -218,21 +222,30 @@
 
 <header>
     <div class="header-container">
-        <img src="hakunalogo.jpg" alt="Hakuna Express Logo">
+
+        <img
+            src="hakunalogo.jpg"
+            alt="Hakuna Express Logo"
+        >
 
         <nav class="nav-links">
-            <a href="index.html">Home</a>
+            <a href="/">Home</a>
             <a href="about.html">About</a>
             <a href="support.html">Support</a>
             <a href="login.html">User Login</a>
             <a href="signup.html">Sign Up</a>
-            <a href="assistant-login.html">Assistant Login</a>
+            <a href="assistant-login.html">
+                Assistant Login
+            </a>
         </nav>
+
     </div>
 </header>
 
 <main class="login-wrapper">
+
     <section class="login-container">
+
         <h2>User Login</h2>
 
         <p class="subtitle">
@@ -242,7 +255,10 @@
         <form id="loginForm" novalidate>
 
             <div class="form-group">
-                <label for="email">Email Address</label>
+
+                <label for="email">
+                    Email Address
+                </label>
 
                 <input
                     type="email"
@@ -252,12 +268,17 @@
                     autocomplete="email"
                     required
                 >
+
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
+
+                <label for="password">
+                    Password
+                </label>
 
                 <div class="password-wrapper">
+
                     <input
                         type="password"
                         id="password"
@@ -272,12 +293,13 @@
                         type="button"
                         class="password-toggle"
                         id="passwordToggle"
-                        onclick="togglePasswordVisibility()"
                         aria-label="Show password"
                     >
                         👁
                     </button>
+
                 </div>
+
             </div>
 
             <button
@@ -287,37 +309,76 @@
             >
                 Login
             </button>
+
         </form>
 
-        <p id="loginMessage" class="message" aria-live="polite"></p>
+        <p
+            id="loginMessage"
+            class="message"
+            aria-live="polite"
+        ></p>
 
         <p class="signup-link">
             Don't have an account?
-            <a href="sign up.html">Create an account</a>
+            <a href="signup.html">
+                Create an account
+            </a>
         </p>
+
     </section>
+
 </main>
 
 <script>
-    const API_BASE_URL = "http://localhost:3000";
+    /*
+        Since the frontend and backend are deployed
+        together on the same Render service,
+        keep this empty.
+    */
+    const API_BASE_URL = "";
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const passwordToggle =
+        document.getElementById("passwordToggle");
+
+    function showMessage(message, type) {
+        loginMessage.textContent = message;
+
+        if (type === "success") {
+            loginMessage.className =
+                "message success-message";
+        } else {
+            loginMessage.className =
+                "message error-message";
+        }
+    }
 
     function togglePasswordVisibility() {
-        const passwordInput =
-            document.getElementById("password");
-
-        const passwordToggle =
-            document.getElementById("passwordToggle");
-
         if (passwordInput.type === "password") {
             passwordInput.type = "text";
+
             passwordToggle.textContent = "🙈";
+
             passwordToggle.setAttribute(
                 "aria-label",
                 "Hide password"
             );
         } else {
             passwordInput.type = "password";
+
             passwordToggle.textContent = "👁";
+
             passwordToggle.setAttribute(
                 "aria-label",
                 "Show password"
@@ -325,25 +386,15 @@
         }
     }
 
-    function showMessage(message, type) {
-        const loginMessage =
-            document.getElementById("loginMessage");
+    passwordToggle.addEventListener(
+        "click",
+        togglePasswordVisibility
+    );
 
-        loginMessage.textContent = message;
-
-        loginMessage.className =
-            type === "success"
-                ? "message success-message"
-                : "message error-message";
-    }
-
-    document
-        .getElementById("loginForm")
-        .addEventListener("submit", async function (event) {
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
             event.preventDefault();
-
-            const loginButton =
-                document.getElementById("loginButton");
 
             const email =
                 document
@@ -353,9 +404,7 @@
                     .toLowerCase();
 
             const password =
-                document
-                    .getElementById("password")
-                    .value;
+                passwordInput.value;
 
             showMessage("", "error");
 
@@ -364,6 +413,7 @@
                     "Please enter your email and password.",
                     "error"
                 );
+
                 return;
             }
 
@@ -375,6 +425,7 @@
                     "Please enter a valid email address.",
                     "error"
                 );
+
                 return;
             }
 
@@ -383,6 +434,7 @@
                     "Password must contain at least 8 characters.",
                     "error"
                 );
+
                 return;
             }
 
@@ -394,9 +446,12 @@
                     `${API_BASE_URL}/login`,
                     {
                         method: "POST",
+
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type":
+                                "application/json"
                         },
+
                         body: JSON.stringify({
                             email,
                             password
@@ -404,24 +459,43 @@
                     }
                 );
 
-                const data = await response.json();
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch (jsonError) {
+                    throw new Error(
+                        "The server returned an invalid response."
+                    );
+                }
 
                 if (!response.ok) {
                     showMessage(
                         data.message || "Login failed.",
                         "error"
                     );
+
                     return;
                 }
 
-                localStorage.removeItem("assistantToken");
-                localStorage.removeItem("assistantPhone");
+                localStorage.removeItem(
+                    "assistantToken"
+                );
 
-                localStorage.setItem("token", data.token);
+                localStorage.removeItem(
+                    "assistantPhone"
+                );
+
+                localStorage.setItem(
+                    "token",
+                    data.token
+                );
+
                 localStorage.setItem(
                     "username",
                     data.username || ""
                 );
+
                 localStorage.setItem(
                     "name",
                     data.name || ""
@@ -434,24 +508,34 @@
 
                 setTimeout(function () {
                     window.location.href =
-                        "UserDashboard.html";
+                        "user-dashboard.html";
                 }, 1000);
 
             } catch (error) {
-                console.error("Login error:", error);
+                console.error(
+                    "Login error:",
+                    error
+                );
 
                 showMessage(
-                    "Unable to connect to the server. Make sure the backend is running.",
+                    error.message ||
+                    "Unable to connect to the server.",
                     "error"
                 );
+
             } finally {
                 loginButton.disabled = false;
                 loginButton.textContent = "Login";
             }
-        });
+        }
+    );
 
+    /*
+        Redirect users who are already logged in.
+    */
     if (localStorage.getItem("token")) {
-        window.location.href = "UserDashboard.html";
+        window.location.href =
+            "user-dashboard.html";
     }
 </script>
 
