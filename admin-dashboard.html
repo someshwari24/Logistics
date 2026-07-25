@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef4fb;
+            color: #263238;
+            min-height: 100vh;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #3949ab;
+            color: white;
+            padding: 14px 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logout-button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            background: #e53935;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 28px auto;
+            padding: 0 18px 45px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #3949ab, #7986cb);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.14);
+        }
+
+        .hero h1 {
+            margin-bottom: 7px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(150px, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+        }
+
+        .stat-card h3 {
+            color: #3949ab;
+            font-size: 27px;
+            margin-bottom: 5px;
+        }
+
+        .navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .nav-button {
+            border: none;
+            border-radius: 6px;
+            padding: 11px 16px;
+            background: white;
+            color: #3949ab;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
+        }
+
+        .nav-button.active {
+            background: #3949ab;
+            color: white;
+        }
+
+        .panel {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .panel h2 {
+            color: #3949ab;
+        }
+
+        .refresh-button,
+        .primary-button,
+        .success-button,
+        .danger-button,
+        .warning-button {
+            border: none;
+            border-radius: 6px;
+            padding: 9px 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .refresh-button,
+        .primary-button {
+            background: #3949ab;
+            color: white;
+        }
+
+        .success-button {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .danger-button {
+            background: #c62828;
+            color: white;
+        }
+
+        .warning-button {
+            background: #ef6c00;
+            color: white;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #b0bec5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 75px;
+            resize: vertical;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 11px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #e8eaf6;
+            color: #283593;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .badge-active,
+        .badge-available,
+        .badge-verified,
+        .badge-resolved,
+        .badge-paid {
+            background: #d8f3dc;
+            color: #1b5e20;
+        }
+
+        .badge-inactive,
+        .badge-unavailable,
+        .badge-rejected,
+        .badge-failed {
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .badge-pending,
+        .badge-generated,
+        .badge-open,
+        .badge-payment_pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .action-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .message.success {
+            display: block;
+            background: #d8f3dc;
+            color: #1b5e20;
+        }
+
+        .message.error {
+            display: block;
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #607d8b;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .header-container,
+            .panel-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .nav-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="brand">Hakuna Express Admin</div>
+
+            <button class="logout-button" onclick="logout()">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Admin Dashboard</h1>
+            <p>Manage assistants, complaints and Razorpay payment verification.</p>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3 id="assistantCount">0</h3>
+                <p>Assistants</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="availableAssistantCount">0</h3>
+                <p>Available Assistants</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="complaintCount">0</h3>
+                <p>Complaints</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="paymentCount">0</h3>
+                <p>Payments</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="pendingPaymentCount">0</h3>
+                <p>Pending Verification</p>
+            </div>
+        </section>
+
+        <nav class="navigation">
+            <button class="nav-button active" data-panel="assistantsPanel">
+                Assistants
+            </button>
+
+            <button class="nav-button" data-panel="complaintsPanel">
+                Complaints
+            </button>
+
+            <button class="nav-button" data-panel="paymentsPanel">
+                Payments
+            </button>
+        </nav>
+
+        <div id="messageBox" class="message"></div>
+
+        <section id="assistantsPanel" class="panel active">
+            <div class="panel-header">
+                <h2>Assistant Management</h2>
+
+                <button class="refresh-button" onclick="loadAssistants()">
+                    Refresh
+                </button>
+            </div>
+
+            <form id="assistantForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="assistantName">Name</label>
+                        <input id="assistantName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assistantEmail">Email</label>
+                        <input id="assistantEmail" type="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assistantPhone">Phone Number</label>
+                        <input
+                            id="assistantPhone"
+                            type="tel"
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assistantPassword">Password</label>
+                        <input
+                            id="assistantPassword"
+                            type="password"
+                            minlength="6"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-button">
+                    Add Assistant
+                </button>
+            </form>
+
+            <div class="table-wrapper" style="margin-top: 22px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="assistantsBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="complaintsPanel" class="panel">
+            <div class="panel-header">
+                <h2>User Complaints</h2>
+
+                <button class="refresh-button" onclick="loadComplaints()">
+                    Refresh
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Complaint</th>
+                            <th>Order</th>
+                            <th>User</th>
+                            <th>Assistant</th>
+                            <th>Reason / Description</th>
+                            <th>Status</th>
+                            <th>Admin Note</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="complaintsBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="paymentsPanel" class="panel">
+            <div class="panel-header">
+                <h2>Payment Verification</h2>
+
+                <button class="refresh-button" onclick="loadPayments()">
+                    Refresh
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>User</th>
+                            <th>Assistant</th>
+                            <th>Amount</th>
+                            <th>Razorpay Payment ID</th>
+                            <th>Bill Status</th>
+                            <th>Gateway Status</th>
+                            <th>Admin Note</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="paymentsBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE_URL =
+            "https://logistics-dwti.onrender.com";
+
+        const adminToken =
+            localStorage.getItem("adminToken");
+
+        let assistants = [];
+        let complaints = [];
+        let payments = [];
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializeDashboard
+        );
+
+        document
+            .getElementById("assistantForm")
+            .addEventListener("submit", addAssistant);
+
+        document
+            .querySelectorAll(".nav-button")
+            .forEach((button) => {
+                button.addEventListener("click", () => {
+                    openPanel(button.dataset.panel);
+                });
+            });
+
+        async function initializeDashboard() {
+            if (!adminToken) {
+                alert("Please log in as administrator.");
+                location.href = "admin-login.html";
+                return;
+            }
+
+            await Promise.all([
+                loadAssistants(),
+                loadComplaints(),
+                loadPayments()
+            ]);
+        }
+
+        function openPanel(panelId) {
+            document
+                .querySelectorAll(".panel")
+                .forEach((panel) => {
+                    panel.classList.remove("active");
+                });
+
+            document
+                .querySelectorAll(".nav-button")
+                .forEach((button) => {
+                    button.classList.remove("active");
+                });
+
+            document
+                .getElementById(panelId)
+                .classList.add("active");
+
+            document
+                .querySelector(
+                    `[data-panel="${panelId}"]`
+                )
+                .classList.add("active");
+        }
+
+        async function loadAssistants() {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/assistants`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load assistants."
+                    );
+                }
+
+                assistants =
+                    Array.isArray(data)
+                        ? data
+                        : data.assistants || [];
+
+                renderAssistants();
+                updateStatistics();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        async function addAssistant(event) {
+            event.preventDefault();
+
+            const assistantData = {
+                name:
+                    document
+                        .getElementById("assistantName")
+                        .value
+                        .trim(),
+
+                email:
+                    document
+                        .getElementById("assistantEmail")
+                        .value
+                        .trim(),
+
+                phonenumber:
+                    document
+                        .getElementById("assistantPhone")
+                        .value
+                        .trim(),
+
+                password:
+                    document
+                        .getElementById("assistantPassword")
+                        .value
+            };
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/assistants`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        },
+                        body: JSON.stringify(
+                            assistantData
+                        )
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to add assistant."
+                    );
+                }
+
+                document
+                    .getElementById("assistantForm")
+                    .reset();
+
+                showMessage(
+                    "Assistant added successfully.",
+                    "success"
+                );
+
+                await loadAssistants();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        function renderAssistants() {
+            const body =
+                document.getElementById(
+                    "assistantsBody"
+                );
+
+            if (!assistants.length) {
+                body.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty">
+                            No assistants found.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            body.innerHTML = assistants
+                .map((assistant) => {
+                    const id =
+                        assistant.id ||
+                        assistant._id;
+
+                    const available =
+                        assistant.available ??
+                        assistant.isAvailable ??
+                        true;
+
+                    return `
+                        <tr>
+                            <td>${escapeHtml(assistant.name || "-")}</td>
+                            <td>${escapeHtml(assistant.email || "-")}</td>
+                            <td>${escapeHtml(
+                                assistant.phonenumber ||
+                                assistant.phone ||
+                                "-"
+                            )}</td>
+
+                            <td>
+                                <span class="badge ${
+                                    available
+                                        ? "badge-available"
+                                        : "badge-unavailable"
+                                }">
+                                    ${
+                                        available
+                                            ? "Available"
+                                            : "Unavailable"
+                                    }
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="action-group">
+                                    <button
+                                        class="warning-button"
+                                        onclick="toggleAvailability(
+                                            '${id}',
+                                            ${!available}
+                                        )"
+                                    >
+                                        ${
+                                            available
+                                                ? "Disable"
+                                                : "Enable"
+                                        }
+                                    </button>
+
+                                    <button
+                                        class="danger-button"
+                                        onclick="deleteAssistant(
+                                            '${id}'
+                                        )"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join("");
+        }
+
+        async function toggleAvailability(
+            assistantId,
+            available
+        ) {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/assistants/${assistantId}/availability`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        },
+                        body: JSON.stringify({
+                            available
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to update availability."
+                    );
+                }
+
+                showMessage(
+                    "Assistant availability updated.",
+                    "success"
+                );
+
+                await loadAssistants();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        async function deleteAssistant(assistantId) {
+            if (
+                !confirm(
+                    "Are you sure you want to delete this assistant?"
+                )
+            ) {
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/assistants/${assistantId}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to delete assistant."
+                    );
+                }
+
+                showMessage(
+                    "Assistant deleted.",
+                    "success"
+                );
+
+                await loadAssistants();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        async function loadComplaints() {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/complaints`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load complaints."
+                    );
+                }
+
+                complaints =
+                    Array.isArray(data)
+                        ? data
+                        : data.complaints || [];
+
+                renderComplaints();
+                updateStatistics();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        function renderComplaints() {
+            const body =
+                document.getElementById(
+                    "complaintsBody"
+                );
+
+            if (!complaints.length) {
+                body.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty">
+                            No complaints found.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            body.innerHTML = complaints
+                .map((complaint) => {
+                    const id =
+                        complaint.id ||
+                        complaint._id;
+
+                    const order =
+                        complaint.orderId || {};
+
+                    const user =
+                        complaint.userId || {};
+
+                    const assistant =
+                        complaint.assistantId || {};
+
+                    const status =
+                        complaint.status ||
+                        "open";
+
+                    return `
+                        <tr>
+                            <td>${escapeHtml(id)}</td>
+
+                            <td>
+                                ${escapeHtml(
+                                    order._id ||
+                                    order.id ||
+                                    complaint.orderId ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    user.name ||
+                                    user.email ||
+                                    complaint.userName ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    assistant.name ||
+                                    complaint.assistantNumber ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    ${escapeHtml(
+                                        complaint.reason ||
+                                        "-"
+                                    )}
+                                </strong>
+                                <br>
+                                ${escapeHtml(
+                                    complaint.description ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                <span class="badge badge-${normalizeStatus(status)}">
+                                    ${escapeHtml(status)}
+                                </span>
+                            </td>
+
+                            <td>
+                                <textarea
+                                    id="complaint-note-${id}"
+                                    placeholder="Admin note"
+                                >${escapeHtml(
+                                    complaint.adminNote ||
+                                    ""
+                                )}</textarea>
+                            </td>
+
+                            <td>
+                                <div class="action-group">
+                                    <button
+                                        class="success-button"
+                                        onclick="updateComplaint(
+                                            '${id}',
+                                            'resolved'
+                                        )"
+                                    >
+                                        Resolve
+                                    </button>
+
+                                    <button
+                                        class="danger-button"
+                                        onclick="updateComplaint(
+                                            '${id}',
+                                            'rejected'
+                                        )"
+                                    >
+                                        Reject
+                                    </button>
+
+                                    <button
+                                        class="primary-button"
+                                        onclick="updateComplaint(
+                                            '${id}',
+                                            '${status}'
+                                        )"
+                                    >
+                                        Save Note
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join("");
+        }
+
+        async function updateComplaint(
+            complaintId,
+            status
+        ) {
+            const adminNote =
+                document
+                    .getElementById(
+                        `complaint-note-${complaintId}`
+                    )
+                    .value
+                    .trim();
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/complaints/${complaintId}`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        },
+                        body: JSON.stringify({
+                            status,
+                            adminNote
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to update complaint."
+                    );
+                }
+
+                showMessage(
+                    "Complaint updated.",
+                    "success"
+                );
+
+                await loadComplaints();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        async function loadPayments() {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/payments`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load payments."
+                    );
+                }
+
+                payments =
+                    Array.isArray(data)
+                        ? data
+                        : data.payments ||
+                          data.bills ||
+                          [];
+
+                renderPayments();
+                updateStatistics();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        function renderPayments() {
+            const body =
+                document.getElementById(
+                    "paymentsBody"
+                );
+
+            if (!payments.length) {
+                body.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="empty">
+                            No payments found.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            body.innerHTML = payments
+                .map((bill) => {
+                    const id =
+                        bill.id ||
+                        bill._id;
+
+                    const order =
+                        bill.orderId || {};
+
+                    const user =
+                        bill.userId || {};
+
+                    const assistant =
+                        bill.assistantId || {};
+
+                    const billStatus =
+                        bill.billStatus ||
+                        "generated";
+
+                    const gatewayStatus =
+                        bill.paymentGatewayStatus ||
+                        "pending";
+
+                    return `
+                        <tr>
+                            <td>
+                                ${escapeHtml(
+                                    order._id ||
+                                    order.id ||
+                                    bill.orderId ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    user.name ||
+                                    user.email ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    assistant.name ||
+                                    assistant.email ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${formatMoney(
+                                    bill.totalAmount
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    bill.razorpayPaymentId ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                <span class="badge badge-${normalizeStatus(
+                                    billStatus
+                                )}">
+                                    ${escapeHtml(billStatus)}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge badge-${normalizeStatus(
+                                    gatewayStatus
+                                )}">
+                                    ${escapeHtml(gatewayStatus)}
+                                </span>
+                            </td>
+
+                            <td>
+                                <textarea
+                                    id="payment-note-${id}"
+                                    placeholder="Admin note"
+                                >${escapeHtml(
+                                    bill.adminNote ||
+                                    ""
+                                )}</textarea>
+                            </td>
+
+                            <td>
+                                <div class="action-group">
+                                    <button
+                                        class="success-button"
+                                        onclick="verifyPayment(
+                                            '${id}',
+                                            true
+                                        )"
+                                    >
+                                        Verify
+                                    </button>
+
+                                    <button
+                                        class="danger-button"
+                                        onclick="verifyPayment(
+                                            '${id}',
+                                            false
+                                        )"
+                                    >
+                                        Reject
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join("");
+        }
+
+        async function verifyPayment(
+            billId,
+            verified
+        ) {
+            const adminNote =
+                document
+                    .getElementById(
+                        `payment-note-${billId}`
+                    )
+                    .value
+                    .trim();
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/admin/payments/${billId}/verify`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                            Authorization:
+                                `Bearer ${adminToken}`
+                        },
+                        body: JSON.stringify({
+                            verified,
+                            adminNote
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to update payment."
+                    );
+                }
+
+                showMessage(
+                    verified
+                        ? "Payment verified."
+                        : "Payment rejected.",
+                    "success"
+                );
+
+                await loadPayments();
+            } catch (error) {
+                showMessage(error.message, "error");
+            }
+        }
+
+        function updateStatistics() {
+            document.getElementById(
+                "assistantCount"
+            ).textContent =
+                assistants.length;
+
+            document.getElementById(
+                "availableAssistantCount"
+            ).textContent =
+                assistants.filter(
+                    (assistant) =>
+                        assistant.available ??
+                        assistant.isAvailable ??
+                        true
+                ).length;
+
+            document.getElementById(
+                "complaintCount"
+            ).textContent =
+                complaints.length;
+
+            document.getElementById(
+                "paymentCount"
+            ).textContent =
+                payments.length;
+
+            document.getElementById(
+                "pendingPaymentCount"
+            ).textContent =
+                payments.filter((bill) => {
+                    const status =
+                        bill.billStatus ||
+                        "generated";
+
+                    return ![
+                        "admin_verified",
+                        "admin_rejected"
+                    ].includes(status);
+                }).length;
+        }
+
+        function formatMoney(value) {
+            return Number(value || 0).toLocaleString(
+                "en-IN",
+                {
+                    style: "currency",
+                    currency: "INR"
+                }
+            );
+        }
+
+        function normalizeStatus(value) {
+            return String(value || "pending")
+                .toLowerCase()
+                .trim()
+                .replaceAll("_", "-")
+                .replaceAll(" ", "-");
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function showMessage(message, type) {
+            const box =
+                document.getElementById(
+                    "messageBox"
+                );
+
+            box.textContent = message;
+            box.className = `message ${type}`;
+
+            setTimeout(() => {
+                box.className = "message";
+                box.textContent = "";
+            }, 5000);
+        }
+
+        function logout() {
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("admin");
+
+            location.href = "admin-login.html";
+        }
+    </script>
+</body>
+</html>

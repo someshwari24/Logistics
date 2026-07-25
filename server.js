@@ -6,12 +6,20 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const path = require("path");
+const crypto = require("crypto");
+const Razorpay = require("razorpay");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
+const RAZORPAY_WEBHOOK_SECRET =
+  process.env.RAZORPAY_WEBHOOK_SECRET;
 
 /* -------------------------------------------------
    ENVIRONMENT VARIABLE VALIDATION
@@ -27,6 +35,29 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+  console.error(
+    "❌ ADMIN_EMAIL and ADMIN_PASSWORD must be configured."
+  );
+  process.exit(1);
+}
+
+if (
+  !RAZORPAY_KEY_ID ||
+  !RAZORPAY_KEY_SECRET ||
+  !RAZORPAY_WEBHOOK_SECRET
+) {
+  console.error(
+    "❌ Razorpay environment variables are missing."
+  );
+  process.exit(1);
+}
+
+const razorpay = new Razorpay({
+  key_id: RAZORPAY_KEY_ID,
+  key_secret: RAZORPAY_KEY_SECRET,
+});
+
 /* -------------------------------------------------
    MIDDLEWARE
 ------------------------------------------------- */
@@ -36,6 +67,151 @@ app.use(
     origin: true,
     credentials: true,
   })
+);
+
+/* -------------------------------------------------
+   RAZORPAY WEBHOOK
+   This route must appear before express.json().
+------------------------------------------------- */
+
+app.post(
+  "/razorpay/webhook",
+  express.raw({
+    type: "application/json",
+  }),
+  async (req, res) => {
+    try {
+      const webhookSignature =
+        req.headers["x-razorpay-signature"];
+
+      if (!webhookSignature) {
+        return res.status(400).json({
+          message:
+            "Razorpay webhook signature is missing.",
+        });
+      }
+
+      const expectedSignature = crypto
+        .createHmac(
+          "sha256",
+          RAZORPAY_WEBHOOK_SECRET
+        )
+        .update(req.body)
+        .digest("hex");
+
+      const receivedBuffer =
+        Buffer.from(webhookSignature);
+
+      const expectedBuffer =
+        Buffer.from(expectedSignature);
+
+      if (
+        receivedBuffer.length !==
+          expectedBuffer.length ||
+        !crypto.timingSafeEqual(
+          receivedBuffer,
+          expectedBuffer
+        )
+      ) {
+        return res.status(400).json({
+          message:
+            "Invalid Razorpay webhook signature.",
+        });
+      }
+
+      const event = JSON.parse(
+        req.body.toString("utf8")
+      );
+
+      const paymentEntity =
+        event.payload?.payment?.entity;
+
+      const razorpayOrderId =
+        paymentEntity?.order_id;
+
+      if (!razorpayOrderId) {
+        return res.status(200).json({
+          message:
+            "Webhook received without an order ID.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findOne({
+          razorpayOrderId,
+        });
+
+      if (!bill) {
+        return res.status(200).json({
+          message:
+            "No local bill matched this Razorpay order.",
+        });
+      }
+
+      if (
+        event.event ===
+          "payment.captured" ||
+        event.event === "order.paid"
+      ) {
+        const expectedAmount =
+          Math.round(
+            bill.totalAmount * 100
+          );
+
+        if (
+          Number(paymentEntity.amount) ===
+            expectedAmount &&
+          paymentEntity.currency === "INR"
+        ) {
+          bill.razorpayPaymentId =
+            paymentEntity.id;
+
+          bill.paymentGatewayStatus =
+            paymentEntity.status;
+
+          bill.billStatus = "paid";
+
+          bill.paidAt =
+            bill.paidAt || new Date();
+
+          await bill.save();
+        }
+      }
+
+      if (
+        event.event ===
+        "payment.failed"
+      ) {
+        bill.billStatus =
+          "payment_failed";
+
+        bill.paymentGatewayStatus =
+          paymentEntity.status ||
+          "failed";
+
+        bill.failureReason =
+          paymentEntity.error_description ||
+          "Payment failed.";
+
+        await bill.save();
+      }
+
+      return res.status(200).json({
+        message:
+          "Webhook processed successfully.",
+      });
+    } catch (error) {
+      console.error(
+        "Razorpay webhook error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to process Razorpay webhook.",
+      });
+    }
+  }
 );
 
 app.use(express.json({ limit: "1mb" }));
@@ -254,10 +430,10 @@ const Address = mongoose.model(
 
 const complaintSchema = new mongoose.Schema(
   {
-    assistantNumber: {
-      type: String,
+    orderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
       required: true,
-      trim: true,
     },
 
     userId: {
@@ -266,19 +442,69 @@ const complaintSchema = new mongoose.Schema(
       required: true,
     },
 
+    assistantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Assistant",
+      required: true,
+    },
+
+    assistantNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    reason: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 150,
+    },
+
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 1500,
+    },
+
+    status: {
+      type: String,
+      enum: [
+        "open",
+        "in_review",
+        "resolved",
+        "rejected",
+      ],
+      default: "open",
+    },
+
+    adminNote: {
+      type: String,
+      trim: true,
+      maxlength: 1500,
+      default: "",
+    },
+
     submittedAt: {
       type: Date,
       default: Date.now,
     },
+
+    resolvedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     collection: "complaints",
+    timestamps: true,
   }
 );
 
 complaintSchema.index(
   {
-    assistantNumber: 1,
+    orderId: 1,
     userId: 1,
   },
   {
@@ -391,6 +617,142 @@ const OrderUpdate = mongoose.model(
 );
 
 /* -------------------------------------------------
+   PAYMENT BILL SCHEMA
+------------------------------------------------- */
+
+const paymentBillSchema =
+  new mongoose.Schema(
+    {
+      orderId: {
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
+        ref: "Address",
+        required: true,
+        unique: true,
+      },
+
+      userId: {
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
+        ref: "User",
+        required: true,
+      },
+
+      assistantId: {
+        type:
+          mongoose.Schema.Types
+            .ObjectId,
+        ref: "Assistant",
+        required: true,
+      },
+
+      itemAmount: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
+
+      deliveryCharge: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+
+      taxAmount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+
+      discountAmount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+
+      totalAmount: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
+
+      description: {
+        type: String,
+        trim: true,
+        maxlength: 1000,
+        default: "",
+      },
+
+      billStatus: {
+        type: String,
+        enum: [
+          "generated",
+          "payment_pending",
+          "paid",
+          "payment_failed",
+          "admin_verified",
+          "admin_rejected",
+        ],
+        default: "generated",
+      },
+
+      razorpayOrderId: {
+        type: String,
+        default: null,
+      },
+
+      razorpayPaymentId: {
+        type: String,
+        default: null,
+      },
+
+      razorpaySignature: {
+        type: String,
+        default: null,
+      },
+
+      paymentGatewayStatus: {
+        type: String,
+        default: null,
+      },
+
+      failureReason: {
+        type: String,
+        default: "",
+      },
+
+      paidAt: {
+        type: Date,
+        default: null,
+      },
+
+      adminVerifiedAt: {
+        type: Date,
+        default: null,
+      },
+
+      adminNote: {
+        type: String,
+        trim: true,
+        maxlength: 1000,
+        default: "",
+      },
+    },
+    {
+      timestamps: true,
+      collection: "payment_bills",
+    }
+  );
+
+const PaymentBill =
+  mongoose.model(
+    "PaymentBill",
+    paymentBillSchema
+  );
+
+/* -------------------------------------------------
    HELPER FUNCTIONS
 ------------------------------------------------- */
 
@@ -448,6 +810,19 @@ function createAssistantToken(assistant) {
     JWT_SECRET,
     {
       expiresIn: "1h",
+    }
+  );
+}
+
+function createAdminToken() {
+  return jwt.sign(
+    {
+      role: "admin",
+      email: ADMIN_EMAIL,
+    },
+    JWT_SECRET,
+    {
+      expiresIn: "2h",
     }
   );
 }
@@ -511,6 +886,17 @@ function assistantOnly(req, res, next) {
     return res.status(403).json({
       message:
         "Only assistants can perform this operation.",
+    });
+  }
+
+  next();
+}
+
+function adminOnly(req, res, next) {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      message:
+        "Only administrators can perform this operation.",
     });
   }
 
@@ -2210,7 +2596,7 @@ app.get(
 );
 
 /* -------------------------------------------------
-   SUBMIT COMPLAINT AGAINST ASSISTANT
+   USER SUBMITS COMPLAINT FOR AN ORDER
 ------------------------------------------------- */
 
 app.post(
@@ -2220,56 +2606,74 @@ app.post(
   async (req, res) => {
     try {
       let {
-        assistantNumber,
+        orderId,
+        reason,
+        description,
       } = req.body;
 
-      assistantNumber =
-        assistantNumber?.trim();
+      orderId = orderId?.trim();
+      reason = reason?.trim();
+      description = description?.trim();
 
-      if (!assistantNumber) {
+      if (!orderId || !reason || !description) {
         return res.status(400).json({
           message:
-            "Assistant phone number is required.",
+            "Order ID, reason, and description are required.",
         });
       }
 
-      if (!isValidPhone(assistantNumber)) {
+      if (!isValidObjectId(orderId)) {
         return res.status(400).json({
           message:
-            "Please enter a valid assistant phone number.",
+            "Invalid order ID.",
         });
       }
 
-      const assistant =
-        await Assistant.findOne({
-          phonenumber:
-            assistantNumber,
-        });
+      const order = await Address.findOne({
+        _id: orderId,
+        userId: req.user.userId,
+      }).populate(
+        "assistantId",
+        "name phonenumber city state"
+      );
 
-      if (!assistant) {
+      if (!order) {
         return res.status(404).json({
           message:
-            "Assistant not found.",
+            "Order not found or it does not belong to you.",
+        });
+      }
+
+      if (!order.assistantId) {
+        return res.status(400).json({
+          message:
+            "This order does not have an assigned assistant.",
         });
       }
 
       const existingComplaint =
         await Complaint.findOne({
-          assistantNumber,
+          orderId: order._id,
           userId: req.user.userId,
         });
 
       if (existingComplaint) {
         return res.status(409).json({
           message:
-            "You have already submitted a complaint against this assistant.",
+            "You have already submitted a complaint for this order.",
         });
       }
 
       const complaint =
         await Complaint.create({
-          assistantNumber,
+          orderId: order._id,
           userId: req.user.userId,
+          assistantId:
+            order.assistantId._id,
+          assistantNumber:
+            order.assistantId.phonenumber,
+          reason,
+          description,
         });
 
       return res.status(201).json({
@@ -2278,8 +2682,15 @@ app.post(
 
         complaint: {
           id: complaint._id,
+          orderId: complaint.orderId,
+          assistantId:
+            complaint.assistantId,
           assistantNumber:
             complaint.assistantNumber,
+          reason: complaint.reason,
+          description:
+            complaint.description,
+          status: complaint.status,
           submittedAt:
             complaint.submittedAt,
         },
@@ -2293,7 +2704,7 @@ app.post(
       if (error.code === 11000) {
         return res.status(409).json({
           message:
-            "You have already submitted a complaint against this assistant.",
+            "You have already submitted a complaint for this order.",
         });
       }
 
@@ -2318,9 +2729,18 @@ app.get(
       const complaints =
         await Complaint.find({
           userId: req.user.userId,
-        }).sort({
-          submittedAt: -1,
-        });
+        })
+          .populate(
+            "orderId",
+            "item currentStatus shoppingDate shoppingTime address city state pincode mobile"
+          )
+          .populate(
+            "assistantId",
+            "name phonenumber city state"
+          )
+          .sort({
+            submittedAt: -1,
+          });
 
       return res.status(200).json({
         message:
@@ -2342,18 +2762,201 @@ app.get(
 );
 
 /* -------------------------------------------------
-   GET ASSISTANT COMPLAINT COUNT
+   ADMIN LOGIN
+------------------------------------------------- */
+
+app.post(
+  "/admin-login",
+  async (req, res) => {
+    try {
+      let { email, password } = req.body;
+
+      email = email?.trim().toLowerCase();
+
+      if (!email || !password) {
+        return res.status(400).json({
+          message:
+            "Admin email and password are required.",
+        });
+      }
+
+      if (
+        email !== ADMIN_EMAIL.toLowerCase() ||
+        password !== ADMIN_PASSWORD
+      ) {
+        return res.status(401).json({
+          message:
+            "Invalid administrator credentials.",
+        });
+      }
+
+      const token = createAdminToken();
+
+      return res.status(200).json({
+        message:
+          "Administrator login successful.",
+        token,
+        admin: {
+          email: ADMIN_EMAIL,
+        },
+      });
+    } catch (error) {
+      console.error(
+        "Admin login error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to log in as administrator.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN GET ALL ASSISTANTS
 ------------------------------------------------- */
 
 app.get(
-  "/assistant/complaints",
+  "/admin/assistants",
   authMiddleware,
-  assistantOnly,
+  adminOnly,
   async (req, res) => {
     try {
+      const assistants =
+        await Assistant.find()
+          .sort({ createdAt: -1 });
+
+      return res.status(200).json({
+        assistants,
+      });
+    } catch (error) {
+      console.error(
+        "Admin get assistants error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to retrieve assistants.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN ADDS ASSISTANT
+------------------------------------------------- */
+
+app.post(
+  "/admin/assistants",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      let {
+        name,
+        phonenumber,
+        city,
+        state,
+      } = req.body;
+
+      name = name?.trim();
+      phonenumber =
+        phonenumber?.replace(/\D/g, "");
+      city = city?.trim();
+      state = state?.trim();
+
+      if (
+        !name ||
+        !phonenumber ||
+        !city ||
+        !state
+      ) {
+        return res.status(400).json({
+          message:
+            "Name, phone number, city, and state are required.",
+        });
+      }
+
+      if (!isValidPhone(phonenumber)) {
+        return res.status(400).json({
+          message:
+            "Phone number must contain between 10 and 15 digits.",
+        });
+      }
+
       const assistant =
-        await Assistant.findById(
-          req.user.assistantId
+        await Assistant.create({
+          name,
+          phonenumber,
+          city,
+          state,
+          isAvailable: true,
+        });
+
+      return res.status(201).json({
+        message:
+          "Assistant added successfully.",
+        assistant,
+      });
+    } catch (error) {
+      console.error(
+        "Admin add assistant error:",
+        error
+      );
+
+      if (error.code === 11000) {
+        return res.status(409).json({
+          message:
+            "An assistant with this phone number already exists.",
+        });
+      }
+
+      return res.status(500).json({
+        message:
+          "Unable to add assistant.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN UPDATES ASSISTANT AVAILABILITY
+------------------------------------------------- */
+
+app.patch(
+  "/admin/assistants/:assistantId/availability",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const { assistantId } = req.params;
+      const { isAvailable } = req.body;
+
+      if (!isValidObjectId(assistantId)) {
+        return res.status(400).json({
+          message:
+            "Invalid assistant ID.",
+        });
+      }
+
+      if (typeof isAvailable !== "boolean") {
+        return res.status(400).json({
+          message:
+            "isAvailable must be true or false.",
+        });
+      }
+
+      const assistant =
+        await Assistant.findByIdAndUpdate(
+          assistantId,
+          { isAvailable },
+          {
+            new: true,
+            runValidators: true,
+          }
         );
 
       if (!assistant) {
@@ -2363,37 +2966,936 @@ app.get(
         });
       }
 
+      return res.status(200).json({
+        message:
+          "Assistant availability updated.",
+        assistant,
+      });
+    } catch (error) {
+      console.error(
+        "Admin update assistant error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to update assistant.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN DELETES ASSISTANT
+------------------------------------------------- */
+
+app.delete(
+  "/admin/assistants/:assistantId",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const { assistantId } = req.params;
+
+      if (!isValidObjectId(assistantId)) {
+        return res.status(400).json({
+          message:
+            "Invalid assistant ID.",
+        });
+      }
+
+      const assignedOrderCount =
+        await Address.countDocuments({
+          assistantId,
+        });
+
+      if (assignedOrderCount > 0) {
+        return res.status(400).json({
+          message:
+            "This assistant has assigned orders. Mark the assistant unavailable instead of deleting.",
+        });
+      }
+
+      const assistant =
+        await Assistant.findByIdAndDelete(
+          assistantId
+        );
+
+      if (!assistant) {
+        return res.status(404).json({
+          message:
+            "Assistant not found.",
+        });
+      }
+
+      return res.status(200).json({
+        message:
+          "Assistant deleted successfully.",
+      });
+    } catch (error) {
+      console.error(
+        "Admin delete assistant error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to delete assistant.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN GETS ALL COMPLAINTS WITH RELATED DETAILS
+------------------------------------------------- */
+
+app.get(
+  "/admin/complaints",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
       const complaints =
-        await Complaint.find({
-          assistantNumber:
-            assistant.phonenumber,
-        })
+        await Complaint.find()
           .populate(
             "userId",
             "name username email"
+          )
+          .populate(
+            "assistantId",
+            "name phonenumber city state isAvailable"
+          )
+          .populate(
+            "orderId",
+            "name address city state pincode shoppingDate shoppingTime item mobile language currentStatus createdAt updatedAt"
           )
           .sort({
             submittedAt: -1,
           });
 
       return res.status(200).json({
-        message:
-          "Assistant complaints retrieved successfully.",
-
-        complaintCount:
-          complaints.length,
-
         complaints,
       });
     } catch (error) {
       console.error(
-        "Get assistant complaints error:",
+        "Admin get complaints error:",
         error
       );
 
       return res.status(500).json({
         message:
-          "Unable to retrieve assistant complaints.",
+          "Unable to retrieve complaints.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN UPDATES COMPLAINT STATUS
+------------------------------------------------- */
+
+app.patch(
+  "/admin/complaints/:complaintId",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const { complaintId } = req.params;
+      let { status, adminNote } = req.body;
+
+      if (!isValidObjectId(complaintId)) {
+        return res.status(400).json({
+          message:
+            "Invalid complaint ID.",
+        });
+      }
+
+      status = status?.trim();
+      adminNote = adminNote?.trim() || "";
+
+      const allowedStatuses = [
+        "open",
+        "in_review",
+        "resolved",
+        "rejected",
+      ];
+
+      if (!allowedStatuses.includes(status)) {
+        return res.status(400).json({
+          message:
+            "Invalid complaint status.",
+        });
+      }
+
+      const update = {
+        status,
+        adminNote,
+        resolvedAt:
+          status === "resolved" ||
+          status === "rejected"
+            ? new Date()
+            : null,
+      };
+
+      const complaint =
+        await Complaint.findByIdAndUpdate(
+          complaintId,
+          update,
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+
+      if (!complaint) {
+        return res.status(404).json({
+          message:
+            "Complaint not found.",
+        });
+      }
+
+      return res.status(200).json({
+        message:
+          "Complaint updated successfully.",
+        complaint,
+      });
+    } catch (error) {
+      console.error(
+        "Admin update complaint error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to update complaint.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ASSISTANT CREATES OR UPDATES A BILL
+------------------------------------------------- */
+
+app.post(
+  "/assistant/orders/:orderId/bill",
+  authMiddleware,
+  assistantOnly,
+  async (req, res) => {
+    try {
+      const { orderId } = req.params;
+
+      let {
+        itemAmount,
+        deliveryCharge = 0,
+        taxAmount = 0,
+        discountAmount = 0,
+        description = "",
+      } = req.body;
+
+      if (!isValidObjectId(orderId)) {
+        return res.status(400).json({
+          message:
+            "Invalid order ID.",
+        });
+      }
+
+      const order =
+        await Address.findOne({
+          _id: orderId,
+          assistantId:
+            req.user.assistantId,
+        });
+
+      if (!order) {
+        return res.status(404).json({
+          message:
+            "Assigned order not found.",
+        });
+      }
+
+      itemAmount =
+        Number(itemAmount);
+
+      deliveryCharge =
+        Number(deliveryCharge);
+
+      taxAmount =
+        Number(taxAmount);
+
+      discountAmount =
+        Number(discountAmount);
+
+      const amounts = [
+        itemAmount,
+        deliveryCharge,
+        taxAmount,
+        discountAmount,
+      ];
+
+      if (
+        amounts.some(
+          (value) =>
+            !Number.isFinite(value) ||
+            value < 0
+        )
+      ) {
+        return res.status(400).json({
+          message:
+            "Enter valid non-negative bill amounts.",
+        });
+      }
+
+      const totalAmount =
+        itemAmount +
+        deliveryCharge +
+        taxAmount -
+        discountAmount;
+
+      if (totalAmount <= 0) {
+        return res.status(400).json({
+          message:
+            "Total bill amount must be greater than zero.",
+        });
+      }
+
+      const existingBill =
+        await PaymentBill.findOne({
+          orderId,
+        });
+
+      if (
+        existingBill &&
+        [
+          "paid",
+          "admin_verified",
+        ].includes(
+          existingBill.billStatus
+        )
+      ) {
+        return res.status(400).json({
+          message:
+            "A paid bill cannot be changed.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findOneAndUpdate(
+          {
+            orderId,
+          },
+          {
+            orderId,
+            userId: order.userId,
+            assistantId:
+              req.user.assistantId,
+            itemAmount,
+            deliveryCharge,
+            taxAmount,
+            discountAmount,
+            totalAmount,
+            description:
+              description?.trim() || "",
+            billStatus: "generated",
+            razorpayOrderId: null,
+            razorpayPaymentId: null,
+            razorpaySignature: null,
+            paymentGatewayStatus:
+              null,
+            failureReason: "",
+            paidAt: null,
+            adminVerifiedAt: null,
+            adminNote: "",
+          },
+          {
+            new: true,
+            upsert: true,
+            runValidators: true,
+            setDefaultsOnInsert: true,
+          }
+        );
+
+      return res.status(201).json({
+        message:
+          "Payment bill generated successfully.",
+        bill,
+      });
+    } catch (error) {
+      console.error(
+        "Create bill error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to generate payment bill.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ASSISTANT VIEWS A BILL
+------------------------------------------------- */
+
+app.get(
+  "/assistant/orders/:orderId/bill",
+  authMiddleware,
+  assistantOnly,
+  async (req, res) => {
+    try {
+      const { orderId } = req.params;
+
+      if (!isValidObjectId(orderId)) {
+        return res.status(400).json({
+          message:
+            "Invalid order ID.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findOne({
+          orderId,
+          assistantId:
+            req.user.assistantId,
+        })
+          .populate(
+            "userId",
+            "name username email"
+          )
+          .populate(
+            "orderId",
+            "item currentStatus address city state pincode mobile"
+          );
+
+      if (!bill) {
+        return res.status(404).json({
+          message:
+            "Payment bill not found.",
+        });
+      }
+
+      return res.status(200).json({
+        bill,
+      });
+    } catch (error) {
+      console.error(
+        "Assistant get bill error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to retrieve payment bill.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   USER VIEWS A BILL
+------------------------------------------------- */
+
+app.get(
+  "/my-orders/:orderId/bill",
+  authMiddleware,
+  userOnly,
+  async (req, res) => {
+    try {
+      const { orderId } = req.params;
+
+      if (!isValidObjectId(orderId)) {
+        return res.status(400).json({
+          message:
+            "Invalid order ID.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findOne({
+          orderId,
+          userId: req.user.userId,
+        })
+          .populate(
+            "assistantId",
+            "name phonenumber"
+          )
+          .populate(
+            "orderId",
+            "item currentStatus address city state pincode"
+          );
+
+      if (!bill) {
+        return res.status(404).json({
+          message:
+            "Payment bill not found.",
+        });
+      }
+
+      return res.status(200).json({
+        bill,
+        razorpayKeyId:
+          RAZORPAY_KEY_ID,
+      });
+    } catch (error) {
+      console.error(
+        "User get bill error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to retrieve payment bill.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   USER CREATES A RAZORPAY ORDER
+------------------------------------------------- */
+
+app.post(
+  "/my-orders/:orderId/create-payment",
+  authMiddleware,
+  userOnly,
+  async (req, res) => {
+    try {
+      const { orderId } = req.params;
+
+      if (!isValidObjectId(orderId)) {
+        return res.status(400).json({
+          message:
+            "Invalid order ID.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findOne({
+          orderId,
+          userId: req.user.userId,
+        });
+
+      if (!bill) {
+        return res.status(404).json({
+          message:
+            "Payment bill not found.",
+        });
+      }
+
+      if (
+        [
+          "paid",
+          "admin_verified",
+        ].includes(
+          bill.billStatus
+        )
+      ) {
+        return res.status(400).json({
+          message:
+            "This bill has already been paid.",
+        });
+      }
+
+      const amountInPaise =
+        Math.round(
+          bill.totalAmount * 100
+        );
+
+      if (amountInPaise < 100) {
+        return res.status(400).json({
+          message:
+            "The payment amount must be at least ₹1.",
+        });
+      }
+
+      const razorpayOrder =
+        await razorpay.orders.create({
+          amount: amountInPaise,
+          currency: "INR",
+          receipt:
+            `bill_${bill._id}`,
+          notes: {
+            billId:
+              bill._id.toString(),
+            deliveryOrderId:
+              orderId,
+            userId:
+              req.user.userId,
+          },
+        });
+
+      bill.razorpayOrderId =
+        razorpayOrder.id;
+
+      bill.razorpayPaymentId =
+        null;
+
+      bill.razorpaySignature =
+        null;
+
+      bill.paymentGatewayStatus =
+        razorpayOrder.status;
+
+      bill.billStatus =
+        "payment_pending";
+
+      bill.failureReason = "";
+
+      await bill.save();
+
+      return res.status(200).json({
+        message:
+          "Razorpay payment order created.",
+        razorpayOrderId:
+          razorpayOrder.id,
+        amount:
+          razorpayOrder.amount,
+        currency:
+          razorpayOrder.currency,
+        keyId:
+          RAZORPAY_KEY_ID,
+        billId: bill._id,
+      });
+    } catch (error) {
+      console.error(
+        "Create Razorpay order error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to start payment.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   USER VERIFIES RAZORPAY PAYMENT
+------------------------------------------------- */
+
+app.post(
+  "/payments/verify",
+  authMiddleware,
+  userOnly,
+  async (req, res) => {
+    try {
+      const {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      } = req.body;
+
+      if (
+        !razorpay_order_id ||
+        !razorpay_payment_id ||
+        !razorpay_signature
+      ) {
+        return res.status(400).json({
+          message:
+            "Payment verification details are missing.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findOne({
+          razorpayOrderId:
+            razorpay_order_id,
+          userId:
+            req.user.userId,
+        });
+
+      if (!bill) {
+        return res.status(404).json({
+          message:
+            "Payment bill not found.",
+        });
+      }
+
+      const expectedSignature =
+        crypto
+          .createHmac(
+            "sha256",
+            RAZORPAY_KEY_SECRET
+          )
+          .update(
+            `${bill.razorpayOrderId}|${razorpay_payment_id}`
+          )
+          .digest("hex");
+
+      const receivedBuffer =
+        Buffer.from(
+          razorpay_signature
+        );
+
+      const expectedBuffer =
+        Buffer.from(
+          expectedSignature
+        );
+
+      const isValid =
+        receivedBuffer.length ===
+          expectedBuffer.length &&
+        crypto.timingSafeEqual(
+          receivedBuffer,
+          expectedBuffer
+        );
+
+      if (!isValid) {
+        bill.billStatus =
+          "payment_failed";
+
+        bill.failureReason =
+          "Payment signature verification failed.";
+
+        await bill.save();
+
+        return res.status(400).json({
+          message:
+            "Payment signature verification failed.",
+        });
+      }
+
+      const payment =
+        await razorpay.payments.fetch(
+          razorpay_payment_id
+        );
+
+      const expectedAmount =
+        Math.round(
+          bill.totalAmount * 100
+        );
+
+      if (
+        payment.order_id !==
+          bill.razorpayOrderId ||
+        Number(payment.amount) !==
+          expectedAmount ||
+        payment.currency !== "INR"
+      ) {
+        return res.status(400).json({
+          message:
+            "Payment details do not match the bill.",
+        });
+      }
+
+      if (
+        payment.status !== "captured"
+      ) {
+        bill.paymentGatewayStatus =
+          payment.status;
+
+        await bill.save();
+
+        return res.status(400).json({
+          message:
+            `Payment is ${payment.status}, not captured.`,
+        });
+      }
+
+      bill.razorpayPaymentId =
+        razorpay_payment_id;
+
+      bill.razorpaySignature =
+        razorpay_signature;
+
+      bill.paymentGatewayStatus =
+        payment.status;
+
+      bill.billStatus = "paid";
+
+      bill.paidAt =
+        bill.paidAt || new Date();
+
+      bill.failureReason = "";
+
+      await bill.save();
+
+      return res.status(200).json({
+        message:
+          "Payment verified successfully.",
+        bill,
+      });
+    } catch (error) {
+      console.error(
+        "Verify payment error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to verify payment.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN VIEWS ALL PAYMENT BILLS
+------------------------------------------------- */
+
+app.get(
+  "/admin/payments",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const bills =
+        await PaymentBill.find()
+          .populate(
+            "userId",
+            "name username email"
+          )
+          .populate(
+            "assistantId",
+            "name phonenumber city state isAvailable"
+          )
+          .populate(
+            "orderId",
+            "item currentStatus address city state pincode mobile shoppingDate shoppingTime"
+          )
+          .sort({
+            createdAt: -1,
+          });
+
+      return res.status(200).json({
+        bills,
+      });
+    } catch (error) {
+      console.error(
+        "Admin get payments error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to retrieve payments.",
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------
+   ADMIN VERIFIES OR REJECTS A PAYMENT
+------------------------------------------------- */
+
+app.patch(
+  "/admin/payments/:billId/verify",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const { billId } = req.params;
+
+      const {
+        approved,
+        adminNote = "",
+      } = req.body;
+
+      if (!isValidObjectId(billId)) {
+        return res.status(400).json({
+          message:
+            "Invalid bill ID.",
+        });
+      }
+
+      if (
+        typeof approved !==
+        "boolean"
+      ) {
+        return res.status(400).json({
+          message:
+            "approved must be true or false.",
+        });
+      }
+
+      const bill =
+        await PaymentBill.findById(
+          billId
+        );
+
+      if (!bill) {
+        return res.status(404).json({
+          message:
+            "Payment bill not found.",
+        });
+      }
+
+      if (approved) {
+        if (
+          bill.billStatus !== "paid"
+        ) {
+          return res.status(400).json({
+            message:
+              "Only a Razorpay-verified paid bill can be approved.",
+          });
+        }
+
+        if (
+          !bill.razorpayPaymentId
+        ) {
+          return res.status(400).json({
+            message:
+              "The Razorpay payment ID is missing.",
+          });
+        }
+
+        const payment =
+          await razorpay.payments.fetch(
+            bill.razorpayPaymentId
+          );
+
+        const expectedAmount =
+          Math.round(
+            bill.totalAmount * 100
+          );
+
+        if (
+          payment.status !==
+            "captured" ||
+          Number(payment.amount) !==
+            expectedAmount ||
+          payment.order_id !==
+            bill.razorpayOrderId
+        ) {
+          return res.status(400).json({
+            message:
+              "Razorpay does not show a matching captured payment.",
+          });
+        }
+
+        bill.billStatus =
+          "admin_verified";
+      } else {
+        bill.billStatus =
+          "admin_rejected";
+      }
+
+      bill.adminNote =
+        adminNote?.trim() || "";
+
+      bill.adminVerifiedAt =
+        new Date();
+
+      await bill.save();
+
+      return res.status(200).json({
+        message: approved
+          ? "Payment approved by admin."
+          : "Payment rejected by admin.",
+        bill,
+      });
+    } catch (error) {
+      console.error(
+        "Admin payment verification error:",
+        error
+      );
+
+      return res.status(500).json({
+        message:
+          "Unable to update payment verification.",
       });
     }
   }

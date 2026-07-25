@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Complaints | Hakuna Express</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#f3f6fa;color:#333;min-height:100vh}
+    header{background:#5c6bc0;color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    header button{padding:9px 14px;border:0;border-radius:5px;background:#28a745;color:#fff;font-weight:bold;cursor:pointer}
+    .page{width:min(920px,calc(100% - 30px));margin:28px auto}
+    .card{background:#fff;padding:22px;border-radius:12px;box-shadow:0 7px 22px rgba(0,0,0,.08);margin-bottom:20px}
+    h2{color:#3f51b5;margin-bottom:15px}
+    label{display:block;font-weight:bold;margin:12px 0 6px}
+    select,textarea{width:100%;padding:10px;border:1px solid #bbb;border-radius:5px;font:inherit}
+    textarea{min-height:110px;resize:vertical}
+    .primary{margin-top:14px;background:#d9534f;color:#fff;border:0;padding:11px 16px;border-radius:5px;font-weight:bold;cursor:pointer}
+    .message{text-align:center;font-weight:bold;min-height:20px;margin:12px 0}
+    .error{color:#d32f2f}.success{color:#2e7d32}
+    .complaint{border:1px solid #ddd;border-left:5px solid #5c6bc0;padding:16px;border-radius:8px;margin-bottom:13px;background:#fafbff}
+    .complaint h3{color:#3f51b5;margin-bottom:8px}
+    .complaint p{margin:6px 0;line-height:1.45}
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>User Complaints</h1>
+    <p>Hakuna Express</p>
+  </div>
+  <button onclick="window.location.href='user-dashboard.html'">Dashboard</button>
+</header>
+
+<main class="page">
+  <section class="card">
+    <h2>Submit a Complaint</h2>
+    <form id="complaintForm">
+      <label for="orderId">Select Order</label>
+      <select id="orderId" required>
+        <option value="">Loading your orders...</option>
+      </select>
+
+      <label for="reason">Reason</label>
+      <select id="reason" required>
+        <option value="">Select reason</option>
+        <option value="Order not delivered">Order not delivered</option>
+        <option value="Wrong items received">Wrong items received</option>
+        <option value="Damaged items">Damaged items</option>
+        <option value="Assistant behaviour">Assistant behaviour</option>
+        <option value="Late delivery">Late delivery</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="description">Complaint Details</label>
+      <textarea id="description" maxlength="1500" required placeholder="Explain the issue clearly"></textarea>
+
+      <button type="submit" class="primary">Submit Complaint</button>
+    </form>
+    <p id="message" class="message"></p>
+  </section>
+
+  <section class="card">
+    <h2>My Complaints</h2>
+    <div id="complaintsContainer"></div>
+  </section>
+</main>
+
+<script>
+const API_BASE_URL = "https://logistics-dwti.onrender.com";
+
+function token() {
+  return localStorage.getItem("token");
+}
+
+function redirectToLogin() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+function showMessage(message, type = "") {
+  const el = document.getElementById("message");
+  el.textContent = message;
+  el.className = `message ${type}`;
+}
+
+async function userRequest(url, options = {}) {
+  const response = await fetch(`${API_BASE_URL}${url}`, {
+    ...options,
+    headers: {
+      ...(options.body ? {"Content-Type": "application/json"} : {}),
+      Authorization: `Bearer ${token()}`,
+      ...(options.headers || {})
+    }
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (response.status === 401 || response.status === 403) {
+    redirectToLogin();
+    throw new Error("Session expired.");
+  }
+
+  if (!response.ok) {
+    throw new Error(data.message || "Request failed.");
+  }
+
+  return data;
+}
+
+function format(value) {
+  return String(value || "Not available")
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+async function loadOrders() {
+  const data = await userRequest("/my-orders");
+  const select = document.getElementById("orderId");
+  select.innerHTML = '<option value="">Select an order</option>';
+
+  (data.orders || []).forEach(order => {
+    const option = document.createElement("option");
+    option.value = order.id;
+    option.textContent = `${order.item} | ${order.id} | ${format(order.currentStatus)}`;
+    select.appendChild(option);
+  });
+}
+
+async function loadComplaints() {
+  const data = await userRequest("/my-complaints");
+  const container = document.getElementById("complaintsContainer");
+  container.innerHTML = "";
+
+  const complaints = data.complaints || [];
+
+  if (!complaints.length) {
+    container.innerHTML = "<p>You have not submitted any complaints.</p>";
+    return;
+  }
+
+  complaints.forEach(complaint => {
+    const order = complaint.orderId || {};
+    const assistant = complaint.assistantId || {};
+    const card = document.createElement("article");
+    card.className = "complaint";
+    card.innerHTML = `
+      <h3>${complaint.reason}</h3>
+      <p><strong>Complaint ID:</strong> ${complaint._id}</p>
+      <p><strong>Order ID:</strong> ${order._id || complaint.orderId}</p>
+      <p><strong>Items:</strong> ${order.item || "Not available"}</p>
+      <p><strong>Assistant:</strong> ${assistant.name || "Not available"} (${assistant.phonenumber || complaint.assistantNumber || "No phone"})</p>
+      <p><strong>Description:</strong> ${complaint.description}</p>
+      <p><strong>Status:</strong> ${format(complaint.status)}</p>
+      <p><strong>Admin Note:</strong> ${complaint.adminNote || "No admin note yet."}</p>
+    `;
+    container.appendChild(card);
+  });
+}
+
+document.getElementById("complaintForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const payload = {
+    orderId: document.getElementById("orderId").value,
+    reason: document.getElementById("reason").value,
+    description: document.getElementById("description").value.trim()
+  };
+
+  try {
+    const data = await userRequest("/complaints", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    showMessage(data.message, "success");
+    event.target.reset();
+    await loadComplaints();
+  } catch (error) {
+    showMessage(error.message, "error");
+  }
+});
+
+if (!token()) {
+  redirectToLogin();
+} else {
+  Promise.all([loadOrders(), loadComplaints()]).catch(error => showMessage(error.message, "error"));
+}
+</script>
+</body>
+</html>

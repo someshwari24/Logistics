@@ -18,71 +18,102 @@
         }
 
         body {
-            min-height: 100vh;
             font-family: Arial, sans-serif;
-            background-color: #f4f7fa;
-            color: #333;
+            background-color: #a0d2eb;
+            color: #263238;
+            min-height: 100vh;
         }
 
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #5c6bc0;
+            color: white;
+            padding: 14px 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
-            padding: 16px 22px;
-            color: white;
-            background-color: #5c6bc0;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            gap: 20px;
         }
 
-        header h1 {
-            font-size: 24px;
-        }
-
-        header p {
-            margin-top: 5px;
-        }
-
-        .logout-button {
-            padding: 9px 15px;
-            color: white;
-            background-color: #d32f2f;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .brand {
+            font-size: 25px;
             font-weight: bold;
         }
 
-        .logout-button:hover {
-            background-color: #b71c1c;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .page-container {
-            width: calc(100% - 30px);
-            max-width: 1180px;
+        .header-button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 14px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .complaint-button {
+            background-color: white;
+            color: #3949ab;
+        }
+
+        .logout-button {
+            background-color: #e53935;
+            color: white;
+        }
+
+        main {
+            max-width: 1200px;
             margin: 30px auto;
+            padding: 0 18px 40px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(
+                135deg,
+                #3949ab,
+                #7986cb
+            );
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .welcome-card h1 {
+            margin-bottom: 8px;
+        }
+
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 24px;
             align-items: start;
         }
 
         .card {
-            padding: 24px;
             background-color: white;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.14);
         }
 
-        h2 {
-            margin-bottom: 8px;
-            color: #3f51b5;
-        }
-
-        .subtitle {
-            margin-bottom: 20px;
-            color: #666;
-            line-height: 1.5;
+        .card h2 {
+            color: #3949ab;
+            margin-bottom: 18px;
         }
 
         .form-group {
@@ -91,686 +122,496 @@
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
             font-weight: bold;
+            color: #37474f;
         }
 
         input,
-        select,
-        textarea {
+        textarea,
+        select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #bbb;
-            border-radius: 5px;
-            outline: none;
-            font-family: Arial, sans-serif;
+            padding: 11px;
+            border: 1px solid #b0bec5;
+            border-radius: 6px;
             font-size: 15px;
-        }
-
-        textarea {
-            min-height: 82px;
-            resize: vertical;
+            outline: none;
         }
 
         input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #5c6bc0;
-            box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.15);
+        textarea:focus,
+        select:focus {
+            border-color: #3949ab;
+            box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.12);
         }
 
-        .two-column-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .assistant-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .assistant-row select {
-            flex: 1;
-        }
-
-        button {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:disabled {
-            opacity: 0.65;
-            cursor: not-allowed;
+        textarea {
+            min-height: 90px;
+            resize: vertical;
         }
 
         .primary-button {
+            width: 100%;
+            border: none;
+            background-color: #3949ab;
             color: white;
-            background-color: #5c6bc0;
-        }
-
-        .success-button {
-            color: white;
-            background-color: #28a745;
-        }
-
-        .secondary-button {
-            color: white;
-            background-color: #6c757d;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .form-actions button {
-            flex: 1;
-        }
-
-        .message {
-            min-height: 20px;
-            margin-top: 15px;
-            text-align: center;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
             font-weight: bold;
         }
 
-        .error-message {
-            color: #d32f2f;
+        .primary-button:hover {
+            background-color: #303f9f;
         }
 
-        .success-message {
-            color: #2e7d32;
-        }
-
-        .loading-message {
-            color: #3f51b5;
-        }
-
-        .booking-result {
-            display: none;
-            margin-top: 18px;
-            padding: 16px;
-            background-color: #edf7ee;
-            border: 1px solid #b7d8ba;
-            border-radius: 8px;
-        }
-
-        .booking-result p {
-            margin: 7px 0;
-        }
-
-        .booking-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .booking-links a {
-            padding: 9px 12px;
-            color: white;
-            background-color: #5c6bc0;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .booking-links a:first-child {
-            background-color: #25d366;
+        .primary-button:disabled {
+            background-color: #9fa8da;
+            cursor: not-allowed;
         }
 
         .orders-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .refresh-button {
+            border: none;
+            background-color: #00897b;
+            color: white;
+            padding: 9px 13px;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
         .orders-container {
             display: grid;
-            gap: 14px;
+            gap: 16px;
         }
 
         .order-card {
-            padding: 16px;
-            background-color: #fafbff;
-            border: 1px solid #ddd;
+            border: 1px solid #d7dce0;
+            border-left: 5px solid #5c6bc0;
             border-radius: 9px;
+            padding: 18px;
+            background-color: #fafafa;
         }
 
-        .order-card h3 {
-            margin-bottom: 8px;
-            color: #3f51b5;
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 13px;
         }
 
-        .order-card p {
-            margin: 6px 0;
-            line-height: 1.4;
+        .order-id {
+            font-weight: bold;
+            color: #3949ab;
             word-break: break-word;
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 4px 9px;
-            color: #7a5400;
-            background-color: #fff3cd;
-            border-radius: 16px;
-            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: bold;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+
+        .status-pending,
+        .status-submitted {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-assigned,
+        .status-shopping {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .status-on-the-way,
+        .status-out-for-delivery {
+            background-color: #ede7f6;
+            color: #4527a0;
+        }
+
+        .status-delivered,
+        .status-completed {
+            background-color: #d8f3dc;
+            color: #1b5e20;
+        }
+
+        .order-row {
+            display: grid;
+            grid-template-columns: 135px 1fr;
+            gap: 10px;
+            padding: 5px 0;
+        }
+
+        .order-label {
+            font-weight: bold;
+            color: #455a64;
         }
 
         .order-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 9px;
+            margin-top: 15px;
         }
 
-        .order-actions button {
+        .action-button {
+            border: none;
+            border-radius: 6px;
+            padding: 9px 13px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .track-button {
+            background-color: #00897b;
             color: white;
-            background-color: #5c6bc0;
         }
 
-        .empty-state {
-            padding: 25px;
-            color: #666;
-            background-color: #f7f8fb;
-            border-radius: 8px;
+        .payment-button {
+            background-color: #3949ab;
+            color: white;
+        }
+
+        .complaint-action {
+            background-color: #fb8c00;
+            color: white;
+        }
+
+        .confirmation-button {
+            background-color: #7b1fa2;
+            color: white;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .message.success {
+            display: block;
+            background-color: #d8f3dc;
+            color: #1b5e20;
+        }
+
+        .message.error {
+            display: block;
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        .message.info {
+            display: block;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .loading,
+        .empty-message {
             text-align: center;
+            padding: 30px;
+            color: #546e7a;
         }
 
         @media (max-width: 900px) {
-            .page-container {
+            .dashboard-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 600px) {
-            header {
+        @media (max-width: 650px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-button {
+                flex: 1;
+                text-align: center;
+            }
+
+            .order-top {
                 flex-direction: column;
             }
 
-            .two-column-row {
+            .order-row {
                 grid-template-columns: 1fr;
+                gap: 3px;
             }
 
-            .assistant-row,
-            .form-actions {
+            .order-actions {
                 flex-direction: column;
+            }
+
+            .action-button {
+                text-align: center;
+                width: 100%;
             }
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="header-container">
+            <div class="brand">
+                Hakuna Express
+            </div>
 
-<header>
-    <div>
-        <h1>Hakuna Express</h1>
-
-        <p>
-            Welcome,
-            <strong id="userName">
-                User
-            </strong>
-        </p>
-    </div>
-
-    <button
-        type="button"
-        class="logout-button"
-        id="logoutButton"
-    >
-        Logout
-    </button>
-</header>
-
-<main class="page-container">
-
-    <section class="card">
-
-        <h2>Place a New Order</h2>
-
-        <p class="subtitle">
-            Enter your shopping details and choose an available assistant.
-        </p>
-
-        <form id="shoppingForm" novalidate>
-
-            <div class="form-group">
-                <label for="name">
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    id="name"
-                    required
+            <div class="header-actions">
+                <a
+                    href="complaints.html"
+                    class="header-button complaint-button"
                 >
-            </div>
-
-            <div class="form-group">
-                <label for="address">
-                    Complete Address
-                </label>
-
-                <textarea
-                    id="address"
-                    required
-                ></textarea>
-            </div>
-
-            <div class="two-column-row">
-
-                <div class="form-group">
-                    <label for="city">
-                        City
-                    </label>
-
-                    <input
-                        type="text"
-                        id="city"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="state">
-                        State
-                    </label>
-
-                    <input
-                        type="text"
-                        id="state"
-                        required
-                    >
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label for="assistantSelect">
-                    Shopping Assistant
-                </label>
-
-                <div class="assistant-row">
-
-                    <select
-                        id="assistantSelect"
-                        disabled
-                        required
-                    >
-                        <option value="">
-                            Enter city and state first
-                        </option>
-                    </select>
-
-                    <button
-                        type="button"
-                        class="primary-button"
-                        id="findAssistantsButton"
-                    >
-                        Find Assistants
-                    </button>
-
-                </div>
-
-                <p
-                    id="assistantMessage"
-                    class="message"
-                ></p>
-
-            </div>
-
-            <div class="two-column-row">
-
-                <div class="form-group">
-                    <label for="pincode">
-                        Pincode
-                    </label>
-
-                    <input
-                        type="text"
-                        id="pincode"
-                        maxlength="10"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="mobile">
-                        Mobile Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="mobile"
-                        maxlength="15"
-                        required
-                    >
-                </div>
-
-            </div>
-
-            <div class="two-column-row">
-
-                <div class="form-group">
-                    <label for="shoppingDate">
-                        Shopping Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="shoppingDate"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="shoppingTime">
-                        Shopping Time
-                    </label>
-
-                    <input
-                        type="time"
-                        id="shoppingTime"
-                        required
-                    >
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                <label for="item">
-                    Items
-                </label>
-
-                <textarea
-                    id="item"
-                    placeholder="Example: medicines, groceries, clothes"
-                    required
-                ></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="language">
-                    Preferred Language
-                </label>
-
-                <select
-                    id="language"
-                    required
-                >
-                    <option value="">
-                        Select language
-                    </option>
-
-                    <option value="English">
-                        English
-                    </option>
-
-                    <option value="Hindi">
-                        Hindi
-                    </option>
-
-                    <option value="Telugu">
-                        Telugu
-                    </option>
-
-                    <option value="Tamil">
-                        Tamil
-                    </option>
-
-                    <option value="Kannada">
-                        Kannada
-                    </option>
-
-                    <option value="Malayalam">
-                        Malayalam
-                    </option>
-
-                    <option value="Marathi">
-                        Marathi
-                    </option>
-
-                    <option value="Bengali">
-                        Bengali
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-actions">
-
-                <button
-                    type="submit"
-                    class="success-button"
-                    id="submitButton"
-                >
-                    Place Order
-                </button>
+                    My Complaints
+                </a>
 
                 <button
                     type="button"
-                    class="secondary-button"
-                    id="clearButton"
+                    class="header-button logout-button"
+                    onclick="logout()"
                 >
-                    Clear
+                    Logout
                 </button>
-
-            </div>
-
-        </form>
-
-        <p
-            id="formMessage"
-            class="message"
-            aria-live="polite"
-        ></p>
-
-        <div
-            id="bookingResult"
-            class="booking-result"
-        >
-            <h3>
-                Order Placed Successfully
-            </h3>
-
-            <p>
-                <strong>Order ID:</strong>
-                <span id="resultOrderId"></span>
-            </p>
-
-            <p>
-                <strong>Assistant:</strong>
-                <span id="resultAssistantName"></span>
-            </p>
-
-            <p>
-                <strong>Phone:</strong>
-                <span id="resultAssistantPhone"></span>
-            </p>
-
-            <div class="booking-links">
-
-                <a
-                    id="whatsappLink"
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    WhatsApp
-                </a>
-
-                <a href="orderUpdates.html">
-                    Track Order
-                </a>
-
-                <a href="confirmation.html">
-                    Confirm Delivery
-                </a>
-
             </div>
         </div>
+    </header>
 
-    </section>
+    <main>
+        <section class="welcome-card">
+            <h1 id="welcomeText">
+                Welcome to Hakuna Express
+            </h1>
 
-    <section class="card">
+            <p>
+                Place a new order, track delivery progress and pay
+                assistant-generated bills securely through Razorpay.
+            </p>
+        </section>
 
-        <div class="orders-header">
+        <div class="dashboard-grid">
 
-            <div>
-                <h2>Your Existing Orders</h2>
+            <!-- Place Order Section -->
 
-                <p class="subtitle">
-                    Your orders load automatically after login.
-                </p>
-            </div>
+            <section class="card">
+                <h2>Place New Order</h2>
 
-            <button
-                type="button"
-                class="primary-button"
-                id="refreshOrdersButton"
-            >
-                Refresh
-            </button>
+                <form id="orderForm">
 
+                    <div class="form-group">
+                        <label for="item">
+                            Shopping Items
+                        </label>
+
+                        <textarea
+                            id="item"
+                            required
+                            placeholder="Example: Rice 5 kg, milk, vegetables"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">
+                            Delivery Address
+                        </label>
+
+                        <textarea
+                            id="address"
+                            required
+                            placeholder="House number, street and area"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            required
+                            placeholder="Enter city"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">
+                            State
+                        </label>
+
+                        <input
+                            type="text"
+                            id="state"
+                            required
+                            placeholder="Enter state"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pincode">
+                            PIN Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="pincode"
+                            required
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            placeholder="6-digit PIN code"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobile">
+                            Mobile Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="mobile"
+                            required
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            placeholder="10-digit mobile number"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shoppingDate">
+                            Shopping Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="shoppingDate"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shoppingTime">
+                            Shopping Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="shoppingTime"
+                            required
+                        >
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="submitOrderButton"
+                    >
+                        Place Order
+                    </button>
+                </form>
+
+                <div
+                    id="orderMessage"
+                    class="message"
+                ></div>
+            </section>
+
+            <!-- Existing Orders Section -->
+
+            <section class="card">
+                <div class="orders-header">
+                    <h2>My Orders</h2>
+
+                    <button
+                        type="button"
+                        class="refresh-button"
+                        onclick="loadOrders()"
+                    >
+                        Refresh
+                    </button>
+                </div>
+
+                <div id="ordersContainer">
+                    <div class="loading">
+                        Loading your orders...
+                    </div>
+                </div>
+            </section>
         </div>
+    </main>
 
-        <p
-            id="ordersMessage"
-            class="message"
-            aria-live="polite"
-        ></p>
+    <script>
+        const API_BASE_URL =
+            "https://logistics-dwti.onrender.com";
 
-        <div
-            id="ordersContainer"
-            class="orders-container"
-        ></div>
+        const token =
+            localStorage.getItem("token");
 
-    </section>
-
-</main>
-
-<script>
-    const API_BASE_URL =
-        "https://logistics-dwti.onrender.com";
-
-    function getToken() {
-        return localStorage.getItem(
-            "token"
-        );
-    }
-
-    function setMessage(
-        elementId,
-        message,
-        type = ""
-    ) {
-        const element =
+        const orderForm =
             document.getElementById(
-                elementId
+                "orderForm"
             );
 
-        element.textContent = message;
-        element.className = "message";
-
-        if (type === "error") {
-            element.classList.add(
-                "error-message"
-            );
-        }
-
-        if (type === "success") {
-            element.classList.add(
-                "success-message"
-            );
-        }
-
-        if (type === "loading") {
-            element.classList.add(
-                "loading-message"
-            );
-        }
-    }
-
-    function escapeHtml(value) {
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            value === undefined ||
-            value === null
-                ? ""
-                : String(value);
-
-        return div.innerHTML;
-    }
-
-    function formatStatus(status) {
-        if (!status) {
-            return "Not available";
-        }
-
-        return String(status)
-            .replaceAll("_", " ")
-            .replace(
-                /\b\w/g,
-                function (letter) {
-                    return letter.toUpperCase();
-                }
-            );
-    }
-
-    function formatDate(value) {
-        if (!value) {
-            return "Not available";
-        }
-
-        const date =
-            new Date(value);
-
-        if (
-            Number.isNaN(
-                date.getTime()
-            )
-        ) {
-            return String(value);
-        }
-
-        return date.toLocaleString();
-    }
-
-    function redirectToLogin() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userName");
-        localStorage.removeItem("username");
-        localStorage.removeItem("email");
-        localStorage.removeItem(
-            "currentOrderId"
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializeDashboard
         );
 
-        window.location.href =
-            "login.html";
-    }
+        orderForm.addEventListener(
+            "submit",
+            submitOrder
+        );
 
-    async function fetchUserInfo() {
-        const token = getToken();
+        async function initializeDashboard() {
+            if (!token) {
+                alert("Please log in first.");
 
-        if (!token) {
-            redirectToLogin();
-            return;
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+            setMinimumDate();
+
+            await loadUserInformation();
+            await loadOrders();
         }
 
-        try {
-            const response =
-                await fetch(
+        function setMinimumDate() {
+            const today =
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
+
+            document.getElementById(
+                "shoppingDate"
+            ).min = today;
+        }
+
+        async function loadUserInformation() {
+            try {
+                const response = await fetch(
                     `${API_BASE_URL}/me`,
                     {
                         headers: {
@@ -780,240 +621,195 @@
                     }
                 );
 
-            const data =
-                await response.json();
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const user =
+                    data.user || data;
+
+                const userName =
+                    user.name ||
+                    user.username ||
+                    "";
+
+                if (userName) {
+                    document.getElementById(
+                        "welcomeText"
+                    ).textContent =
+                        `Welcome, ${userName}`;
+                }
+            } catch (error) {
+                console.error(
+                    "Unable to load user:",
+                    error
+                );
+            }
+        }
+
+        async function submitOrder(event) {
+            event.preventDefault();
+
+            const submitButton =
+                document.getElementById(
+                    "submitOrderButton"
+                );
+
+            const orderData = {
+                item:
+                    document
+                        .getElementById("item")
+                        .value
+                        .trim(),
+
+                address:
+                    document
+                        .getElementById("address")
+                        .value
+                        .trim(),
+
+                city:
+                    document
+                        .getElementById("city")
+                        .value
+                        .trim(),
+
+                state:
+                    document
+                        .getElementById("state")
+                        .value
+                        .trim(),
+
+                pincode:
+                    document
+                        .getElementById("pincode")
+                        .value
+                        .trim(),
+
+                mobile:
+                    document
+                        .getElementById("mobile")
+                        .value
+                        .trim(),
+
+                shoppingDate:
+                    document
+                        .getElementById(
+                            "shoppingDate"
+                        )
+                        .value,
+
+                shoppingTime:
+                    document
+                        .getElementById(
+                            "shoppingTime"
+                        )
+                        .value
+            };
 
             if (
-                response.status === 401 ||
-                response.status === 403
+                !/^[0-9]{6}$/.test(
+                    orderData.pincode
+                )
             ) {
-                redirectToLogin();
-                return;
-            }
-
-            if (!response.ok) {
-                throw new Error(
-                    data.message ||
-                    "Unable to load user details."
-                );
-            }
-
-            const user =
-                data.user || {};
-
-            document.getElementById(
-                "userName"
-            ).textContent =
-                user.name ||
-                localStorage.getItem(
-                    "userName"
-                ) ||
-                "User";
-
-            document.getElementById(
-                "name"
-            ).value =
-                user.name || "";
-
-            localStorage.setItem(
-                "userName",
-                user.name || ""
-            );
-
-        } catch (error) {
-            console.error(
-                "User details error:",
-                error
-            );
-        }
-    }
-
-    function resetAssistantSelection() {
-        const select =
-            document.getElementById(
-                "assistantSelect"
-            );
-
-        select.disabled = true;
-
-        select.innerHTML = `
-            <option value="">
-                Enter city and state first
-            </option>
-        `;
-
-        setMessage(
-            "assistantMessage",
-            ""
-        );
-    }
-
-    async function loadAssistants() {
-        const city =
-            document
-                .getElementById("city")
-                .value
-                .trim();
-
-        const state =
-            document
-                .getElementById("state")
-                .value
-                .trim();
-
-        const select =
-            document.getElementById(
-                "assistantSelect"
-            );
-
-        const button =
-            document.getElementById(
-                "findAssistantsButton"
-            );
-
-        if (!city || !state) {
-            setMessage(
-                "assistantMessage",
-                "Please enter city and state.",
-                "error"
-            );
-
-            return;
-        }
-
-        button.disabled = true;
-        button.textContent =
-            "Searching...";
-
-        try {
-            const url =
-                `${API_BASE_URL}/assistants` +
-                `?city=${encodeURIComponent(city)}` +
-                `&state=${encodeURIComponent(state)}`;
-
-            const response =
-                await fetch(url);
-
-            const data =
-                await response.json();
-
-            if (!response.ok) {
-                setMessage(
-                    "assistantMessage",
-                    data.message ||
-                    "Unable to load assistants.",
+                showOrderMessage(
+                    "Enter a valid 6-digit PIN code.",
                     "error"
                 );
 
-                resetAssistantSelection();
                 return;
             }
 
-            const assistants =
-                Array.isArray(
-                    data.assistants
+            if (
+                !/^[0-9]{10}$/.test(
+                    orderData.mobile
                 )
-                    ? data.assistants
-                    : [];
+            ) {
+                showOrderMessage(
+                    "Enter a valid 10-digit mobile number.",
+                    "error"
+                );
 
-            select.innerHTML = `
-                <option value="">
-                    Select an assistant
-                </option>
-            `;
+                return;
+            }
 
-            assistants.forEach(
-                function (assistant) {
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
+            submitButton.disabled = true;
 
-                    option.value =
-                        assistant._id ||
-                        assistant.id;
+            submitButton.textContent =
+                "Placing Order...";
 
-                    option.textContent =
-                        `${assistant.name} - ` +
-                        `${assistant.phonenumber}`;
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/submit-details`,
+                    {
+                        method: "POST",
 
-                    select.appendChild(
-                        option
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify(
+                            orderData
+                        )
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to place order."
                     );
                 }
-            );
 
-            select.disabled =
-                assistants.length === 0;
-
-            if (assistants.length > 0) {
-                setMessage(
-                    "assistantMessage",
-                    `${assistants.length} assistant(s) available.`,
+                showOrderMessage(
+                    data.message ||
+                    "Order placed successfully.",
                     "success"
                 );
-            } else {
-                setMessage(
-                    "assistantMessage",
-                    "No available assistants found.",
+
+                orderForm.reset();
+                setMinimumDate();
+
+                await loadOrders();
+            } catch (error) {
+                showOrderMessage(
+                    error.message,
                     "error"
                 );
+            } finally {
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "Place Order";
             }
-
-        } catch (error) {
-            console.error(
-                "Assistant error:",
-                error
-            );
-
-            setMessage(
-                "assistantMessage",
-                "Unable to connect to the server.",
-                "error"
-            );
-
-        } finally {
-            button.disabled = false;
-            button.textContent =
-                "Find Assistants";
-        }
-    }
-
-    async function loadExistingOrders() {
-        const token = getToken();
-
-        if (!token) {
-            redirectToLogin();
-            return;
         }
 
-        const container =
-            document.getElementById(
-                "ordersContainer"
-            );
+        async function loadOrders() {
+            const container =
+                document.getElementById(
+                    "ordersContainer"
+                );
 
-        const refreshButton =
-            document.getElementById(
-                "refreshOrdersButton"
-            );
+            container.innerHTML = `
+                <div class="loading">
+                    Loading your orders...
+                </div>
+            `;
 
-        container.innerHTML = "";
-
-        refreshButton.disabled = true;
-
-        setMessage(
-            "ordersMessage",
-            "Loading your orders...",
-            "loading"
-        );
-
-        try {
-            const response =
-                await fetch(
+            try {
+                const response = await fetch(
                     `${API_BASE_URL}/my-orders`,
                     {
-                        method: "GET",
-
                         headers: {
                             Authorization:
                                 `Bearer ${token}`
@@ -1021,41 +817,50 @@
                     }
                 );
 
-            const data =
-                await response.json();
+                const data =
+                    await response.json();
 
-            if (
-                response.status === 401 ||
-                response.status === 403
-            ) {
-                redirectToLogin();
-                return;
-            }
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+                    logout();
+                    return;
+                }
 
-            if (!response.ok) {
-                setMessage(
-                    "ordersMessage",
-                    data.message ||
-                    "Unable to load orders.",
-                    "error"
-                );
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load orders."
+                    );
+                }
 
-                return;
-            }
+                const orders =
+                    Array.isArray(data)
+                        ? data
+                        : data.orders || [];
 
-            const orders =
-                Array.isArray(data.orders)
-                    ? data.orders
-                    : [];
-
-            if (orders.length === 0) {
-                setMessage(
-                    "ordersMessage",
-                    ""
-                );
-
+                displayOrders(orders);
+            } catch (error) {
                 container.innerHTML = `
-                    <div class="empty-state">
+                    <div class="empty-message">
+                        ${escapeHtml(
+                            error.message
+                        )}
+                    </div>
+                `;
+            }
+        }
+
+        function displayOrders(orders) {
+            const container =
+                document.getElementById(
+                    "ordersContainer"
+                );
+
+            if (!orders.length) {
+                container.innerHTML = `
+                    <div class="empty-message">
                         You have not placed any orders yet.
                     </div>
                 `;
@@ -1063,512 +868,269 @@
                 return;
             }
 
-            setMessage(
-                "ordersMessage",
-                `${orders.length} order${
-                    orders.length === 1
-                        ? ""
-                        : "s"
-                } found.`,
-                "success"
-            );
+            container.innerHTML = `
+                <div class="orders-container">
+                    ${orders
+                        .map(createOrderCard)
+                        .join("")}
+                </div>
+            `;
+        }
 
-            orders.forEach(
-                function (order) {
-                    const card =
-                        document.createElement(
-                            "article"
-                        );
+        function createOrderCard(order) {
+            const id =
+                order.id ||
+                order._id ||
+                "";
 
-                    card.className =
-                        "order-card";
+            const status =
+                order.currentStatus ||
+                order.status ||
+                "Pending";
 
-                    card.innerHTML = `
-                        <h3>
+            const statusClass =
+                normalizeStatus(status);
+
+            const assistant =
+                order.assistantName ||
+                order.assistantId?.name ||
+                order.assistant?.name ||
+                "Not assigned yet";
+
+            const items =
+                formatItems(order.item);
+
+            const address =
+                [
+                    order.address,
+                    order.city,
+                    order.state,
+                    order.pincode
+                ]
+                    .filter(Boolean)
+                    .join(", ");
+
+            return `
+                <article class="order-card">
+
+                    <div class="order-top">
+                        <div class="order-id">
+                            Order ID: ${escapeHtml(id)}
+                        </div>
+
+                        <div
+                            class="status-badge status-${statusClass}"
+                        >
+                            ${escapeHtml(status)}
+                        </div>
+                    </div>
+
+                    <div class="order-row">
+                        <span class="order-label">
+                            Items
+                        </span>
+
+                        <span>
+                            ${escapeHtml(items)}
+                        </span>
+                    </div>
+
+                    <div class="order-row">
+                        <span class="order-label">
+                            Delivery Address
+                        </span>
+
+                        <span>
                             ${escapeHtml(
-                                order.item ||
-                                "Order"
+                                address || "-"
                             )}
-                        </h3>
+                        </span>
+                    </div>
 
-                        <p>
-                            <strong>Order ID:</strong>
-                            ${escapeHtml(order.id)}
-                        </p>
+                    <div class="order-row">
+                        <span class="order-label">
+                            Mobile
+                        </span>
 
-                        <p>
-                            <strong>Status:</strong>
+                        <span>
+                            ${escapeHtml(
+                                order.mobile || "-"
+                            )}
+                        </span>
+                    </div>
 
-                            <span class="status-badge">
-                                ${escapeHtml(
-                                    formatStatus(
-                                        order.currentStatus
-                                    )
-                                )}
-                            </span>
-                        </p>
+                    <div class="order-row">
+                        <span class="order-label">
+                            Shopping Date
+                        </span>
 
-                        <p>
-                            <strong>Shopping date:</strong>
+                        <span>
                             ${escapeHtml(
                                 formatDate(
                                     order.shoppingDate
                                 )
                             )}
-                        </p>
+                        </span>
+                    </div>
 
-                        <p>
-                            <strong>Shopping time:</strong>
+                    <div class="order-row">
+                        <span class="order-label">
+                            Shopping Time
+                        </span>
+
+                        <span>
                             ${escapeHtml(
-                                order.shoppingTime
+                                order.shoppingTime ||
+                                "-"
                             )}
-                        </p>
+                        </span>
+                    </div>
 
-                        <p>
-                            <strong>Address:</strong>
-                            ${escapeHtml(order.address)},
-                            ${escapeHtml(order.city)},
-                            ${escapeHtml(order.state)}
-                            -
-                            ${escapeHtml(order.pincode)}
-                        </p>
+                    <div class="order-row">
+                        <span class="order-label">
+                            Assistant
+                        </span>
 
-                        <p>
-                            <strong>Assistant:</strong>
-                            ${escapeHtml(
-                                order.assistant?.name ||
-                                "Not assigned"
-                            )}
-                        </p>
+                        <span>
+                            ${escapeHtml(assistant)}
+                        </span>
+                    </div>
 
-                        <p>
-                            <strong>Assistant phone:</strong>
-                            ${escapeHtml(
-                                order.assistant?.phonenumber ||
-                                "Not available"
-                            )}
-                        </p>
+                    <div class="order-actions">
 
-                        <div class="order-actions">
+                        <button
+                            type="button"
+                            class="action-button track-button"
+                            onclick="trackOrder('${id}')"
+                        >
+                            Track Order
+                        </button>
 
-                            <button
-                                type="button"
-                                data-track="${escapeHtml(
-                                    order.id
-                                )}"
-                            >
-                                Track
-                            </button>
+                        <button
+                            type="button"
+                            class="action-button payment-button"
+                            onclick="viewBill('${id}')"
+                        >
+                            View Bill / Pay
+                        </button>
 
-                            <button
-                                type="button"
-                                data-confirm="${escapeHtml(
-                                    order.id
-                                )}"
-                            >
-                                Confirm Delivery
-                            </button>
+                        <button
+                            type="button"
+                            class="action-button confirmation-button"
+                            onclick="openConfirmation('${id}')"
+                        >
+                            Delivery Confirmation
+                        </button>
 
-                        </div>
-                    `;
-
-                    container.appendChild(
-                        card
-                    );
-                }
-            );
-
-            container
-                .querySelectorAll(
-                    "[data-track]"
-                )
-                .forEach(
-                    function (button) {
-                        button.addEventListener(
-                            "click",
-                            function () {
-                                localStorage.setItem(
-                                    "currentOrderId",
-                                    this.dataset.track
-                                );
-
-                                window.location.href =
-                                    "orderUpdates.html";
-                            }
-                        );
-                    }
-                );
-
-            container
-                .querySelectorAll(
-                    "[data-confirm]"
-                )
-                .forEach(
-                    function (button) {
-                        button.addEventListener(
-                            "click",
-                            function () {
-                                localStorage.setItem(
-                                    "currentOrderId",
-                                    this.dataset.confirm
-                                );
-
-                                window.location.href =
-                                    "confirmation.html";
-                            }
-                        );
-                    }
-                );
-
-        } catch (error) {
-            console.error(
-                "Load orders error:",
-                error
-            );
-
-            setMessage(
-                "ordersMessage",
-                "Unable to connect to the server.",
-                "error"
-            );
-
-        } finally {
-            refreshButton.disabled = false;
+                        <button
+                            type="button"
+                            class="action-button complaint-action"
+                            onclick="raiseComplaint('${id}')"
+                        >
+                            Raise Complaint
+                        </button>
+                    </div>
+                </article>
+            `;
         }
-    }
 
-    document
-        .getElementById("shoppingForm")
-        .addEventListener(
-            "submit",
-            async function (event) {
-                event.preventDefault();
+        function trackOrder(orderId) {
+            window.location.href =
+                `tracking.html?orderId=${encodeURIComponent(
+                    orderId
+                )}`;
+        }
 
-                const token =
-                    getToken();
+        function viewBill(orderId) {
+            window.location.href =
+                `payment.html?orderId=${encodeURIComponent(
+                    orderId
+                )}`;
+        }
 
-                if (!token) {
-                    redirectToLogin();
-                    return;
-                }
+        function openConfirmation(orderId) {
+            window.location.href =
+                `confirmation.html?orderId=${encodeURIComponent(
+                    orderId
+                )}`;
+        }
 
-                const formData = {
-                    name:
-                        document
-                            .getElementById("name")
-                            .value
-                            .trim(),
+        function raiseComplaint(orderId) {
+            window.location.href =
+                `complaints.html?orderId=${encodeURIComponent(
+                    orderId
+                )}`;
+        }
 
-                    address:
-                        document
-                            .getElementById("address")
-                            .value
-                            .trim(),
-
-                    city:
-                        document
-                            .getElementById("city")
-                            .value
-                            .trim(),
-
-                    state:
-                        document
-                            .getElementById("state")
-                            .value
-                            .trim(),
-
-                    assistantId:
-                        document
-                            .getElementById(
-                                "assistantSelect"
-                            )
-                            .value,
-
-                    pincode:
-                        document
-                            .getElementById("pincode")
-                            .value
-                            .trim(),
-
-                    mobile:
-                        document
-                            .getElementById("mobile")
-                            .value
-                            .replace(/\D/g, ""),
-
-                    item:
-                        document
-                            .getElementById("item")
-                            .value
-                            .trim(),
-
-                    language:
-                        document
-                            .getElementById("language")
-                            .value,
-
-                    date:
-                        document
-                            .getElementById(
-                                "shoppingDate"
-                            )
-                            .value,
-
-                    time:
-                        document
-                            .getElementById(
-                                "shoppingTime"
-                            )
-                            .value
-                };
-
-                if (
-                    Object.values(formData)
-                        .some(
-                            function (value) {
-                                return !value;
-                            }
-                        )
-                ) {
-                    setMessage(
-                        "formMessage",
-                        "Please fill all fields and select an assistant.",
-                        "error"
-                    );
-
-                    return;
-                }
-
-                const submitButton =
-                    document.getElementById(
-                        "submitButton"
-                    );
-
-                submitButton.disabled = true;
-                submitButton.textContent =
-                    "Placing order...";
-
-                document.getElementById(
-                    "bookingResult"
-                ).style.display =
-                    "none";
-
-                try {
-                    const response =
-                        await fetch(
-                            `${API_BASE_URL}/submit-details`,
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json",
-
-                                    Authorization:
-                                        `Bearer ${token}`
-                                },
-
-                                body:
-                                    JSON.stringify(
-                                        formData
-                                    )
-                            }
-                        );
-
-                    const data =
-                        await response.json();
-
-                    if (
-                        response.status === 401 ||
-                        response.status === 403
-                    ) {
-                        redirectToLogin();
-                        return;
-                    }
-
-                    if (!response.ok) {
-                        setMessage(
-                            "formMessage",
-                            data.message ||
-                            "Unable to place order.",
-                            "error"
-                        );
-
-                        return;
-                    }
-
-                    const orderId =
-                        data.order?.id || "";
-
-                    localStorage.setItem(
-                        "currentOrderId",
-                        orderId
-                    );
-
-                    document.getElementById(
-                        "resultOrderId"
-                    ).textContent =
-                        orderId ||
-                        "Not available";
-
-                    document.getElementById(
-                        "resultAssistantName"
-                    ).textContent =
-                        data.assistant?.name ||
-                        "Not available";
-
-                    document.getElementById(
-                        "resultAssistantPhone"
-                    ).textContent =
-                        data.assistant
-                            ?.phonenumber ||
-                        "Not available";
-
-                    document.getElementById(
-                        "whatsappLink"
-                    ).href =
-                        data.whatsappUrl ||
-                        "#";
-
-                    document.getElementById(
-                        "bookingResult"
-                    ).style.display =
-                        "block";
-
-                    setMessage(
-                        "formMessage",
-                        data.message ||
-                        "Order placed successfully.",
-                        "success"
-                    );
-
-                    await loadExistingOrders();
-
-                } catch (error) {
-                    console.error(
-                        "Place order error:",
-                        error
-                    );
-
-                    setMessage(
-                        "formMessage",
-                        "Unable to connect to the server.",
-                        "error"
-                    );
-
-                } finally {
-                    submitButton.disabled =
-                        false;
-
-                    submitButton.textContent =
-                        "Place Order";
-                }
+        function formatItems(items) {
+            if (Array.isArray(items)) {
+                return items.join(", ");
             }
-        );
 
-    document
-        .getElementById(
-            "findAssistantsButton"
-        )
-        .addEventListener(
-            "click",
-            loadAssistants
-        );
+            return items || "-";
+        }
 
-    document
-        .getElementById(
-            "refreshOrdersButton"
-        )
-        .addEventListener(
-            "click",
-            loadExistingOrders
-        );
+        function formatDate(value) {
+            if (!value) {
+                return "-";
+            }
 
-    document
-        .getElementById("clearButton")
-        .addEventListener(
-            "click",
-            function () {
-                const savedName =
-                    document
-                        .getElementById("name")
-                        .value;
+            const date =
+                new Date(value);
 
-                document
-                    .getElementById(
-                        "shoppingForm"
-                    )
-                    .reset();
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+                return value;
+            }
 
+            return date.toLocaleDateString(
+                "en-IN"
+            );
+        }
+
+        function normalizeStatus(status) {
+            return String(status)
+                .toLowerCase()
+                .trim()
+                .replaceAll("_", "-")
+                .replaceAll(" ", "-");
+        }
+
+        function showOrderMessage(
+            message,
+            type
+        ) {
+            const box =
                 document.getElementById(
-                    "name"
-                ).value =
-                    savedName;
-
-                resetAssistantSelection();
-
-                setMessage(
-                    "formMessage",
-                    ""
+                    "orderMessage"
                 );
 
-                document.getElementById(
-                    "bookingResult"
-                ).style.display =
-                    "none";
-            }
-        );
+            box.textContent = message;
 
-    document
-        .getElementById("logoutButton")
-        .addEventListener(
-            "click",
-            function () {
-                const shouldLogout =
-                    confirm(
-                        "Are you sure you want to log out?"
-                    );
-
-                if (shouldLogout) {
-                    redirectToLogin();
-                }
-            }
-        );
-
-    document
-        .getElementById("city")
-        .addEventListener(
-            "input",
-            resetAssistantSelection
-        );
-
-    document
-        .getElementById("state")
-        .addEventListener(
-            "input",
-            resetAssistantSelection
-        );
-
-    document.getElementById(
-        "shoppingDate"
-    ).min =
-        new Date()
-            .toISOString()
-            .split("T")[0];
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        async function () {
-            if (!getToken()) {
-                redirectToLogin();
-                return;
-            }
-
-            await fetchUserInfo();
-            await loadExistingOrders();
+            box.className =
+                `message ${type}`;
         }
-    );
-</script>
 
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("userId");
+
+            window.location.href =
+                "login.html";
+        }
+    </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Assigned Orders | Hakuna Express</title>
+    <title>Assistant Orders | Hakuna Express</title>
 
     <style>
         * {
@@ -18,732 +18,527 @@
         }
 
         body {
-            min-height: 100vh;
             font-family: Arial, sans-serif;
-            background-color: #eef3fb;
-            color: #333;
+            background-color: #a0d2eb;
+            color: #263238;
+            min-height: 100vh;
         }
 
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 15px 25px;
+            background-color: #5c6bc0;
             color: white;
-            background-color: #4a63d4;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            padding: 14px 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
         }
 
-        .brand h1 {
-            font-size: 24px;
+        .header-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
         }
 
-        .brand p {
-            margin-top: 3px;
-            font-size: 13px;
-            opacity: 0.9;
+        .brand {
+            font-size: 25px;
+            font-weight: bold;
         }
 
         .header-actions {
             display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .assistant-name {
-            font-size: 14px;
+            gap: 10px;
         }
 
         .header-button {
-            padding: 9px 14px;
-            color: white;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
             font-weight: bold;
-        }
-
-        .header-button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
+            cursor: pointer;
+            text-decoration: none;
         }
 
         .refresh-button {
-            background-color: #28a745;
-        }
-
-        .refresh-button:hover {
-            background-color: #218838;
+            background-color: white;
+            color: #3949ab;
         }
 
         .logout-button {
-            background-color: #d32f2f;
+            background-color: #e53935;
+            color: white;
         }
 
-        .logout-button:hover {
-            background-color: #b71c1c;
-        }
-
-        .container {
-            width: calc(100% - 30px);
+        main {
             max-width: 1200px;
             margin: 30px auto;
+            padding: 0 18px 40px;
         }
 
-        .top-section {
+        .welcome-card {
+            background: linear-gradient(
+                135deg,
+                #3949ab,
+                #7986cb
+            );
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .welcome-card h1 {
+            margin-bottom: 8px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .summary-card h3 {
+            color: #3949ab;
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .summary-card p {
+            color: #546e7a;
+            font-weight: bold;
+        }
+
+        .main-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.14);
+        }
+
+        .orders-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             gap: 15px;
             margin-bottom: 20px;
         }
 
-        .top-section h2 {
-            margin-bottom: 5px;
-            color: #3f51b5;
+        .orders-header h2 {
+            color: #3949ab;
         }
 
-        .top-section p {
-            color: #666;
-        }
-
-        .update-page-link {
-            display: inline-block;
-            padding: 10px 16px;
-            color: white;
-            background-color: #4a63d4;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .update-page-link:hover {
-            background-color: #3549aa;
-        }
-
-        .message {
-            min-height: 22px;
-            margin: 18px 0;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .success-message {
-            color: #2e7d32;
-        }
-
-        .error-message {
-            color: #d32f2f;
-        }
-
-        .loading-message {
-            color: #4a63d4;
-        }
-
-        .table-wrapper {
-            display: none;
-            overflow-x: auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
-        }
-
-        table {
-            width: 100%;
-            min-width: 1000px;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 13px 12px;
-            border-bottom: 1px solid #e2e2e2;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        th {
-            color: white;
-            background-color: #4a63d4;
+        .filter-select {
+            padding: 10px;
+            border: 1px solid #b0bec5;
+            border-radius: 6px;
             font-size: 14px;
+            outline: none;
         }
 
-        tbody tr:hover {
-            background-color: #f7f9ff;
+        .orders-container {
+            display: grid;
+            gap: 18px;
+        }
+
+        .order-card {
+            border: 1px solid #d7dce0;
+            border-left: 5px solid #5c6bc0;
+            border-radius: 10px;
+            background-color: #fafafa;
+            padding: 19px;
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 14px;
         }
 
         .order-id {
-            max-width: 170px;
-            word-break: break-all;
-            font-family: monospace;
-            font-size: 13px;
-        }
-
-        .item-cell {
-            max-width: 220px;
-            white-space: normal;
+            color: #3949ab;
+            font-weight: bold;
             word-break: break-word;
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 6px 10px;
+            padding: 6px 11px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             text-transform: capitalize;
+            white-space: nowrap;
         }
 
-        .status-assistant-assigned,
-        .status-pending {
-            color: #7a5400;
+        .status-pending,
+        .status-assigned {
             background-color: #fff3cd;
+            color: #856404;
         }
 
-        .status-packed {
+        .status-accepted,
+        .status-shopping {
+            background-color: #e3f2fd;
             color: #0d47a1;
-            background-color: #dbeafe;
         }
 
-        .status-shipped,
-        .status-in-transit {
-            color: #5d3a00;
-            background-color: #ffe8b3;
-        }
-
+        .status-picked-up,
+        .status-on-the-way,
         .status-out-for-delivery {
-            color: #6a1b9a;
-            background-color: #f3e5f5;
+            background-color: #ede7f6;
+            color: #4527a0;
         }
 
-        .status-delivered {
-            color: #1b5e20;
+        .status-delivered,
+        .status-completed {
             background-color: #d8f3dc;
+            color: #1b5e20;
         }
 
-        .status-returned,
         .status-cancelled {
-            color: #8b1d1d;
-            background-color: #fde2e2;
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px 22px;
+        }
+
+        .order-row {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 10px;
+            padding: 5px 0;
+        }
+
+        .order-label {
+            font-weight: bold;
+            color: #455a64;
+        }
+
+        .order-value {
+            word-break: break-word;
+        }
+
+        .status-update-box {
+            margin-top: 16px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .status-select {
+            flex: 1;
+            min-width: 190px;
+            padding: 10px;
+            border: 1px solid #b0bec5;
+            border-radius: 6px;
+            font-size: 14px;
         }
 
         .update-button {
-            padding: 8px 14px;
+            background-color: #00897b;
             color: white;
-            background-color: #28a745;
+        }
+
+        .bill-button {
+            background-color: #3949ab;
+            color: white;
+        }
+
+        .track-button {
+            background-color: #7b1fa2;
+            color: white;
+        }
+
+        .action-button {
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            border-radius: 6px;
+            padding: 10px 14px;
             font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
         }
 
-        .update-button:hover {
-            background-color: #218838;
-        }
-
-        .update-button:disabled {
-            background-color: #9e9e9e;
+        .action-button:disabled {
+            opacity: 0.6;
             cursor: not-allowed;
         }
 
-        .empty-state {
+        .message {
             display: none;
-            padding: 35px 20px;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+        }
+
+        .message.success {
+            display: block;
+            background-color: #d8f3dc;
+            color: #1b5e20;
+        }
+
+        .message.error {
+            display: block;
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        .message.info {
+            display: block;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .loading,
+        .empty-message {
             text-align: center;
-            color: #666;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            padding: 35px;
+            color: #546e7a;
         }
 
-        .empty-state h3 {
-            margin-bottom: 8px;
-            color: #444;
+        @media (max-width: 900px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .order-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        @media (max-width: 750px) {
-            header {
+        @media (max-width: 650px) {
+            .header-container {
                 flex-direction: column;
-                text-align: center;
+                align-items: flex-start;
             }
 
             .header-actions {
-                flex-wrap: wrap;
-                justify-content: center;
+                width: 100%;
             }
 
-            .top-section {
+            .header-button {
+                flex: 1;
+                text-align: center;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .order-top {
+                flex-direction: column;
+            }
+
+            .order-row {
+                grid-template-columns: 1fr;
+                gap: 3px;
+            }
+
+            .status-update-box {
                 flex-direction: column;
                 align-items: stretch;
-                text-align: center;
             }
 
-            .update-page-link {
-                text-align: center;
-            }
-
-            .container {
-                margin-top: 20px;
+            .status-select,
+            .action-button {
+                width: 100%;
             }
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="header-container">
+            <div class="brand">
+                Hakuna Express Assistant
+            </div>
 
-<header>
-    <div class="brand">
-        <h1>Hakuna Assistant</h1>
-        <p>Assigned Orders</p>
-    </div>
+            <div class="header-actions">
+                <button
+                    type="button"
+                    class="header-button refresh-button"
+                    onclick="loadOrders()"
+                >
+                    Refresh
+                </button>
 
-    <div class="header-actions">
-        <span class="assistant-name">
-            Welcome,
-            <strong id="assistantName">Assistant</strong>
-        </span>
+                <button
+                    type="button"
+                    class="header-button logout-button"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
 
-        <button
-            type="button"
-            class="header-button refresh-button"
-            id="refreshButton"
-        >
-            Refresh
-        </button>
-
-        <button
-            type="button"
-            class="header-button logout-button"
-            id="logoutButton"
-        >
-            Logout
-        </button>
-    </div>
-</header>
-
-<main class="container">
-
-    <section class="top-section">
-        <div>
-            <h2>Your Assigned Orders</h2>
+    <main>
+        <section class="welcome-card">
+            <h1>Assistant Dashboard</h1>
 
             <p>
-                View your assigned orders and update their delivery status.
+                View assigned orders, update delivery status and
+                generate payment bills for users.
             </p>
-        </div>
-
-        <a
-            href="assistant-update.html"
-            class="update-page-link"
-        >
-            Update Order Manually
-        </a>
-    </section>
-
-    <p
-        id="message"
-        class="message"
-        aria-live="polite"
-    ></p>
-
-    <div
-        id="tableWrapper"
-        class="table-wrapper"
-    >
-        <table>
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Mobile</th>
-                    <th>City</th>
-                    <th>Item</th>
-                    <th>Shopping Date</th>
-                    <th>Status</th>
-                    <th>Last Updated</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody id="ordersTableBody"></tbody>
-        </table>
-    </div>
-
-    <section
-        id="emptyState"
-        class="empty-state"
-    >
-        <h3>No assigned orders</h3>
-
-        <p>
-            No orders are currently assigned to your account.
-        </p>
-    </section>
-
-</main>
-
-<script>
-    const API_BASE_URL =
-        "https://logistics-dwti.onrender.com";
-
-    function showMessage(message, type = "") {
-        const messageElement =
-            document.getElementById("message");
-
-        messageElement.textContent = message;
-
-        if (type === "success") {
-            messageElement.className =
-                "message success-message";
-
-        } else if (type === "error") {
-            messageElement.className =
-                "message error-message";
-
-        } else if (type === "loading") {
-            messageElement.className =
-                "message loading-message";
-
-        } else {
-            messageElement.className =
-                "message";
-        }
-    }
-
-    function clearAssistantSession() {
-        localStorage.removeItem("assistantToken");
-        localStorage.removeItem("assistantPhone");
-        localStorage.removeItem("assistantName");
-        localStorage.removeItem("assistantId");
-        localStorage.removeItem("selectedOrderId");
-    }
-
-    function redirectToAssistantLogin() {
-        clearAssistantSession();
-
-        window.location.href =
-            "assistant-login.html";
-    }
-
-    function formatStatus(status) {
-        if (!status) {
-            return "Unknown";
-        }
-
-        return String(status)
-            .replaceAll("_", " ")
-            .replace(
-                /\b\w/g,
-                function (letter) {
-                    return letter.toUpperCase();
-                }
-            );
-    }
-
-    function getStatusClass(status) {
-        const normalizedStatus =
-            String(status || "")
-                .toLowerCase()
-                .replaceAll("_", "-")
-                .replaceAll(" ", "-");
-
-        const supportedClasses = [
-            "assistant-assigned",
-            "pending",
-            "packed",
-            "shipped",
-            "in-transit",
-            "out-for-delivery",
-            "delivered",
-            "returned",
-            "cancelled"
-        ];
-
-        if (
-            supportedClasses.includes(
-                normalizedStatus
-            )
-        ) {
-            return `status-${normalizedStatus}`;
-        }
-
-        return "status-pending";
-    }
-
-    function formatDate(dateValue) {
-        if (!dateValue) {
-            return "Not available";
-        }
-
-        const date = new Date(dateValue);
-
-        if (Number.isNaN(date.getTime())) {
-            return String(dateValue);
-        }
-
-        return date.toLocaleDateString();
-    }
-
-    function formatDateTime(dateValue) {
-        if (!dateValue) {
-            return "Not available";
-        }
-
-        const date = new Date(dateValue);
-
-        if (Number.isNaN(date.getTime())) {
-            return String(dateValue);
-        }
-
-        return date.toLocaleString();
-    }
-
-    function createTextCell(
-        value,
-        className = ""
-    ) {
-        const cell =
-            document.createElement("td");
-
-        if (
-            value === undefined ||
-            value === null ||
-            value === ""
-        ) {
-            cell.textContent =
-                "Not available";
-        } else {
-            cell.textContent =
-                String(value);
-        }
-
-        if (className) {
-            cell.className =
-                className;
-        }
-
-        return cell;
-    }
-
-    function createOrderRow(order) {
-        const row =
-            document.createElement("tr");
-
-        const orderId =
-            order._id ||
-            order.id ||
-            order.orderId ||
-            "";
-
-        const customerName =
-            order.name ||
-            order.customerName ||
-            order.customer?.name ||
-            "Not available";
-
-        const customerMobile =
-            order.mobile ||
-            order.customerMobile ||
-            order.customer?.mobile ||
-            "Not available";
-
-        const city =
-            order.city ||
-            order.customer?.city ||
-            "Not available";
-
-        const item =
-            order.item ||
-            order.items ||
-            "Not available";
-
-        const shoppingDate =
-            order.shoppingDate ||
-            order.date ||
-            order.createdAt;
-
-        const orderStatus =
-            order.currentStatus ||
-            order.status ||
-            "assistant_assigned";
-
-        const lastUpdated =
-            order.updatedAt ||
-            order.createdAt;
-
-        row.appendChild(
-            createTextCell(
-                orderId,
-                "order-id"
-            )
-        );
-
-        row.appendChild(
-            createTextCell(
-                customerName
-            )
-        );
-
-        row.appendChild(
-            createTextCell(
-                customerMobile
-            )
-        );
-
-        row.appendChild(
-            createTextCell(
-                city
-            )
-        );
-
-        row.appendChild(
-            createTextCell(
-                item,
-                "item-cell"
-            )
-        );
-
-        row.appendChild(
-            createTextCell(
-                formatDate(
-                    shoppingDate
-                )
-            )
-        );
-
-        const statusCell =
-            document.createElement("td");
-
-        const statusBadge =
-            document.createElement("span");
-
-        statusBadge.className =
-            `status-badge ${getStatusClass(orderStatus)}`;
-
-        statusBadge.textContent =
-            formatStatus(orderStatus);
-
-        statusCell.appendChild(
-            statusBadge
-        );
-
-        row.appendChild(
-            statusCell
-        );
-
-        row.appendChild(
-            createTextCell(
-                formatDateTime(
-                    lastUpdated
-                )
-            )
-        );
-
-        const actionCell =
-            document.createElement("td");
-
-        const updateButton =
-            document.createElement("button");
-
-        updateButton.type =
-            "button";
-
-        updateButton.className =
-            "update-button";
-
-        updateButton.textContent =
-            "Update";
-
-        if (!orderId) {
-            updateButton.disabled =
-                true;
-        }
-
-        updateButton.addEventListener(
-            "click",
-            function () {
-                openUpdatePage(
-                    orderId
-                );
-            }
-        );
-
-        actionCell.appendChild(
-            updateButton
-        );
-
-        row.appendChild(
-            actionCell
-        );
-
-        return row;
-    }
-
-    async function loadOrders() {
+        </section>
+
+        <section class="summary-grid">
+            <div class="summary-card">
+                <h3 id="totalCount">0</h3>
+                <p>Total Orders</p>
+            </div>
+
+            <div class="summary-card">
+                <h3 id="activeCount">0</h3>
+                <p>Active Orders</p>
+            </div>
+
+            <div class="summary-card">
+                <h3 id="deliveredCount">0</h3>
+                <p>Delivered</p>
+            </div>
+
+            <div class="summary-card">
+                <h3 id="pendingCount">0</h3>
+                <p>Pending</p>
+            </div>
+        </section>
+
+        <div
+            id="messageBox"
+            class="message"
+        ></div>
+
+        <section class="main-card">
+            <div class="orders-header">
+                <h2>Assigned Orders</h2>
+
+                <select
+                    id="statusFilter"
+                    class="filter-select"
+                    onchange="filterOrders()"
+                >
+                    <option value="all">
+                        All Orders
+                    </option>
+
+                    <option value="pending">
+                        Pending
+                    </option>
+
+                    <option value="assigned">
+                        Assigned
+                    </option>
+
+                    <option value="accepted">
+                        Accepted
+                    </option>
+
+                    <option value="shopping">
+                        Shopping
+                    </option>
+
+                    <option value="picked-up">
+                        Picked Up
+                    </option>
+
+                    <option value="on-the-way">
+                        On The Way
+                    </option>
+
+                    <option value="delivered">
+                        Delivered
+                    </option>
+                </select>
+            </div>
+
+            <div id="ordersContainer">
+                <div class="loading">
+                    Loading assigned orders...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE_URL =
+            "https://logistics-dwti.onrender.com";
+
         const token =
-            localStorage.getItem(
-                "assistantToken"
-            );
+            localStorage.getItem("assistantToken") ||
+            localStorage.getItem("token");
 
-        const tableBody =
-            document.getElementById(
-                "ordersTableBody"
-            );
+        let allOrders = [];
 
-        const tableWrapper =
-            document.getElementById(
-                "tableWrapper"
-            );
-
-        const emptyState =
-            document.getElementById(
-                "emptyState"
-            );
-
-        const refreshButton =
-            document.getElementById(
-                "refreshButton"
-            );
-
-        if (!token) {
-            alert(
-                "Please log in as an assistant."
-            );
-
-            redirectToAssistantLogin();
-            return;
-        }
-
-        refreshButton.disabled =
-            true;
-
-        refreshButton.textContent =
-            "Loading...";
-
-        tableBody.innerHTML = "";
-
-        tableWrapper.style.display =
-            "none";
-
-        emptyState.style.display =
-            "none";
-
-        showMessage(
-            "Loading assigned orders...",
-            "loading"
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializePage
         );
 
-        try {
-            const response =
-                await fetch(
+        async function initializePage() {
+            if (!token) {
+                alert(
+                    "Please log in as an assistant."
+                );
+
+                window.location.href =
+                    "assistant-login.html";
+
+                return;
+            }
+
+            await loadOrders();
+        }
+
+        async function loadOrders() {
+            const container =
+                document.getElementById(
+                    "ordersContainer"
+                );
+
+            container.innerHTML = `
+                <div class="loading">
+                    Loading assigned orders...
+                </div>
+            `;
+
+            try {
+                const response = await fetch(
                     `${API_BASE_URL}/assistant/orders`,
                     {
-                        method: "GET",
-
                         headers: {
                             Authorization:
                                 `Bearer ${token}`
@@ -751,164 +546,602 @@
                     }
                 );
 
-            let data = {};
-
-            try {
-                data =
+                const data =
                     await response.json();
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+                    logout();
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load assigned orders."
+                    );
+                }
+
+                allOrders =
+                    Array.isArray(data)
+                        ? data
+                        : data.orders || [];
+
+                updateSummary(allOrders);
+                filterOrders();
             } catch (error) {
-                console.error(
-                    "Invalid JSON response:",
-                    error
-                );
-            }
+                container.innerHTML = `
+                    <div class="empty-message">
+                        ${escapeHtml(
+                            error.message
+                        )}
+                    </div>
+                `;
 
-            console.log(
-                "Assigned orders response:",
-                data
-            );
-
-            if (
-                response.status === 401 ||
-                response.status === 403
-            ) {
-                alert(
-                    "Your assistant session has expired. Please log in again."
-                );
-
-                redirectToAssistantLogin();
-                return;
-            }
-
-            if (!response.ok) {
                 showMessage(
-                    data.message ||
-                    "Unable to load assigned orders.",
+                    error.message,
                     "error"
                 );
-
-                return;
             }
+        }
 
-            const orders =
-                Array.isArray(data)
-                    ? data
-                    : Array.isArray(data.orders)
-                        ? data.orders
-                        : Array.isArray(data.assignedOrders)
-                            ? data.assignedOrders
-                            : Array.isArray(data.data)
-                                ? data.data
-                                : [];
+        function updateSummary(orders) {
+            const total =
+                orders.length;
 
-            if (orders.length === 0) {
-                showMessage("");
+            const delivered =
+                orders.filter((order) => {
+                    const status =
+                        normalizeStatus(
+                            getOrderStatus(order)
+                        );
 
-                emptyState.style.display =
-                    "block";
-
-                return;
-            }
-
-            orders.forEach(
-                function (order) {
-                    tableBody.appendChild(
-                        createOrderRow(order)
+                    return (
+                        status === "delivered" ||
+                        status === "completed"
                     );
-                }
-            );
+                }).length;
 
-            tableWrapper.style.display =
-                "block";
+            const pending =
+                orders.filter((order) => {
+                    const status =
+                        normalizeStatus(
+                            getOrderStatus(order)
+                        );
 
-            showMessage(
-                `${orders.length} assigned order${
-                    orders.length === 1
-                        ? ""
-                        : "s"
-                } loaded.`,
-                "success"
-            );
+                    return (
+                        status === "pending" ||
+                        status === "assigned"
+                    );
+                }).length;
 
-        } catch (error) {
-            console.error(
-                "Load orders error:",
-                error
-            );
+            const active =
+                total - delivered;
 
-            showMessage(
-                "Unable to connect to the server. Please try again.",
-                "error"
-            );
+            document.getElementById(
+                "totalCount"
+            ).textContent = total;
 
-        } finally {
-            refreshButton.disabled =
-                false;
+            document.getElementById(
+                "activeCount"
+            ).textContent = active;
 
-            refreshButton.textContent =
-                "Refresh";
-        }
-    }
+            document.getElementById(
+                "deliveredCount"
+            ).textContent = delivered;
 
-    function openUpdatePage(orderId) {
-        if (!orderId) {
-            showMessage(
-                "This order does not contain a valid order ID.",
-                "error"
-            );
-
-            return;
+            document.getElementById(
+                "pendingCount"
+            ).textContent = pending;
         }
 
-        localStorage.setItem(
-            "selectedOrderId",
+        function filterOrders() {
+            const selectedStatus =
+                document.getElementById(
+                    "statusFilter"
+                ).value;
+
+            if (selectedStatus === "all") {
+                displayOrders(allOrders);
+                return;
+            }
+
+            const filteredOrders =
+                allOrders.filter((order) => {
+                    return (
+                        normalizeStatus(
+                            getOrderStatus(order)
+                        ) === selectedStatus
+                    );
+                });
+
+            displayOrders(filteredOrders);
+        }
+
+        function displayOrders(orders) {
+            const container =
+                document.getElementById(
+                    "ordersContainer"
+                );
+
+            if (!orders.length) {
+                container.innerHTML = `
+                    <div class="empty-message">
+                        No assigned orders found.
+                    </div>
+                `;
+
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="orders-container">
+                    ${orders
+                        .map(createOrderCard)
+                        .join("")}
+                </div>
+            `;
+        }
+
+        function createOrderCard(order) {
+            const id =
+                order.id ||
+                order._id ||
+                "";
+
+            const status =
+                getOrderStatus(order);
+
+            const statusClass =
+                normalizeStatus(status);
+
+            const customerName =
+                order.name ||
+                order.customerName ||
+                order.userName ||
+                order.userId?.name ||
+                order.userId?.username ||
+                "Customer";
+
+            const customerEmail =
+                order.email ||
+                order.userId?.email ||
+                "-";
+
+            const address =
+                [
+                    order.address,
+                    order.city,
+                    order.state,
+                    order.pincode
+                ]
+                    .filter(Boolean)
+                    .join(", ");
+
+            const items =
+                formatItems(order.item);
+
+            const isDelivered =
+                statusClass === "delivered" ||
+                statusClass === "completed";
+
+            return `
+                <article class="order-card">
+
+                    <div class="order-top">
+                        <div class="order-id">
+                            Order ID:
+                            ${escapeHtml(id)}
+                        </div>
+
+                        <span
+                            class="status-badge
+                            status-${statusClass}"
+                        >
+                            ${escapeHtml(status)}
+                        </span>
+                    </div>
+
+                    <div class="order-grid">
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Customer
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    customerName
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Email
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    customerEmail
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Mobile
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    order.mobile ||
+                                    order.phone ||
+                                    "-"
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Items
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(items)}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Address
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    address || "-"
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Shopping Date
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    formatDate(
+                                        order.shoppingDate
+                                    )
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Shopping Time
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    order.shoppingTime ||
+                                    "-"
+                                )}
+                            </span>
+                        </div>
+
+                        <div class="order-row">
+                            <span class="order-label">
+                                Created
+                            </span>
+
+                            <span class="order-value">
+                                ${escapeHtml(
+                                    formatDateTime(
+                                        order.createdAt
+                                    )
+                                )}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="status-update-box">
+
+                        <select
+                            id="status-${id}"
+                            class="status-select"
+                            ${isDelivered
+                                ? "disabled"
+                                : ""}
+                        >
+                            ${createStatusOptions(
+                                status
+                            )}
+                        </select>
+
+                        <button
+                            type="button"
+                            class="action-button update-button"
+                            onclick="updateOrderStatus(
+                                '${id}'
+                            )"
+                            ${isDelivered
+                                ? "disabled"
+                                : ""}
+                        >
+                            Update Status
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-button bill-button"
+                            onclick="openBillPage(
+                                '${id}'
+                            )"
+                        >
+                            Generate / View Bill
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-button track-button"
+                            onclick="trackOrder(
+                                '${id}'
+                            )"
+                        >
+                            Track Order
+                        </button>
+                    </div>
+                </article>
+            `;
+        }
+
+        function createStatusOptions(
+            currentStatus
+        ) {
+            const statuses = [
+                "Assigned",
+                "Accepted",
+                "Shopping",
+                "Picked Up",
+                "On The Way",
+                "Delivered"
+            ];
+
+            const normalizedCurrent =
+                normalizeStatus(
+                    currentStatus
+                );
+
+            return statuses
+                .map((status) => {
+                    const selected =
+                        normalizeStatus(
+                            status
+                        ) ===
+                        normalizedCurrent
+                            ? "selected"
+                            : "";
+
+                    return `
+                        <option
+                            value="${escapeHtml(
+                                status
+                            )}"
+                            ${selected}
+                        >
+                            ${escapeHtml(status)}
+                        </option>
+                    `;
+                })
+                .join("");
+        }
+
+        async function updateOrderStatus(
             orderId
-        );
+        ) {
+            const select =
+                document.getElementById(
+                    `status-${orderId}`
+                );
 
-        window.location.href =
-            "assistant-update.html";
-    }
+            const newStatus =
+                select.value;
 
-    document
-        .getElementById(
-            "refreshButton"
-        )
-        .addEventListener(
-            "click",
-            loadOrders
-        );
+            const previousText =
+                select.nextElementSibling
+                    .textContent;
 
-    document
-        .getElementById(
-            "logoutButton"
-        )
-        .addEventListener(
-            "click",
-            function () {
-                const shouldLogout =
-                    confirm(
-                        "Are you sure you want to log out?"
+            const updateButton =
+                select.nextElementSibling;
+
+            updateButton.disabled = true;
+
+            updateButton.textContent =
+                "Updating...";
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/assistant/orders/${orderId}/status`,
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            status: newStatus
+                        })
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to update order status."
                     );
-
-                if (shouldLogout) {
-                    redirectToAssistantLogin();
                 }
+
+                showMessage(
+                    data.message ||
+                    "Order status updated successfully.",
+                    "success"
+                );
+
+                await loadOrders();
+            } catch (error) {
+                showMessage(
+                    error.message,
+                    "error"
+                );
+            } finally {
+                updateButton.disabled = false;
+
+                updateButton.textContent =
+                    previousText.trim() ||
+                    "Update Status";
             }
-        );
+        }
 
-    const savedAssistantName =
-        localStorage.getItem(
-            "assistantName"
-        );
+        function openBillPage(orderId) {
+            window.location.href =
+                `assistant-bill.html?orderId=${encodeURIComponent(
+                    orderId
+                )}`;
+        }
 
-    document.getElementById(
-        "assistantName"
-    ).textContent =
-        savedAssistantName ||
-        "Assistant";
+        function trackOrder(orderId) {
+            window.location.href =
+                `tracking.html?orderId=${encodeURIComponent(
+                    orderId
+                )}`;
+        }
 
-    loadOrders();
-</script>
+        function getOrderStatus(order) {
+            return (
+                order.currentStatus ||
+                order.status ||
+                "Assigned"
+            );
+        }
 
+        function normalizeStatus(status) {
+            return String(status || "")
+                .toLowerCase()
+                .trim()
+                .replaceAll("_", "-")
+                .replaceAll(" ", "-");
+        }
+
+        function formatItems(items) {
+            if (Array.isArray(items)) {
+                return items.join(", ");
+            }
+
+            return items || "-";
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "-";
+            }
+
+            const date =
+                new Date(value);
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+                return value;
+            }
+
+            return date.toLocaleDateString(
+                "en-IN"
+            );
+        }
+
+        function formatDateTime(value) {
+            if (!value) {
+                return "-";
+            }
+
+            const date =
+                new Date(value);
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+                return value;
+            }
+
+            return date.toLocaleString(
+                "en-IN"
+            );
+        }
+
+        function showMessage(
+            message,
+            type
+        ) {
+            const box =
+                document.getElementById(
+                    "messageBox"
+                );
+
+            box.textContent = message;
+
+            box.className =
+                `message ${type}`;
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+            setTimeout(() => {
+                box.className = "message";
+                box.textContent = "";
+            }, 5000);
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function logout() {
+            localStorage.removeItem(
+                "assistantToken"
+            );
+
+            localStorage.removeItem("token");
+
+            localStorage.removeItem(
+                "assistant"
+            );
+
+            window.location.href =
+                "assistant-login.html";
+        }
+    </script>
 </body>
 </html>

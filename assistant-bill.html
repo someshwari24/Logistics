@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Generate Bill | Hakuna Express</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #a0d2eb;
+            color: #222;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #5c6bc0;
+            color: white;
+            padding: 14px 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+        }
+
+        .header-container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        button,
+        .button-link {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .secondary-button {
+            background: white;
+            color: #3949ab;
+        }
+
+        .danger-button {
+            background: #e53935;
+            color: white;
+        }
+
+        .primary-button {
+            width: 100%;
+            background: #3949ab;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button:hover,
+        .button-link:hover {
+            opacity: 0.88;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 0 18px 40px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 22px;
+            color: #263238;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.14);
+        }
+
+        .card h2 {
+            color: #3949ab;
+            margin-bottom: 18px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #455a64;
+        }
+
+        .detail-value {
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #37474f;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #b0bec5;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #3949ab;
+            box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.12);
+        }
+
+        textarea {
+            min-height: 95px;
+            resize: vertical;
+        }
+
+        .total-box {
+            margin-top: 14px;
+            background: #e8eaf6;
+            border-left: 5px solid #3949ab;
+            padding: 16px;
+            border-radius: 7px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .status.success {
+            display: block;
+            background: #d8f3dc;
+            color: #1b5e20;
+        }
+
+        .status.error {
+            display: block;
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .status.info {
+            display: block;
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .payment-status {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 7px;
+            background: #f5f5f5;
+        }
+
+        .payment-status strong {
+            color: #3949ab;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 800px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions a,
+            .header-actions button {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="brand">Hakuna Express - Assistant Billing</div>
+
+            <div class="header-actions">
+                <a
+                    href="assistant-orders.html"
+                    class="button-link secondary-button"
+                >
+                    Back to Orders
+                </a>
+
+                <button
+                    type="button"
+                    class="danger-button"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1 class="page-title">Generate Customer Bill</h1>
+
+        <div class="layout">
+            <section class="card">
+                <h2>Order Details</h2>
+
+                <div id="orderLoading">
+                    Loading order details...
+                </div>
+
+                <div id="orderDetails" class="hidden">
+                    <div class="detail-row">
+                        <span class="detail-label">Order ID</span>
+                        <span
+                            class="detail-value"
+                            id="orderIdText"
+                        ></span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Items</span>
+                        <span
+                            class="detail-value"
+                            id="itemsText"
+                        ></span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Customer</span>
+                        <span
+                            class="detail-value"
+                            id="customerText"
+                        ></span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Phone</span>
+                        <span
+                            class="detail-value"
+                            id="phoneText"
+                        ></span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Address</span>
+                        <span
+                            class="detail-value"
+                            id="addressText"
+                        ></span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Order Status</span>
+                        <span
+                            class="detail-value"
+                            id="orderStatusText"
+                        ></span>
+                    </div>
+                </div>
+
+                <div
+                    id="currentPaymentStatus"
+                    class="payment-status hidden"
+                >
+                    <strong>Bill status:</strong>
+                    <span id="billStatusText"></span>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Bill Information</h2>
+
+                <form id="billForm">
+                    <div class="form-group">
+                        <label for="itemAmount">
+                            Item Amount (INR)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="itemAmount"
+                            min="0"
+                            step="0.01"
+                            required
+                            placeholder="Example: 1200"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deliveryCharge">
+                            Delivery Charge (INR)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="deliveryCharge"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taxAmount">
+                            Tax Amount (INR)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="taxAmount"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discountAmount">
+                            Discount (INR)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="discountAmount"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">
+                            Bill Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            maxlength="1000"
+                            placeholder="Add purchased-item details or any billing note."
+                        ></textarea>
+                    </div>
+
+                    <div class="total-box">
+                        <span>Total Amount</span>
+                        <span id="totalAmountText">INR 0.00</span>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="submitButton"
+                    >
+                        Generate Bill
+                    </button>
+                </form>
+
+                <div id="messageBox" class="status"></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE_URL =
+            "https://logistics-dwti.onrender.com";
+
+        const token =
+            localStorage.getItem("token") ||
+            localStorage.getItem("assistantToken");
+
+        const params =
+            new URLSearchParams(window.location.search);
+
+        const orderId =
+            params.get("orderId");
+
+        const billForm =
+            document.getElementById("billForm");
+
+        const amountInputs = [
+            "itemAmount",
+            "deliveryCharge",
+            "taxAmount",
+            "discountAmount"
+        ];
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializePage
+        );
+
+        amountInputs.forEach((inputId) => {
+            document
+                .getElementById(inputId)
+                .addEventListener(
+                    "input",
+                    calculateTotal
+                );
+        });
+
+        billForm.addEventListener(
+            "submit",
+            submitBill
+        );
+
+        async function initializePage() {
+            if (!token) {
+                alert("Please log in as an assistant.");
+
+                window.location.href =
+                    "assistant-login.html";
+
+                return;
+            }
+
+            if (!orderId) {
+                showMessage(
+                    "Order ID is missing from the page URL.",
+                    "error"
+                );
+
+                billForm.classList.add("hidden");
+                return;
+            }
+
+            await loadAssignedOrder();
+            await loadExistingBill();
+        }
+
+        async function loadAssignedOrder() {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/assistant/orders`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load assigned orders."
+                    );
+                }
+
+                const orders =
+                    Array.isArray(data)
+                        ? data
+                        : data.orders || [];
+
+                const order = orders.find(
+                    (entry) =>
+                        String(
+                            entry.id || entry._id
+                        ) === String(orderId)
+                );
+
+                if (!order) {
+                    throw new Error(
+                        "This order is not assigned to the logged-in assistant."
+                    );
+                }
+
+                displayOrder(order);
+            } catch (error) {
+                document.getElementById(
+                    "orderLoading"
+                ).textContent = error.message;
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+            }
+        }
+
+        function displayOrder(order) {
+            document.getElementById(
+                "orderLoading"
+            ).classList.add("hidden");
+
+            document.getElementById(
+                "orderDetails"
+            ).classList.remove("hidden");
+
+            document.getElementById(
+                "orderIdText"
+            ).textContent =
+                order.id || order._id || "-";
+
+            document.getElementById(
+                "itemsText"
+            ).textContent =
+                formatItems(order.item);
+
+            document.getElementById(
+                "customerText"
+            ).textContent =
+                order.name ||
+                order.userName ||
+                order.userId?.name ||
+                "-";
+
+            document.getElementById(
+                "phoneText"
+            ).textContent =
+                order.mobile ||
+                order.phone ||
+                "-";
+
+            document.getElementById(
+                "addressText"
+            ).textContent =
+                formatAddress(order);
+
+            document.getElementById(
+                "orderStatusText"
+            ).textContent =
+                order.currentStatus ||
+                order.status ||
+                "Pending";
+        }
+
+        async function loadExistingBill() {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/assistant/orders/${orderId}/bill`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (response.status === 404) {
+                    return;
+                }
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to load the existing bill."
+                    );
+                }
+
+                const bill = data.bill;
+
+                document.getElementById(
+                    "itemAmount"
+                ).value = bill.itemAmount ?? 0;
+
+                document.getElementById(
+                    "deliveryCharge"
+                ).value =
+                    bill.deliveryCharge ?? 0;
+
+                document.getElementById(
+                    "taxAmount"
+                ).value =
+                    bill.taxAmount ?? 0;
+
+                document.getElementById(
+                    "discountAmount"
+                ).value =
+                    bill.discountAmount ?? 0;
+
+                document.getElementById(
+                    "description"
+                ).value =
+                    bill.description || "";
+
+                document.getElementById(
+                    "currentPaymentStatus"
+                ).classList.remove("hidden");
+
+                document.getElementById(
+                    "billStatusText"
+                ).textContent =
+                    formatStatus(
+                        bill.billStatus
+                    );
+
+                if (
+                    ["paid", "admin_verified"].includes(
+                        bill.billStatus
+                    )
+                ) {
+                    disableBillEditing();
+
+                    showMessage(
+                        "This bill has already been paid and cannot be edited.",
+                        "info"
+                    );
+                }
+
+                calculateTotal();
+            } catch (error) {
+                showMessage(
+                    error.message,
+                    "error"
+                );
+            }
+        }
+
+        async function submitBill(event) {
+            event.preventDefault();
+
+            const itemAmount =
+                readAmount("itemAmount");
+
+            const deliveryCharge =
+                readAmount("deliveryCharge");
+
+            const taxAmount =
+                readAmount("taxAmount");
+
+            const discountAmount =
+                readAmount("discountAmount");
+
+            const total =
+                itemAmount +
+                deliveryCharge +
+                taxAmount -
+                discountAmount;
+
+            if (
+                [
+                    itemAmount,
+                    deliveryCharge,
+                    taxAmount,
+                    discountAmount
+                ].some(
+                    (value) =>
+                        !Number.isFinite(value) ||
+                        value < 0
+                )
+            ) {
+                showMessage(
+                    "Enter valid non-negative amounts.",
+                    "error"
+                );
+                return;
+            }
+
+            if (total <= 0) {
+                showMessage(
+                    "Total amount must be greater than zero.",
+                    "error"
+                );
+                return;
+            }
+
+            const submitButton =
+                document.getElementById(
+                    "submitButton"
+                );
+
+            submitButton.disabled = true;
+            submitButton.textContent =
+                "Generating Bill...";
+
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/assistant/orders/${orderId}/bill`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            itemAmount,
+                            deliveryCharge,
+                            taxAmount,
+                            discountAmount,
+                            description:
+                                document
+                                    .getElementById(
+                                        "description"
+                                    )
+                                    .value
+                                    .trim()
+                        })
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to generate bill."
+                    );
+                }
+
+                document.getElementById(
+                    "currentPaymentStatus"
+                ).classList.remove("hidden");
+
+                document.getElementById(
+                    "billStatusText"
+                ).textContent =
+                    formatStatus(
+                        data.bill.billStatus
+                    );
+
+                showMessage(
+                    "Bill generated successfully. The user can now view and pay it.",
+                    "success"
+                );
+            } catch (error) {
+                showMessage(
+                    error.message,
+                    "error"
+                );
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent =
+                    "Generate Bill";
+            }
+        }
+
+        function calculateTotal() {
+            const itemAmount =
+                readAmount("itemAmount");
+
+            const deliveryCharge =
+                readAmount("deliveryCharge");
+
+            const taxAmount =
+                readAmount("taxAmount");
+
+            const discountAmount =
+                readAmount("discountAmount");
+
+            const total = Math.max(
+                0,
+                itemAmount +
+                    deliveryCharge +
+                    taxAmount -
+                    discountAmount
+            );
+
+            document.getElementById(
+                "totalAmountText"
+            ).textContent =
+                `INR ${total.toFixed(2)}`;
+        }
+
+        function readAmount(inputId) {
+            const value =
+                Number(
+                    document.getElementById(
+                        inputId
+                    ).value
+                );
+
+            return Number.isFinite(value)
+                ? value
+                : 0;
+        }
+
+        function formatItems(items) {
+            if (Array.isArray(items)) {
+                return items.join(", ");
+            }
+
+            return items || "-";
+        }
+
+        function formatAddress(order) {
+            return [
+                order.address,
+                order.city,
+                order.state,
+                order.pincode
+            ]
+                .filter(Boolean)
+                .join(", ") || "-";
+        }
+
+        function formatStatus(status) {
+            return String(status || "generated")
+                .replaceAll("_", " ")
+                .replace(/\b\w/g, (letter) =>
+                    letter.toUpperCase()
+                );
+        }
+
+        function disableBillEditing() {
+            billForm
+                .querySelectorAll(
+                    "input, textarea, button"
+                )
+                .forEach((element) => {
+                    element.disabled = true;
+                });
+        }
+
+        function showMessage(message, type) {
+            const box =
+                document.getElementById(
+                    "messageBox"
+                );
+
+            box.textContent = message;
+            box.className =
+                `status ${type}`;
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem(
+                "assistantToken"
+            );
+
+            window.location.href =
+                "assistant-login.html";
+        }
+    </script>
+</body>
+</html>
