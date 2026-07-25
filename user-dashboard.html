@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -49,10 +48,6 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
-        }
-
-        .logout-btn:hover {
-            background-color: #b71c1c;
         }
 
         .dashboard-container {
@@ -124,6 +119,37 @@
             flex: 1;
         }
 
+        .assistant-search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .assistant-search-row select {
+            flex: 1;
+        }
+
+        .find-assistant-btn {
+            padding: 10px 15px;
+            color: white;
+            background-color: #5c6bc0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .find-assistant-btn:disabled {
+            background-color: #a7add4;
+            cursor: not-allowed;
+        }
+
+        .assistant-search-message {
+            min-height: 18px;
+            margin-top: 7px;
+            font-size: 13px;
+        }
+
         .button-container {
             display: flex;
             gap: 12px;
@@ -141,10 +167,6 @@
             font-size: 16px;
         }
 
-        .button:hover {
-            background-color: #218838;
-        }
-
         .button:disabled {
             background-color: #94c6a0;
             cursor: not-allowed;
@@ -152,10 +174,6 @@
 
         .cancel-btn {
             background-color: #dc3545;
-        }
-
-        .cancel-btn:hover {
-            background-color: #c82333;
         }
 
         .message {
@@ -192,10 +210,6 @@
             line-height: 1.5;
         }
 
-        .assistant-result strong {
-            color: #333;
-        }
-
         .result-actions {
             display: flex;
             gap: 10px;
@@ -213,16 +227,8 @@
             font-weight: bold;
         }
 
-        .result-link:hover {
-            background-color: #1da851;
-        }
-
         .secondary-link {
             background-color: #5c6bc0;
-        }
-
-        .secondary-link:hover {
-            background-color: #3f51b5;
         }
 
         @media (max-width: 650px) {
@@ -242,15 +248,9 @@
                 padding: 20px;
             }
 
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-
-            .button-container {
-                flex-direction: column;
-            }
-
+            .form-row,
+            .button-container,
+            .assistant-search-row,
             .result-actions {
                 flex-direction: column;
             }
@@ -283,32 +283,26 @@
     </p>
 
     <p class="description">
-        Enter your shopping details to book a personal shopping assistant.
+        Enter your shopping details and select an available assistant.
     </p>
 
     <form id="shoppingForm" novalidate>
 
         <div class="form-group">
             <label for="name">Full Name</label>
-
             <input
                 type="text"
                 id="name"
-                name="name"
                 placeholder="Enter your full name"
-                autocomplete="name"
                 required
             >
         </div>
 
         <div class="form-group">
             <label for="address">Complete Address</label>
-
             <textarea
                 id="address"
-                name="address"
                 placeholder="Enter house number, street and locality"
-                autocomplete="street-address"
                 required
             ></textarea>
         </div>
@@ -316,11 +310,9 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="city">City</label>
-
                 <input
                     type="text"
                     id="city"
-                    name="city"
                     placeholder="Enter city"
                     required
                 >
@@ -328,11 +320,9 @@
 
             <div class="form-group">
                 <label for="state">State</label>
-
                 <input
                     type="text"
                     id="state"
-                    name="state"
                     placeholder="Enter state"
                     required
                 >
@@ -340,44 +330,64 @@
         </div>
 
         <div class="form-group">
-            <label for="pincode">Pincode</label>
+            <label for="assistantSelect">
+                Select Shopping Assistant
+            </label>
 
+            <div class="assistant-search-row">
+                <select
+                    id="assistantSelect"
+                    required
+                    disabled
+                >
+                    <option value="">
+                        Enter city and state, then find assistants
+                    </option>
+                </select>
+
+                <button
+                    type="button"
+                    class="find-assistant-btn"
+                    id="findAssistantsButton"
+                    onclick="loadAssistants()"
+                >
+                    Find Assistants
+                </button>
+            </div>
+
+            <p
+                id="assistantSearchMessage"
+                class="assistant-search-message"
+            ></p>
+        </div>
+
+        <div class="form-group">
+            <label for="pincode">Pincode</label>
             <input
                 type="text"
                 id="pincode"
-                name="pincode"
-                placeholder="Enter 6-digit pincode"
                 inputmode="numeric"
                 maxlength="6"
-                pattern="[0-9]{6}"
-                autocomplete="postal-code"
+                placeholder="Enter 6-digit pincode"
                 required
             >
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="shopping-date">
-                    Shopping Date
-                </label>
-
+                <label for="shopping-date">Shopping Date</label>
                 <input
                     type="date"
                     id="shopping-date"
-                    name="date"
                     required
                 >
             </div>
 
             <div class="form-group">
-                <label for="shopping-time">
-                    Shopping Time
-                </label>
-
+                <label for="shopping-time">Shopping Time</label>
                 <input
                     type="time"
                     id="shopping-time"
-                    name="time"
                     required
                 >
             </div>
@@ -385,47 +395,29 @@
 
         <div class="form-group">
             <label for="mobile">Mobile Number</label>
-
             <input
                 type="tel"
                 id="mobile"
-                name="mobile"
-                placeholder="Enter 10-digit mobile number"
                 inputmode="numeric"
                 maxlength="10"
-                pattern="[0-9]{10}"
-                autocomplete="tel"
+                placeholder="Enter 10-digit mobile number"
                 required
             >
         </div>
 
         <div class="form-group">
-            <label for="item">
-                Items You Want to Purchase
-            </label>
-
+            <label for="item">Items You Want to Purchase</label>
             <textarea
                 id="item"
-                name="item"
-                placeholder="Example: Medicines, groceries, clothes or household products"
+                placeholder="Example: Medicines, groceries, clothes"
                 required
             ></textarea>
         </div>
 
         <div class="form-group">
-            <label for="language">
-                Preferred Language
-            </label>
-
-            <select
-                id="language"
-                name="language"
-                required
-            >
-                <option value="">
-                    Select a language
-                </option>
-
+            <label for="language">Preferred Language</label>
+            <select id="language" required>
+                <option value="">Select a language</option>
                 <option value="English">English</option>
                 <option value="Hindi">Hindi</option>
                 <option value="Telugu">Telugu</option>
@@ -515,16 +507,8 @@
 </main>
 
 <script>
-    /*
-      Use an empty string when the frontend and backend
-      are hosted on the same server.
-
-      For a separate deployed backend, replace it with:
-      const API_BASE_URL = "https://your-backend.onrender.com";
-    */
-    const API_BASE_URL = "";
-
-    const token = localStorage.getItem("token");
+    const API_BASE_URL =
+        "https://logistics-dwti.onrender.com";
 
     function showMessage(message, type) {
         const formMessage =
@@ -548,8 +532,9 @@
     }
 
     async function fetchUserInfo() {
+        const token = localStorage.getItem("token");
+
         if (!token) {
-            alert("Please log in to access the dashboard.");
             redirectToLogin();
             return;
         }
@@ -558,7 +543,6 @@
             const response = await fetch(
                 `${API_BASE_URL}/me`,
                 {
-                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -581,22 +565,7 @@
                 "name"
             ).value = data.name || "";
 
-            localStorage.setItem(
-                "name",
-                data.name || ""
-            );
-
-            localStorage.setItem(
-                "username",
-                data.username || ""
-            );
-
         } catch (error) {
-            console.error(
-                "User information error:",
-                error
-            );
-
             alert(
                 "Your session has expired. Please log in again."
             );
@@ -606,20 +575,162 @@
     }
 
     function logout() {
-        const shouldLogout = confirm(
-            "Are you sure you want to log out?"
-        );
-
-        if (!shouldLogout) {
+        if (!confirm("Are you sure you want to log out?")) {
             return;
         }
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-        localStorage.removeItem("name");
-        localStorage.removeItem("currentOrderId");
+        redirectToLogin();
+    }
 
-        window.location.href = "login.html";
+    function resetAssistantSelection() {
+        const select =
+            document.getElementById("assistantSelect");
+
+        const message =
+            document.getElementById(
+                "assistantSearchMessage"
+            );
+
+        select.innerHTML = `
+            <option value="">
+                Enter city and state, then find assistants
+            </option>
+        `;
+
+        select.disabled = true;
+        message.textContent = "";
+    }
+
+    async function loadAssistants() {
+        const city = document
+            .getElementById("city")
+            .value
+            .trim();
+
+        const state = document
+            .getElementById("state")
+            .value
+            .trim();
+
+        const select =
+            document.getElementById("assistantSelect");
+
+        const button =
+            document.getElementById(
+                "findAssistantsButton"
+            );
+
+        const message =
+            document.getElementById(
+                "assistantSearchMessage"
+            );
+
+        const token = localStorage.getItem("token");
+
+        if (!city || !state) {
+            message.textContent =
+                "Please enter both city and state.";
+
+            message.style.color = "#d32f2f";
+            return;
+        }
+
+        if (!token) {
+            redirectToLogin();
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Searching...";
+
+        select.disabled = true;
+        select.innerHTML = `
+            <option value="">
+                Searching assistants...
+            </option>
+        `;
+
+        try {
+            const url =
+                `${API_BASE_URL}/assistants` +
+                `?city=${encodeURIComponent(city)}` +
+                `&state=${encodeURIComponent(state)}`;
+
+            const response = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                redirectToLogin();
+                return;
+            }
+
+            if (!response.ok) {
+                select.innerHTML = `
+                    <option value="">
+                        No assistants available
+                    </option>
+                `;
+
+                message.textContent =
+                    data.message ||
+                    "No assistants found.";
+
+                message.style.color = "#d32f2f";
+                return;
+            }
+
+            select.innerHTML = `
+                <option value="">
+                    Select an assistant
+                </option>
+            `;
+
+            data.assistants.forEach((assistant) => {
+                const option =
+                    document.createElement("option");
+
+                option.value = assistant._id;
+
+                option.textContent =
+                    `${assistant.name} - ` +
+                    `${assistant.phonenumber}`;
+
+                select.appendChild(option);
+            });
+
+            select.disabled = false;
+
+            message.textContent =
+                `${data.assistants.length} assistant(s) available.`;
+
+            message.style.color = "#2e7d32";
+
+        } catch (error) {
+            console.error(error);
+
+            select.innerHTML = `
+                <option value="">
+                    Unable to load assistants
+                </option>
+            `;
+
+            message.textContent =
+                "Unable to connect to the server.";
+
+            message.style.color = "#d32f2f";
+
+        } finally {
+            button.disabled = false;
+            button.textContent = "Find Assistants";
+        }
     }
 
     function validateForm(data) {
@@ -628,6 +739,7 @@
             !data.address ||
             !data.city ||
             !data.state ||
+            !data.assistantId ||
             !data.pincode ||
             !data.date ||
             !data.time ||
@@ -635,7 +747,7 @@
             !data.item ||
             !data.language
         ) {
-            return "Please fill in all fields.";
+            return "Please fill in all fields and select an assistant.";
         }
 
         if (!/^\d{6}$/.test(data.pincode)) {
@@ -646,9 +758,8 @@
             return "Mobile number must contain exactly 10 digits.";
         }
 
-        const selectedDate = new Date(
-            `${data.date}T00:00:00`
-        );
+        const selectedDate =
+            new Date(`${data.date}T00:00:00`);
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -667,19 +778,10 @@
             async function (event) {
                 event.preventDefault();
 
-                const submitButton =
-                    document.getElementById(
-                        "submitButton"
-                    );
-
-                const currentToken =
+                const token =
                     localStorage.getItem("token");
 
-                if (!currentToken) {
-                    alert(
-                        "Please log in before creating a shopping request."
-                    );
-
+                if (!token) {
                     redirectToLogin();
                     return;
                 }
@@ -704,6 +806,12 @@
                         .getElementById("state")
                         .value
                         .trim(),
+
+                    assistantId: document
+                        .getElementById(
+                            "assistantSelect"
+                        )
+                        .value,
 
                     pincode: document
                         .getElementById("pincode")
@@ -741,18 +849,18 @@
                     validateForm(formData);
 
                 if (validationError) {
-                    showMessage(
-                        validationError,
-                        "error"
-                    );
+                    showMessage(validationError, "error");
                     return;
                 }
+
+                const submitButton =
+                    document.getElementById(
+                        "submitButton"
+                    );
 
                 submitButton.disabled = true;
                 submitButton.textContent =
                     "Booking assistant...";
-
-                showMessage("", "error");
 
                 document.getElementById(
                     "assistantResult"
@@ -769,26 +877,19 @@
                                     "application/json",
 
                                 Authorization:
-                                    `Bearer ${currentToken}`
+                                    `Bearer ${token}`
                             },
 
-                            body: JSON.stringify(
-                                formData
-                            )
+                            body: JSON.stringify(formData)
                         }
                     );
 
-                    const data =
-                        await response.json();
+                    const data = await response.json();
 
                     if (
                         response.status === 401 ||
                         response.status === 403
                     ) {
-                        alert(
-                            "Your session has expired. Please log in again."
-                        );
-
                         redirectToLogin();
                         return;
                     }
@@ -796,9 +897,10 @@
                     if (!response.ok) {
                         showMessage(
                             data.message ||
-                            "Unable to create the shopping request.",
+                            "Unable to create request.",
                             "error"
                         );
+
                         return;
                     }
 
@@ -824,12 +926,9 @@
                         data.assistantPhone ||
                         "Not available";
 
-                    const whatsappLink =
-                        document.getElementById(
-                            "whatsappLink"
-                        );
-
-                    whatsappLink.href =
+                    document.getElementById(
+                        "whatsappLink"
+                    ).href =
                         data.whatsappLink || "#";
 
                     document.getElementById(
@@ -842,20 +941,11 @@
                         "success"
                     );
 
-                    document.getElementById(
-                        "assistantResult"
-                    ).scrollIntoView({
-                        behavior: "smooth"
-                    });
-
                 } catch (error) {
-                    console.error(
-                        "Shopping request error:",
-                        error
-                    );
+                    console.error(error);
 
                     showMessage(
-                        "Unable to connect to the server. Please try again.",
+                        "Unable to connect to the server.",
                         "error"
                     );
 
@@ -868,11 +958,7 @@
         );
 
     function cancelForm() {
-        const shouldClear = confirm(
-            "Clear all entered shopping details?"
-        );
-
-        if (!shouldClear) {
+        if (!confirm("Clear all entered shopping details?")) {
             return;
         }
 
@@ -886,28 +972,38 @@
         document.getElementById("name").value =
             savedName;
 
+        resetAssistantSelection();
+
         document.getElementById(
             "assistantResult"
         ).style.display = "none";
 
         showMessage("", "error");
-
         setMinimumShoppingDate();
     }
 
     function setMinimumShoppingDate() {
         const today =
-            new Date()
-                .toISOString()
-                .split("T")[0];
+            new Date().toISOString().split("T")[0];
 
-        const dateInput =
-            document.getElementById(
-                "shopping-date"
-            );
-
-        dateInput.min = today;
+        document.getElementById(
+            "shopping-date"
+        ).min = today;
     }
+
+    document
+        .getElementById("city")
+        .addEventListener(
+            "input",
+            resetAssistantSelection
+        );
+
+    document
+        .getElementById("state")
+        .addEventListener(
+            "input",
+            resetAssistantSelection
+        );
 
     setMinimumShoppingDate();
     fetchUserInfo();
