@@ -447,11 +447,8 @@
 </main>
 
 <script>
-    /*
-      Leave this empty when the frontend and backend
-      are served from the same Express application.
-    */
-    const API_BASE_URL = "";
+    const API_BASE_URL =
+        "https://logistics-dwti.onrender.com";
 
     let allOrders = [];
 
@@ -613,7 +610,10 @@
         orderCard.className = "order";
 
         const orderId =
-            order._id || order.orderId || "";
+            order.id ||
+            order._id ||
+            order.orderId ||
+            "";
 
         const confirmationStatus =
             getConfirmationStatus(order);
@@ -702,17 +702,10 @@
             createDetail(
                 "Delivery Status",
                 formatStatus(
+                    order.currentStatus ||
                     order.deliveryStatus ||
                     order.assistantStatus ||
-                    (
-                        [
-                            "received",
-                            "not_received",
-                            "problem_with_assistant"
-                        ].includes(order.status)
-                            ? "Not available"
-                            : order.status
-                    )
+                    order.status
                 )
             )
         );
@@ -887,48 +880,120 @@
         ).innerHTML = "";
 
         try {
-            const response = await fetch(
-                `${API_BASE_URL}/get-user-address`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`
+            /*
+              Load orders and previous confirmations together.
+              The backend route for orders is /my-orders.
+            */
+            const [
+                ordersResponse,
+                confirmationsResponse
+            ] = await Promise.all([
+                fetch(
+                    `${API_BASE_URL}/my-orders`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
                     }
-                }
-            );
+                ),
 
-            let data = {};
-
-            try {
-                data = await response.json();
-            } catch {
-                data = {};
-            }
+                fetch(
+                    `${API_BASE_URL}/my-confirmations`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                )
+            ]);
 
             if (
-                response.status === 401 ||
-                response.status === 403
+                ordersResponse.status === 401 ||
+                ordersResponse.status === 403 ||
+                confirmationsResponse.status === 401 ||
+                confirmationsResponse.status === 403
             ) {
                 handleExpiredSession();
                 return;
             }
 
-            if (!response.ok) {
+            let ordersData = {};
+            let confirmationsData = {};
+
+            try {
+                ordersData =
+                    await ordersResponse.json();
+            } catch {
+                ordersData = {};
+            }
+
+            try {
+                confirmationsData =
+                    await confirmationsResponse.json();
+            } catch {
+                confirmationsData = {};
+            }
+
+            if (!ordersResponse.ok) {
                 showMessage(
-                    data.message ||
+                    ordersData.message ||
                     "Unable to load your orders.",
                     "error"
                 );
                 return;
             }
 
-            allOrders =
-                Array.isArray(data)
-                    ? data
-                    : Array.isArray(data.orders)
-                        ? data.orders
-                        : [];
+            const orders =
+                Array.isArray(ordersData.orders)
+                    ? ordersData.orders
+                    : [];
+
+            const confirmations =
+                confirmationsResponse.ok &&
+                Array.isArray(
+                    confirmationsData.confirmations
+                )
+                    ? confirmationsData.confirmations
+                    : [];
+
+            const confirmationMap = new Map();
+
+            confirmations.forEach(
+                function (confirmation) {
+                    const confirmationOrderId =
+                        confirmation.orderId?._id ||
+                        confirmation.orderId?.id ||
+                        confirmation.orderId;
+
+                    if (confirmationOrderId) {
+                        confirmationMap.set(
+                            String(confirmationOrderId),
+                            confirmation.status
+                        );
+                    }
+                }
+            );
+
+            allOrders = orders.map(
+                function (order) {
+                    const orderId =
+                        order.id ||
+                        order._id ||
+                        order.orderId;
+
+                    return {
+                        ...order,
+                        confirmationStatus:
+                            confirmationMap.get(
+                                String(orderId)
+                            ) || "pending"
+                    };
+                }
+            );
 
             showMessage("");
             filterOrders();
@@ -1193,7 +1258,7 @@
             "click",
             function () {
                 window.location.href =
-                    "UserDashboard.html";
+                    "user-dashboard.html";
             }
         );
 
