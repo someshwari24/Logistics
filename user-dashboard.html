@@ -25,77 +25,81 @@
         }
 
         header {
-            position: relative;
-            padding: 18px 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 16px 22px;
             color: white;
-            text-align: center;
             background-color: #5c6bc0;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
         header h1 {
-            font-size: 28px;
+            font-size: 24px;
         }
 
-        .logout-btn {
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            padding: 9px 16px;
+        header p {
+            margin-top: 5px;
+        }
+
+        .logout-button {
+            padding: 9px 15px;
             color: white;
             background-color: #d32f2f;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
-        }
-
-        .logout-btn:hover {
-            background-color: #b71c1c;
-        }
-
-        .dashboard-container {
-            width: calc(100% - 30px);
-            max-width: 620px;
-            margin: 35px auto;
-            padding: 28px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .welcome-message {
-            margin-bottom: 8px;
-            color: #3f51b5;
-            text-align: center;
-            font-size: 21px;
             font-weight: bold;
         }
 
-        .description {
-            margin-bottom: 25px;
+        .logout-button:hover {
+            background-color: #b71c1c;
+        }
+
+        .page-container {
+            width: calc(100% - 30px);
+            max-width: 1180px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            padding: 24px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+        }
+
+        h2 {
+            margin-bottom: 8px;
+            color: #3f51b5;
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
             color: #666;
-            text-align: center;
             line-height: 1.5;
         }
 
         .form-group {
-            margin-bottom: 17px;
+            margin-bottom: 15px;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 7px;
-            color: #444;
+            margin-bottom: 6px;
             font-weight: bold;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
-            padding: 11px;
+            padding: 10px;
             border: 1px solid #bbb;
             border-radius: 5px;
             outline: none;
@@ -103,101 +107,75 @@
             font-size: 15px;
         }
 
-        .form-group textarea {
-            min-height: 90px;
+        textarea {
+            min-height: 82px;
             resize: vertical;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #5c6bc0;
             box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.15);
         }
 
-        .form-row {
-            display: flex;
-            gap: 15px;
+        .two-column-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        .form-row .form-group {
+        .assistant-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .assistant-row select {
             flex: 1;
         }
 
-        .assistant-search-row {
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .primary-button {
+            color: white;
+            background-color: #5c6bc0;
+        }
+
+        .success-button {
+            color: white;
+            background-color: #28a745;
+        }
+
+        .secondary-button {
+            color: white;
+            background-color: #6c757d;
+        }
+
+        .form-actions {
             display: flex;
             gap: 10px;
         }
 
-        .assistant-search-row select {
+        .form-actions button {
             flex: 1;
-        }
-
-        .find-assistant-btn {
-            padding: 10px 15px;
-            color: white;
-            background-color: #5c6bc0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-
-        .find-assistant-btn:hover {
-            background-color: #3f51b5;
-        }
-
-        .find-assistant-btn:disabled {
-            background-color: #a7add4;
-            cursor: not-allowed;
-        }
-
-        .assistant-search-message {
-            min-height: 18px;
-            margin-top: 7px;
-            font-size: 13px;
-        }
-
-        .button-container {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .button {
-            flex: 1;
-            padding: 11px 18px;
-            color: white;
-            background-color: #28a745;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button:hover {
-            background-color: #218838;
-        }
-
-        .button:disabled {
-            background-color: #94c6a0;
-            cursor: not-allowed;
-        }
-
-        .cancel-btn {
-            background-color: #dc3545;
-        }
-
-        .cancel-btn:hover {
-            background-color: #c82333;
         }
 
         .message {
             min-height: 20px;
-            margin-top: 18px;
+            margin-top: 15px;
             text-align: center;
-            font-size: 14px;
+            font-weight: bold;
         }
 
         .error-message {
@@ -208,82 +186,122 @@
             color: #2e7d32;
         }
 
-        .assistant-result {
+        .loading-message {
+            color: #3f51b5;
+        }
+
+        .booking-result {
             display: none;
-            margin-top: 25px;
-            padding: 20px;
+            margin-top: 18px;
+            padding: 16px;
             background-color: #edf7ee;
             border: 1px solid #b7d8ba;
             border-radius: 8px;
         }
 
-        .assistant-result h3 {
-            margin-bottom: 12px;
-            color: #2e7d32;
-        }
-
-        .assistant-result p {
+        .booking-result p {
             margin: 7px 0;
-            line-height: 1.5;
-            overflow-wrap: anywhere;
         }
 
-        .result-actions {
+        .booking-links {
             display: flex;
-            gap: 10px;
-            margin-top: 16px;
             flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
         }
 
-        .result-link {
-            display: inline-block;
-            padding: 10px 15px;
+        .booking-links a {
+            padding: 9px 12px;
             color: white;
-            background-color: #25d366;
+            background-color: #5c6bc0;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
         }
 
-        .result-link:hover {
-            opacity: 0.9;
+        .booking-links a:first-child {
+            background-color: #25d366;
         }
 
-        .secondary-link {
+        .orders-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .orders-container {
+            display: grid;
+            gap: 14px;
+        }
+
+        .order-card {
+            padding: 16px;
+            background-color: #fafbff;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+        }
+
+        .order-card h3 {
+            margin-bottom: 8px;
+            color: #3f51b5;
+        }
+
+        .order-card p {
+            margin: 6px 0;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 9px;
+            color: #7a5400;
+            background-color: #fff3cd;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .order-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .order-actions button {
+            color: white;
             background-color: #5c6bc0;
         }
 
-        .disabled-link {
-            opacity: 0.6;
-            pointer-events: none;
+        .empty-state {
+            padding: 25px;
+            color: #666;
+            background-color: #f7f8fb;
+            border-radius: 8px;
+            text-align: center;
         }
 
-        @media (max-width: 650px) {
+        @media (max-width: 900px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
             header {
-                padding: 18px 15px 70px;
-            }
-
-            .logout-btn {
-                top: auto;
-                right: 50%;
-                bottom: 15px;
-                transform: translateX(50%);
-            }
-
-            .dashboard-container {
-                margin: 20px auto;
-                padding: 20px;
-            }
-
-            .form-row,
-            .button-container,
-            .assistant-search-row,
-            .result-actions {
                 flex-direction: column;
             }
 
-            .result-link {
-                text-align: center;
+            .two-column-row {
+                grid-template-columns: 1fr;
+            }
+
+            .assistant-row,
+            .form-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -292,272 +310,349 @@
 <body>
 
 <header>
-    <h1>User Dashboard</h1>
+    <div>
+        <h1>Hakuna Express</h1>
+
+        <p>
+            Welcome,
+            <strong id="userName">
+                User
+            </strong>
+        </p>
+    </div>
 
     <button
         type="button"
-        class="logout-btn"
-        onclick="logout()"
+        class="logout-button"
+        id="logoutButton"
     >
         Logout
     </button>
 </header>
 
-<main class="dashboard-container">
+<main class="page-container">
 
-    <p class="welcome-message">
-        Welcome, <span id="username">User</span>!
-    </p>
+    <section class="card">
 
-    <p class="description">
-        Enter your shopping details and select an available assistant.
-    </p>
+        <h2>Place a New Order</h2>
 
-    <form id="shoppingForm" novalidate>
+        <p class="subtitle">
+            Enter your shopping details and choose an available assistant.
+        </p>
 
-        <div class="form-group">
-            <label for="name">Full Name</label>
-
-            <input
-                type="text"
-                id="name"
-                placeholder="Enter your full name"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="address">Complete Address</label>
-
-            <textarea
-                id="address"
-                placeholder="Enter house number, street and locality"
-                required
-            ></textarea>
-        </div>
-
-        <div class="form-row">
+        <form id="shoppingForm" novalidate>
 
             <div class="form-group">
-                <label for="city">City</label>
+                <label for="name">
+                    Full Name
+                </label>
 
                 <input
                     type="text"
-                    id="city"
-                    placeholder="Enter city"
+                    id="name"
                     required
                 >
             </div>
 
             <div class="form-group">
-                <label for="state">State</label>
+                <label for="address">
+                    Complete Address
+                </label>
 
-                <input
-                    type="text"
-                    id="state"
-                    placeholder="Enter state"
+                <textarea
+                    id="address"
                     required
-                >
+                ></textarea>
             </div>
 
-        </div>
+            <div class="two-column-row">
 
-        <div class="form-group">
-            <label for="assistantSelect">
-                Select Shopping Assistant
-            </label>
+                <div class="form-group">
+                    <label for="city">
+                        City
+                    </label>
 
-            <div class="assistant-search-row">
+                    <input
+                        type="text"
+                        id="city"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="state">
+                        State
+                    </label>
+
+                    <input
+                        type="text"
+                        id="state"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="assistantSelect">
+                    Shopping Assistant
+                </label>
+
+                <div class="assistant-row">
+
+                    <select
+                        id="assistantSelect"
+                        disabled
+                        required
+                    >
+                        <option value="">
+                            Enter city and state first
+                        </option>
+                    </select>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="findAssistantsButton"
+                    >
+                        Find Assistants
+                    </button>
+
+                </div>
+
+                <p
+                    id="assistantMessage"
+                    class="message"
+                ></p>
+
+            </div>
+
+            <div class="two-column-row">
+
+                <div class="form-group">
+                    <label for="pincode">
+                        Pincode
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pincode"
+                        maxlength="10"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">
+                        Mobile Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="mobile"
+                        maxlength="15"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="two-column-row">
+
+                <div class="form-group">
+                    <label for="shoppingDate">
+                        Shopping Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="shoppingDate"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="shoppingTime">
+                        Shopping Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="shoppingTime"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="item">
+                    Items
+                </label>
+
+                <textarea
+                    id="item"
+                    placeholder="Example: medicines, groceries, clothes"
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="language">
+                    Preferred Language
+                </label>
 
                 <select
-                    id="assistantSelect"
+                    id="language"
                     required
-                    disabled
                 >
                     <option value="">
-                        Enter city and state, then find assistants
+                        Select language
+                    </option>
+
+                    <option value="English">
+                        English
+                    </option>
+
+                    <option value="Hindi">
+                        Hindi
+                    </option>
+
+                    <option value="Telugu">
+                        Telugu
+                    </option>
+
+                    <option value="Tamil">
+                        Tamil
+                    </option>
+
+                    <option value="Kannada">
+                        Kannada
+                    </option>
+
+                    <option value="Malayalam">
+                        Malayalam
+                    </option>
+
+                    <option value="Marathi">
+                        Marathi
+                    </option>
+
+                    <option value="Bengali">
+                        Bengali
                     </option>
                 </select>
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="success-button"
+                    id="submitButton"
+                >
+                    Place Order
+                </button>
 
                 <button
                     type="button"
-                    class="find-assistant-btn"
-                    id="findAssistantsButton"
-                    onclick="loadAssistants()"
+                    class="secondary-button"
+                    id="clearButton"
                 >
-                    Find Assistants
+                    Clear
                 </button>
 
             </div>
 
-            <p
-                id="assistantSearchMessage"
-                class="assistant-search-message"
-            ></p>
-        </div>
+        </form>
 
-        <div class="form-group">
-            <label for="pincode">Pincode</label>
+        <p
+            id="formMessage"
+            class="message"
+            aria-live="polite"
+        ></p>
 
-            <input
-                type="text"
-                id="pincode"
-                inputmode="numeric"
-                maxlength="6"
-                placeholder="Enter 6-digit pincode"
-                required
-            >
-        </div>
+        <div
+            id="bookingResult"
+            class="booking-result"
+        >
+            <h3>
+                Order Placed Successfully
+            </h3>
 
-        <div class="form-row">
+            <p>
+                <strong>Order ID:</strong>
+                <span id="resultOrderId"></span>
+            </p>
 
-            <div class="form-group">
-                <label for="shopping-date">
-                    Shopping Date
-                </label>
+            <p>
+                <strong>Assistant:</strong>
+                <span id="resultAssistantName"></span>
+            </p>
 
-                <input
-                    type="date"
-                    id="shopping-date"
-                    required
+            <p>
+                <strong>Phone:</strong>
+                <span id="resultAssistantPhone"></span>
+            </p>
+
+            <div class="booking-links">
+
+                <a
+                    id="whatsappLink"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
                 >
+                    WhatsApp
+                </a>
+
+                <a href="orderUpdates.html">
+                    Track Order
+                </a>
+
+                <a href="confirmation.html">
+                    Confirm Delivery
+                </a>
+
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="shopping-time">
-                    Shopping Time
-                </label>
+    </section>
 
-                <input
-                    type="time"
-                    id="shopping-time"
-                    required
-                >
+    <section class="card">
+
+        <div class="orders-header">
+
+            <div>
+                <h2>Your Existing Orders</h2>
+
+                <p class="subtitle">
+                    Your orders load automatically after login.
+                </p>
             </div>
-
-        </div>
-
-        <div class="form-group">
-            <label for="mobile">Mobile Number</label>
-
-            <input
-                type="tel"
-                id="mobile"
-                inputmode="numeric"
-                maxlength="10"
-                placeholder="Enter 10-digit mobile number"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="item">
-                Items You Want to Purchase
-            </label>
-
-            <textarea
-                id="item"
-                placeholder="Example: Medicines, groceries, clothes"
-                required
-            ></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="language">
-                Preferred Language
-            </label>
-
-            <select id="language" required>
-                <option value="">Select a language</option>
-                <option value="English">English</option>
-                <option value="Hindi">Hindi</option>
-                <option value="Telugu">Telugu</option>
-                <option value="Tamil">Tamil</option>
-                <option value="Kannada">Kannada</option>
-                <option value="Malayalam">Malayalam</option>
-                <option value="Marathi">Marathi</option>
-                <option value="Bengali">Bengali</option>
-                <option value="Gujarati">Gujarati</option>
-                <option value="Punjabi">Punjabi</option>
-            </select>
-        </div>
-
-        <div class="button-container">
-
-            <button
-                type="submit"
-                class="button"
-                id="submitButton"
-            >
-                Book Assistant
-            </button>
 
             <button
                 type="button"
-                class="button cancel-btn"
-                onclick="cancelForm()"
+                class="primary-button"
+                id="refreshOrdersButton"
             >
-                Clear Form
+                Refresh
             </button>
 
         </div>
 
-    </form>
+        <p
+            id="ordersMessage"
+            class="message"
+            aria-live="polite"
+        ></p>
 
-    <p
-        id="formMessage"
-        class="message"
-        aria-live="polite"
-    ></p>
+        <div
+            id="ordersContainer"
+            class="orders-container"
+        ></div>
 
-    <section
-        id="assistantResult"
-        class="assistant-result"
-    >
-        <h3>Assistant Assigned Successfully</h3>
-
-        <p>
-            <strong>Order ID:</strong>
-            <span id="resultOrderId"></span>
-        </p>
-
-        <p>
-            <strong>Assistant:</strong>
-            <span id="resultAssistantName"></span>
-        </p>
-
-        <p>
-            <strong>Phone:</strong>
-            <span id="resultAssistantPhone"></span>
-        </p>
-
-        <div class="result-actions">
-
-            <a
-                id="whatsappLink"
-                class="result-link disabled-link"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Contact on WhatsApp
-            </a>
-
-            <a
-                href="orderUpdates.html"
-                class="result-link secondary-link"
-            >
-                Track Order
-            </a>
-
-            <a
-                href="confirmation.html"
-                class="result-link secondary-link"
-            >
-                Confirm Delivery
-            </a>
-
-        </div>
     </section>
 
 </main>
@@ -566,29 +661,107 @@
     const API_BASE_URL =
         "https://logistics-dwti.onrender.com";
 
-    function showMessage(message, type) {
-        const formMessage =
-            document.getElementById("formMessage");
+    function getToken() {
+        return localStorage.getItem(
+            "token"
+        );
+    }
 
-        formMessage.textContent = message;
+    function setMessage(
+        elementId,
+        message,
+        type = ""
+    ) {
+        const element =
+            document.getElementById(
+                elementId
+            );
 
-        formMessage.className =
-            type === "success"
-                ? "message success-message"
-                : "message error-message";
+        element.textContent = message;
+        element.className = "message";
+
+        if (type === "error") {
+            element.classList.add(
+                "error-message"
+            );
+        }
+
+        if (type === "success") {
+            element.classList.add(
+                "success-message"
+            );
+        }
+
+        if (type === "loading") {
+            element.classList.add(
+                "loading-message"
+            );
+        }
+    }
+
+    function escapeHtml(value) {
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value === undefined ||
+            value === null
+                ? ""
+                : String(value);
+
+        return div.innerHTML;
+    }
+
+    function formatStatus(status) {
+        if (!status) {
+            return "Not available";
+        }
+
+        return String(status)
+            .replaceAll("_", " ")
+            .replace(
+                /\b\w/g,
+                function (letter) {
+                    return letter.toUpperCase();
+                }
+            );
+    }
+
+    function formatDate(value) {
+        if (!value) {
+            return "Not available";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return String(value);
+        }
+
+        return date.toLocaleString();
     }
 
     function redirectToLogin() {
         localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userName");
         localStorage.removeItem("username");
-        localStorage.removeItem("name");
-        localStorage.removeItem("currentOrderId");
+        localStorage.removeItem("email");
+        localStorage.removeItem(
+            "currentOrderId"
+        );
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
     }
 
     async function fetchUserInfo() {
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
         if (!token) {
             redirectToLogin();
@@ -596,155 +769,19 @@
         }
 
         try {
-            const response = await fetch(
-                `${API_BASE_URL}/me`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/me`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
                     }
-                }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    data.message || "Session expired."
                 );
-            }
 
-            /*
-             * Supports both:
-             * { name: "User" }
-             * and
-             * { user: { name: "User" } }
-             */
-            const userName =
-                data.user?.name ||
-                data.name ||
-                localStorage.getItem("name") ||
-                localStorage.getItem("username") ||
-                "User";
-
-            document.getElementById(
-                "username"
-            ).textContent = userName;
-
-            document.getElementById(
-                "name"
-            ).value = userName;
-
-        } catch (error) {
-            console.error(
-                "Fetch user information error:",
-                error
-            );
-
-            alert(
-                "Your session has expired. Please log in again."
-            );
-
-            redirectToLogin();
-        }
-    }
-
-    function logout() {
-        const confirmed = confirm(
-            "Are you sure you want to log out?"
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
-        redirectToLogin();
-    }
-
-    function resetAssistantSelection() {
-        const select =
-            document.getElementById("assistantSelect");
-
-        const message =
-            document.getElementById(
-                "assistantSearchMessage"
-            );
-
-        select.innerHTML = `
-            <option value="">
-                Enter city and state, then find assistants
-            </option>
-        `;
-
-        select.disabled = true;
-        message.textContent = "";
-    }
-
-    async function loadAssistants() {
-        const city = document
-            .getElementById("city")
-            .value
-            .trim();
-
-        const state = document
-            .getElementById("state")
-            .value
-            .trim();
-
-        const select =
-            document.getElementById("assistantSelect");
-
-        const button =
-            document.getElementById(
-                "findAssistantsButton"
-            );
-
-        const message =
-            document.getElementById(
-                "assistantSearchMessage"
-            );
-
-        const token =
-            localStorage.getItem("token");
-
-        if (!city || !state) {
-            message.textContent =
-                "Please enter both city and state.";
-
-            message.style.color = "#d32f2f";
-            return;
-        }
-
-        if (!token) {
-            redirectToLogin();
-            return;
-        }
-
-        button.disabled = true;
-        button.textContent = "Searching...";
-
-        select.disabled = true;
-
-        select.innerHTML = `
-            <option value="">
-                Searching assistants...
-            </option>
-        `;
-
-        message.textContent = "";
-
-        try {
-            const url =
-                `${API_BASE_URL}/assistants` +
-                `?city=${encodeURIComponent(city)}` +
-                `&state=${encodeURIComponent(state)}`;
-
-            const response = await fetch(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            const data = await response.json();
+            const data =
+                await response.json();
 
             if (
                 response.status === 401 ||
@@ -755,38 +792,129 @@
             }
 
             if (!response.ok) {
-                select.innerHTML = `
-                    <option value="">
-                        No assistants available
-                    </option>
-                `;
-
-                message.textContent =
+                throw new Error(
                     data.message ||
-                    "No assistants found.";
+                    "Unable to load user details."
+                );
+            }
 
-                message.style.color = "#d32f2f";
+            const user =
+                data.user || {};
+
+            document.getElementById(
+                "userName"
+            ).textContent =
+                user.name ||
+                localStorage.getItem(
+                    "userName"
+                ) ||
+                "User";
+
+            document.getElementById(
+                "name"
+            ).value =
+                user.name || "";
+
+            localStorage.setItem(
+                "userName",
+                user.name || ""
+            );
+
+        } catch (error) {
+            console.error(
+                "User details error:",
+                error
+            );
+        }
+    }
+
+    function resetAssistantSelection() {
+        const select =
+            document.getElementById(
+                "assistantSelect"
+            );
+
+        select.disabled = true;
+
+        select.innerHTML = `
+            <option value="">
+                Enter city and state first
+            </option>
+        `;
+
+        setMessage(
+            "assistantMessage",
+            ""
+        );
+    }
+
+    async function loadAssistants() {
+        const city =
+            document
+                .getElementById("city")
+                .value
+                .trim();
+
+        const state =
+            document
+                .getElementById("state")
+                .value
+                .trim();
+
+        const select =
+            document.getElementById(
+                "assistantSelect"
+            );
+
+        const button =
+            document.getElementById(
+                "findAssistantsButton"
+            );
+
+        if (!city || !state) {
+            setMessage(
+                "assistantMessage",
+                "Please enter city and state.",
+                "error"
+            );
+
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent =
+            "Searching...";
+
+        try {
+            const url =
+                `${API_BASE_URL}/assistants` +
+                `?city=${encodeURIComponent(city)}` +
+                `&state=${encodeURIComponent(state)}`;
+
+            const response =
+                await fetch(url);
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+                setMessage(
+                    "assistantMessage",
+                    data.message ||
+                    "Unable to load assistants.",
+                    "error"
+                );
+
+                resetAssistantSelection();
                 return;
             }
 
             const assistants =
-                Array.isArray(data.assistants)
+                Array.isArray(
+                    data.assistants
+                )
                     ? data.assistants
                     : [];
-
-            if (assistants.length === 0) {
-                select.innerHTML = `
-                    <option value="">
-                        No assistants available
-                    </option>
-                `;
-
-                message.textContent =
-                    "No available assistants found for this location.";
-
-                message.style.color = "#d32f2f";
-                return;
-            }
 
             select.innerHTML = `
                 <option value="">
@@ -794,94 +922,319 @@
                 </option>
             `;
 
-            assistants.forEach((assistant) => {
-                const option =
-                    document.createElement("option");
+            assistants.forEach(
+                function (assistant) {
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
 
-                option.value =
-                    assistant._id || assistant.id;
+                    option.value =
+                        assistant._id ||
+                        assistant.id;
 
-                option.textContent =
-                    `${assistant.name} - ` +
-                    `${assistant.phonenumber}`;
+                    option.textContent =
+                        `${assistant.name} - ` +
+                        `${assistant.phonenumber}`;
 
-                select.appendChild(option);
-            });
+                    select.appendChild(
+                        option
+                    );
+                }
+            );
 
-            select.disabled = false;
+            select.disabled =
+                assistants.length === 0;
 
-            message.textContent =
-                `${assistants.length} assistant(s) available.`;
-
-            message.style.color = "#2e7d32";
+            if (assistants.length > 0) {
+                setMessage(
+                    "assistantMessage",
+                    `${assistants.length} assistant(s) available.`,
+                    "success"
+                );
+            } else {
+                setMessage(
+                    "assistantMessage",
+                    "No available assistants found.",
+                    "error"
+                );
+            }
 
         } catch (error) {
             console.error(
-                "Load assistants error:",
+                "Assistant error:",
                 error
             );
 
-            select.innerHTML = `
-                <option value="">
-                    Unable to load assistants
-                </option>
-            `;
-
-            message.textContent =
-                "Unable to connect to the server.";
-
-            message.style.color = "#d32f2f";
+            setMessage(
+                "assistantMessage",
+                "Unable to connect to the server.",
+                "error"
+            );
 
         } finally {
             button.disabled = false;
-            button.textContent = "Find Assistants";
+            button.textContent =
+                "Find Assistants";
         }
     }
 
-    function validateForm(data) {
-        if (
-            !data.name ||
-            !data.address ||
-            !data.city ||
-            !data.state ||
-            !data.assistantId ||
-            !data.pincode ||
-            !data.date ||
-            !data.time ||
-            !data.mobile ||
-            !data.item ||
-            !data.language
-        ) {
-            return "Please fill in all fields and select an assistant.";
+    async function loadExistingOrders() {
+        const token = getToken();
+
+        if (!token) {
+            redirectToLogin();
+            return;
         }
 
-        if (!/^\d{6}$/.test(data.pincode)) {
-            return "Pincode must contain exactly 6 digits.";
+        const container =
+            document.getElementById(
+                "ordersContainer"
+            );
+
+        const refreshButton =
+            document.getElementById(
+                "refreshOrdersButton"
+            );
+
+        container.innerHTML = "";
+
+        refreshButton.disabled = true;
+
+        setMessage(
+            "ordersMessage",
+            "Loading your orders...",
+            "loading"
+        );
+
+        try {
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/my-orders`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                redirectToLogin();
+                return;
+            }
+
+            if (!response.ok) {
+                setMessage(
+                    "ordersMessage",
+                    data.message ||
+                    "Unable to load orders.",
+                    "error"
+                );
+
+                return;
+            }
+
+            const orders =
+                Array.isArray(data.orders)
+                    ? data.orders
+                    : [];
+
+            if (orders.length === 0) {
+                setMessage(
+                    "ordersMessage",
+                    ""
+                );
+
+                container.innerHTML = `
+                    <div class="empty-state">
+                        You have not placed any orders yet.
+                    </div>
+                `;
+
+                return;
+            }
+
+            setMessage(
+                "ordersMessage",
+                `${orders.length} order${
+                    orders.length === 1
+                        ? ""
+                        : "s"
+                } found.`,
+                "success"
+            );
+
+            orders.forEach(
+                function (order) {
+                    const card =
+                        document.createElement(
+                            "article"
+                        );
+
+                    card.className =
+                        "order-card";
+
+                    card.innerHTML = `
+                        <h3>
+                            ${escapeHtml(
+                                order.item ||
+                                "Order"
+                            )}
+                        </h3>
+
+                        <p>
+                            <strong>Order ID:</strong>
+                            ${escapeHtml(order.id)}
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong>
+
+                            <span class="status-badge">
+                                ${escapeHtml(
+                                    formatStatus(
+                                        order.currentStatus
+                                    )
+                                )}
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>Shopping date:</strong>
+                            ${escapeHtml(
+                                formatDate(
+                                    order.shoppingDate
+                                )
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Shopping time:</strong>
+                            ${escapeHtml(
+                                order.shoppingTime
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Address:</strong>
+                            ${escapeHtml(order.address)},
+                            ${escapeHtml(order.city)},
+                            ${escapeHtml(order.state)}
+                            -
+                            ${escapeHtml(order.pincode)}
+                        </p>
+
+                        <p>
+                            <strong>Assistant:</strong>
+                            ${escapeHtml(
+                                order.assistant?.name ||
+                                "Not assigned"
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Assistant phone:</strong>
+                            ${escapeHtml(
+                                order.assistant?.phonenumber ||
+                                "Not available"
+                            )}
+                        </p>
+
+                        <div class="order-actions">
+
+                            <button
+                                type="button"
+                                data-track="${escapeHtml(
+                                    order.id
+                                )}"
+                            >
+                                Track
+                            </button>
+
+                            <button
+                                type="button"
+                                data-confirm="${escapeHtml(
+                                    order.id
+                                )}"
+                            >
+                                Confirm Delivery
+                            </button>
+
+                        </div>
+                    `;
+
+                    container.appendChild(
+                        card
+                    );
+                }
+            );
+
+            container
+                .querySelectorAll(
+                    "[data-track]"
+                )
+                .forEach(
+                    function (button) {
+                        button.addEventListener(
+                            "click",
+                            function () {
+                                localStorage.setItem(
+                                    "currentOrderId",
+                                    this.dataset.track
+                                );
+
+                                window.location.href =
+                                    "orderUpdates.html";
+                            }
+                        );
+                    }
+                );
+
+            container
+                .querySelectorAll(
+                    "[data-confirm]"
+                )
+                .forEach(
+                    function (button) {
+                        button.addEventListener(
+                            "click",
+                            function () {
+                                localStorage.setItem(
+                                    "currentOrderId",
+                                    this.dataset.confirm
+                                );
+
+                                window.location.href =
+                                    "confirmation.html";
+                            }
+                        );
+                    }
+                );
+
+        } catch (error) {
+            console.error(
+                "Load orders error:",
+                error
+            );
+
+            setMessage(
+                "ordersMessage",
+                "Unable to connect to the server.",
+                "error"
+            );
+
+        } finally {
+            refreshButton.disabled = false;
         }
-
-        if (!/^\d{10}$/.test(data.mobile)) {
-            return "Mobile number must contain exactly 10 digits.";
-        }
-
-        const selectedDateTime =
-            new Date(`${data.date}T${data.time}`);
-
-        if (
-            Number.isNaN(
-                selectedDateTime.getTime()
-            )
-        ) {
-            return "Please select a valid shopping date and time.";
-        }
-
-        if (
-            selectedDateTime.getTime() <=
-            Date.now()
-        ) {
-            return "Shopping date and time must be in the future.";
-        }
-
-        return "";
     }
 
     document
@@ -892,7 +1245,7 @@
                 event.preventDefault();
 
                 const token =
-                    localStorage.getItem("token");
+                    getToken();
 
                 if (!token) {
                     redirectToLogin();
@@ -900,70 +1253,86 @@
                 }
 
                 const formData = {
-                    name: document
-                        .getElementById("name")
-                        .value
-                        .trim(),
+                    name:
+                        document
+                            .getElementById("name")
+                            .value
+                            .trim(),
 
-                    address: document
-                        .getElementById("address")
-                        .value
-                        .trim(),
+                    address:
+                        document
+                            .getElementById("address")
+                            .value
+                            .trim(),
 
-                    city: document
-                        .getElementById("city")
-                        .value
-                        .trim(),
+                    city:
+                        document
+                            .getElementById("city")
+                            .value
+                            .trim(),
 
-                    state: document
-                        .getElementById("state")
-                        .value
-                        .trim(),
+                    state:
+                        document
+                            .getElementById("state")
+                            .value
+                            .trim(),
 
-                    assistantId: document
-                        .getElementById(
-                            "assistantSelect"
-                        )
-                        .value,
+                    assistantId:
+                        document
+                            .getElementById(
+                                "assistantSelect"
+                            )
+                            .value,
 
-                    pincode: document
-                        .getElementById("pincode")
-                        .value
-                        .replace(/\D/g, ""),
+                    pincode:
+                        document
+                            .getElementById("pincode")
+                            .value
+                            .trim(),
 
-                    date: document
-                        .getElementById(
-                            "shopping-date"
-                        )
-                        .value,
+                    mobile:
+                        document
+                            .getElementById("mobile")
+                            .value
+                            .replace(/\D/g, ""),
 
-                    time: document
-                        .getElementById(
-                            "shopping-time"
-                        )
-                        .value,
+                    item:
+                        document
+                            .getElementById("item")
+                            .value
+                            .trim(),
 
-                    mobile: document
-                        .getElementById("mobile")
-                        .value
-                        .replace(/\D/g, ""),
+                    language:
+                        document
+                            .getElementById("language")
+                            .value,
 
-                    item: document
-                        .getElementById("item")
-                        .value
-                        .trim(),
+                    date:
+                        document
+                            .getElementById(
+                                "shoppingDate"
+                            )
+                            .value,
 
-                    language: document
-                        .getElementById("language")
-                        .value
+                    time:
+                        document
+                            .getElementById(
+                                "shoppingTime"
+                            )
+                            .value
                 };
 
-                const validationError =
-                    validateForm(formData);
-
-                if (validationError) {
-                    showMessage(
-                        validationError,
+                if (
+                    Object.values(formData)
+                        .some(
+                            function (value) {
+                                return !value;
+                            }
+                        )
+                ) {
+                    setMessage(
+                        "formMessage",
+                        "Please fill all fields and select an assistant.",
                         "error"
                     );
 
@@ -975,47 +1344,39 @@
                         "submitButton"
                     );
 
-                const resultSection =
-                    document.getElementById(
-                        "assistantResult"
-                    );
-
                 submitButton.disabled = true;
-
                 submitButton.textContent =
-                    "Booking assistant...";
+                    "Placing order...";
 
-                resultSection.style.display =
+                document.getElementById(
+                    "bookingResult"
+                ).style.display =
                     "none";
 
-                showMessage("", "error");
-
                 try {
-                    const response = await fetch(
-                        `${API_BASE_URL}/submit-details`,
-                        {
-                            method: "POST",
+                    const response =
+                        await fetch(
+                            `${API_BASE_URL}/submit-details`,
+                            {
+                                method: "POST",
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
 
-                                Authorization:
-                                    `Bearer ${token}`
-                            },
+                                    Authorization:
+                                        `Bearer ${token}`
+                                },
 
-                            body:
-                                JSON.stringify(formData)
-                        }
-                    );
+                                body:
+                                    JSON.stringify(
+                                        formData
+                                    )
+                            }
+                        );
 
                     const data =
                         await response.json();
-
-                    console.log(
-                        "Booking API response:",
-                        data
-                    );
 
                     if (
                         response.status === 401 ||
@@ -1026,35 +1387,18 @@
                     }
 
                     if (!response.ok) {
-                        showMessage(
+                        setMessage(
+                            "formMessage",
                             data.message ||
-                            "Unable to create request.",
+                            "Unable to place order.",
                             "error"
                         );
 
                         return;
                     }
 
-                    /*
-                     * Correct backend response:
-                     *
-                     * data.order.id
-                     * data.assistant.name
-                     * data.assistant.phonenumber
-                     * data.whatsappUrl
-                     */
-
                     const orderId =
                         data.order?.id || "";
-
-                    const assistantName =
-                        data.assistant?.name || "";
-
-                    const assistantPhone =
-                        data.assistant?.phonenumber || "";
-
-                    const whatsappUrl =
-                        data.whatsappUrl || "";
 
                     localStorage.setItem(
                         "currentOrderId",
@@ -1064,140 +1408,132 @@
                     document.getElementById(
                         "resultOrderId"
                     ).textContent =
-                        orderId || "Not available";
+                        orderId ||
+                        "Not available";
 
                     document.getElementById(
                         "resultAssistantName"
                     ).textContent =
-                        assistantName ||
+                        data.assistant?.name ||
                         "Not available";
 
                     document.getElementById(
                         "resultAssistantPhone"
                     ).textContent =
-                        assistantPhone ||
+                        data.assistant
+                            ?.phonenumber ||
                         "Not available";
 
-                    const whatsappLink =
-                        document.getElementById(
-                            "whatsappLink"
-                        );
+                    document.getElementById(
+                        "whatsappLink"
+                    ).href =
+                        data.whatsappUrl ||
+                        "#";
 
-                    if (whatsappUrl) {
-                        whatsappLink.href =
-                            whatsappUrl;
-
-                        whatsappLink.classList.remove(
-                            "disabled-link"
-                        );
-
-                        whatsappLink.textContent =
-                            "Contact on WhatsApp";
-                    } else {
-                        whatsappLink.href = "#";
-
-                        whatsappLink.classList.add(
-                            "disabled-link"
-                        );
-
-                        whatsappLink.textContent =
-                            "WhatsApp unavailable";
-                    }
-
-                    resultSection.style.display =
+                    document.getElementById(
+                        "bookingResult"
+                    ).style.display =
                         "block";
 
-                    showMessage(
+                    setMessage(
+                        "formMessage",
                         data.message ||
-                        "Assistant assigned successfully.",
+                        "Order placed successfully.",
                         "success"
                     );
 
-                    resultSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
+                    await loadExistingOrders();
 
                 } catch (error) {
                     console.error(
-                        "Booking request error:",
+                        "Place order error:",
                         error
                     );
 
-                    showMessage(
+                    setMessage(
+                        "formMessage",
                         "Unable to connect to the server.",
                         "error"
                     );
 
                 } finally {
-                    submitButton.disabled = false;
+                    submitButton.disabled =
+                        false;
 
                     submitButton.textContent =
-                        "Book Assistant";
+                        "Place Order";
                 }
             }
         );
 
-    function cancelForm() {
-        const confirmed = confirm(
-            "Clear all entered shopping details?"
+    document
+        .getElementById(
+            "findAssistantsButton"
+        )
+        .addEventListener(
+            "click",
+            loadAssistants
         );
 
-        if (!confirmed) {
-            return;
-        }
-
-        const savedName =
-            document.getElementById("name").value;
-
-        document
-            .getElementById("shoppingForm")
-            .reset();
-
-        document.getElementById(
-            "name"
-        ).value = savedName;
-
-        resetAssistantSelection();
-
-        document.getElementById(
-            "assistantResult"
-        ).style.display = "none";
-
-        const whatsappLink =
-            document.getElementById(
-                "whatsappLink"
-            );
-
-        whatsappLink.href = "#";
-
-        whatsappLink.classList.add(
-            "disabled-link"
+    document
+        .getElementById(
+            "refreshOrdersButton"
+        )
+        .addEventListener(
+            "click",
+            loadExistingOrders
         );
 
-        whatsappLink.textContent =
-            "Contact on WhatsApp";
+    document
+        .getElementById("clearButton")
+        .addEventListener(
+            "click",
+            function () {
+                const savedName =
+                    document
+                        .getElementById("name")
+                        .value;
 
-        showMessage("", "error");
+                document
+                    .getElementById(
+                        "shoppingForm"
+                    )
+                    .reset();
 
-        setMinimumShoppingDate();
-    }
+                document.getElementById(
+                    "name"
+                ).value =
+                    savedName;
 
-    function setMinimumShoppingDate() {
-        const now = new Date();
+                resetAssistantSelection();
 
-        const localDate =
-            new Date(
-                now.getTime() -
-                now.getTimezoneOffset() * 60000
-            )
-            .toISOString()
-            .split("T")[0];
+                setMessage(
+                    "formMessage",
+                    ""
+                );
 
-        document.getElementById(
-            "shopping-date"
-        ).min = localDate;
-    }
+                document.getElementById(
+                    "bookingResult"
+                ).style.display =
+                    "none";
+            }
+        );
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            function () {
+                const shouldLogout =
+                    confirm(
+                        "Are you sure you want to log out?"
+                    );
+
+                if (shouldLogout) {
+                    redirectToLogin();
+                }
+            }
+        );
 
     document
         .getElementById("city")
@@ -1213,8 +1549,25 @@
             resetAssistantSelection
         );
 
-    setMinimumShoppingDate();
-    fetchUserInfo();
+    document.getElementById(
+        "shoppingDate"
+    ).min =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async function () {
+            if (!getToken()) {
+                redirectToLogin();
+                return;
+            }
+
+            await fetchUserInfo();
+            await loadExistingOrders();
+        }
+    );
 </script>
 
 </body>
