@@ -299,7 +299,10 @@
                     required
                 >
 
-                <p class="help-text" id="orderIdHelp">
+                <p
+                    class="help-text"
+                    id="orderIdHelp"
+                >
                     Enter the MongoDB order ID assigned to you.
                 </p>
             </div>
@@ -316,10 +319,6 @@
                 >
                     <option value="">
                         Select order status
-                    </option>
-
-                    <option value="pending">
-                        Pending
                     </option>
 
                     <option value="packed">
@@ -373,7 +372,7 @@
                 ></textarea>
 
                 <p class="help-text">
-                    This field works only if your backend stores update notes.
+                    The current backend does not store this note, but it is safe to leave it here.
                 </p>
             </div>
 
@@ -406,11 +405,8 @@
 </main>
 
 <script>
-    /*
-      Leave empty when the frontend is served
-      by the same Express application.
-    */
-    const API_BASE_URL = "";
+    const API_BASE_URL =
+        "https://logistics-dwti.onrender.com";
 
     function showMessage(message, type = "") {
         const updateMessage =
@@ -425,7 +421,8 @@
             updateMessage.className =
                 "message error-message";
         } else {
-            updateMessage.className = "message";
+            updateMessage.className =
+                "message";
         }
     }
 
@@ -433,6 +430,7 @@
         localStorage.removeItem("assistantToken");
         localStorage.removeItem("assistantPhone");
         localStorage.removeItem("assistantName");
+        localStorage.removeItem("assistantId");
         localStorage.removeItem("selectedOrderId");
     }
 
@@ -470,14 +468,19 @@
     function formatStatus(status) {
         return status
             .replaceAll("_", " ")
-            .replace(/\b\w/g, function (letter) {
-                return letter.toUpperCase();
-            });
+            .replace(
+                /\b\w/g,
+                function (letter) {
+                    return letter.toUpperCase();
+                }
+            );
     }
 
     function loadSelectedOrder() {
         const selectedOrderId =
-            localStorage.getItem("selectedOrderId");
+            localStorage.getItem(
+                "selectedOrderId"
+            );
 
         if (!selectedOrderId) {
             return;
@@ -486,7 +489,9 @@
         const orderIdInput =
             document.getElementById("orderId");
 
-        orderIdInput.value = selectedOrderId;
+        orderIdInput.value =
+            selectedOrderId;
+
         orderIdInput.readOnly = true;
 
         document.getElementById(
@@ -497,7 +502,9 @@
 
     function clearForm() {
         const selectedOrderId =
-            localStorage.getItem("selectedOrderId");
+            localStorage.getItem(
+                "selectedOrderId"
+            );
 
         document
             .getElementById("updateForm")
@@ -509,10 +516,19 @@
 
         showMessage("");
 
+        const orderIdInput =
+            document.getElementById("orderId");
+
         if (selectedOrderId) {
-            document.getElementById(
-                "orderId"
-            ).value = selectedOrderId;
+            orderIdInput.value =
+                selectedOrderId;
+
+            orderIdInput.readOnly =
+                true;
+        } else {
+            orderIdInput.value = "";
+            orderIdInput.readOnly =
+                false;
         }
     }
 
@@ -527,7 +543,8 @@
                     );
 
                 if (!this.value) {
-                    previewArea.textContent = "";
+                    previewArea.textContent =
+                        "";
                     return;
                 }
 
@@ -592,7 +609,9 @@
                 }
 
                 if (
-                    !/^[a-fA-F0-9]{24}$/.test(orderId)
+                    !/^[a-fA-F0-9]{24}$/.test(
+                        orderId
+                    )
                 ) {
                     showMessage(
                         "Order ID must contain exactly 24 hexadecimal characters.",
@@ -609,39 +628,52 @@
                     return;
                 }
 
-                submitButton.disabled = true;
+                submitButton.disabled =
+                    true;
+
                 submitButton.textContent =
                     "Updating order...";
 
                 try {
-                    const response = await fetch(
-                        `${API_BASE_URL}/assistant_update`,
-                        {
-                            method: "POST",
+                    const response =
+                        await fetch(
+                            `${API_BASE_URL}/assistant_update`,
+                            {
+                                method: "POST",
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
 
-                                Authorization:
-                                    `Bearer ${token}`
-                            },
+                                    Authorization:
+                                        `Bearer ${token}`
+                                },
 
-                            body: JSON.stringify({
-                                orderId,
-                                status,
-                                note
-                            })
-                        }
-                    );
+                                body:
+                                    JSON.stringify({
+                                        orderId,
+                                        status,
+                                        note
+                                    })
+                            }
+                        );
 
-                    let data;
+                    let data = {};
 
                     try {
-                        data = await response.json();
-                    } catch {
-                        data = {};
+                        data =
+                            await response.json();
+                    } catch (error) {
+                        console.error(
+                            "Invalid JSON response:",
+                            error
+                        );
                     }
+
+                    console.log(
+                        "Update response:",
+                        data
+                    );
 
                     if (
                         response.status === 401 ||
@@ -675,7 +707,9 @@
                     );
 
                     document
-                        .getElementById("updateForm")
+                        .getElementById(
+                            "updateForm"
+                        )
                         .reset();
 
                     const orderIdInput =
@@ -683,7 +717,8 @@
                             "orderId"
                         );
 
-                    orderIdInput.readOnly = false;
+                    orderIdInput.readOnly =
+                        false;
 
                     document.getElementById(
                         "orderIdHelp"
@@ -694,10 +729,13 @@
                         "previewArea"
                     ).textContent = "";
 
-                    setTimeout(function () {
-                        window.location.href =
-                            "assistant-orders.html";
-                    }, 1200);
+                    setTimeout(
+                        function () {
+                            window.location.href =
+                                "assistant-orders.html";
+                        },
+                        1200
+                    );
 
                 } catch (error) {
                     console.error(
@@ -711,7 +749,9 @@
                     );
 
                 } finally {
-                    submitButton.disabled = false;
+                    submitButton.disabled =
+                        false;
+
                     submitButton.textContent =
                         "Submit Update";
                 }
@@ -740,9 +780,10 @@
         .addEventListener(
             "click",
             function () {
-                const shouldLogout = confirm(
-                    "Are you sure you want to log out?"
-                );
+                const shouldLogout =
+                    confirm(
+                        "Are you sure you want to log out?"
+                    );
 
                 if (shouldLogout) {
                     redirectToAssistantLogin();

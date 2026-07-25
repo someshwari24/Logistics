@@ -67,6 +67,11 @@
             font-weight: bold;
         }
 
+        .header-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         .refresh-button {
             background-color: #28a745;
         }
@@ -98,7 +103,12 @@
         }
 
         .top-section h2 {
+            margin-bottom: 5px;
             color: #3f51b5;
+        }
+
+        .top-section p {
+            color: #666;
         }
 
         .update-page-link {
@@ -135,6 +145,7 @@
         }
 
         .table-wrapper {
+            display: none;
             overflow-x: auto;
             background-color: white;
             border-radius: 10px;
@@ -143,7 +154,7 @@
 
         table {
             width: 100%;
-            min-width: 900px;
+            min-width: 1000px;
             border-collapse: collapse;
         }
 
@@ -187,6 +198,7 @@
             text-transform: capitalize;
         }
 
+        .status-assistant-assigned,
         .status-pending {
             color: #7a5400;
             background-color: #fff3cd;
@@ -231,6 +243,11 @@
 
         .update-button:hover {
             background-color: #218838;
+        }
+
+        .update-button:disabled {
+            background-color: #9e9e9e;
+            cursor: not-allowed;
         }
 
         .empty-state {
@@ -313,8 +330,9 @@
     <section class="top-section">
         <div>
             <h2>Your Assigned Orders</h2>
+
             <p>
-                View your orders and update their current delivery status.
+                View your assigned orders and update their delivery status.
             </p>
         </div>
 
@@ -341,6 +359,7 @@
                 <tr>
                     <th>Order ID</th>
                     <th>Customer</th>
+                    <th>Mobile</th>
                     <th>City</th>
                     <th>Item</th>
                     <th>Shopping Date</th>
@@ -359,6 +378,7 @@
         class="empty-state"
     >
         <h3>No assigned orders</h3>
+
         <p>
             No orders are currently assigned to your account.
         </p>
@@ -367,11 +387,8 @@
 </main>
 
 <script>
-    /*
-      Keep this empty when frontend and backend
-      are served from the same Express server.
-    */
-    const API_BASE_URL = "";
+    const API_BASE_URL =
+        "https://logistics-dwti.onrender.com";
 
     function showMessage(message, type = "") {
         const messageElement =
@@ -382,14 +399,18 @@
         if (type === "success") {
             messageElement.className =
                 "message success-message";
+
         } else if (type === "error") {
             messageElement.className =
                 "message error-message";
+
         } else if (type === "loading") {
             messageElement.className =
                 "message loading-message";
+
         } else {
-            messageElement.className = "message";
+            messageElement.className =
+                "message";
         }
     }
 
@@ -397,12 +418,15 @@
         localStorage.removeItem("assistantToken");
         localStorage.removeItem("assistantPhone");
         localStorage.removeItem("assistantName");
+        localStorage.removeItem("assistantId");
         localStorage.removeItem("selectedOrderId");
     }
 
     function redirectToAssistantLogin() {
         clearAssistantSession();
-        window.location.href = "assistant-login.html";
+
+        window.location.href =
+            "assistant-login.html";
     }
 
     function formatStatus(status) {
@@ -410,11 +434,14 @@
             return "Unknown";
         }
 
-        return status
+        return String(status)
             .replaceAll("_", " ")
-            .replace(/\b\w/g, function (letter) {
-                return letter.toUpperCase();
-            });
+            .replace(
+                /\b\w/g,
+                function (letter) {
+                    return letter.toUpperCase();
+                }
+            );
     }
 
     function getStatusClass(status) {
@@ -425,6 +452,7 @@
                 .replaceAll(" ", "-");
 
         const supportedClasses = [
+            "assistant-assigned",
             "pending",
             "packed",
             "shipped",
@@ -435,9 +463,15 @@
             "cancelled"
         ];
 
-        return supportedClasses.includes(normalizedStatus)
-            ? `status-${normalizedStatus}`
-            : "status-pending";
+        if (
+            supportedClasses.includes(
+                normalizedStatus
+            )
+        ) {
+            return `status-${normalizedStatus}`;
+        }
+
+        return "status-pending";
     }
 
     function formatDate(dateValue) {
@@ -448,7 +482,7 @@
         const date = new Date(dateValue);
 
         if (Number.isNaN(date.getTime())) {
-            return dateValue;
+            return String(dateValue);
         }
 
         return date.toLocaleDateString();
@@ -462,34 +496,84 @@
         const date = new Date(dateValue);
 
         if (Number.isNaN(date.getTime())) {
-            return dateValue;
+            return String(dateValue);
         }
 
         return date.toLocaleString();
     }
 
-    function createTextCell(value, className = "") {
-        const cell = document.createElement("td");
+    function createTextCell(
+        value,
+        className = ""
+    ) {
+        const cell =
+            document.createElement("td");
 
-        cell.textContent =
+        if (
             value === undefined ||
             value === null ||
             value === ""
-                ? "Not available"
-                : value;
+        ) {
+            cell.textContent =
+                "Not available";
+        } else {
+            cell.textContent =
+                String(value);
+        }
 
         if (className) {
-            cell.className = className;
+            cell.className =
+                className;
         }
 
         return cell;
     }
 
     function createOrderRow(order) {
-        const row = document.createElement("tr");
+        const row =
+            document.createElement("tr");
 
         const orderId =
-            order._id || order.orderId || "";
+            order._id ||
+            order.id ||
+            order.orderId ||
+            "";
+
+        const customerName =
+            order.name ||
+            order.customerName ||
+            order.customer?.name ||
+            "Not available";
+
+        const customerMobile =
+            order.mobile ||
+            order.customerMobile ||
+            order.customer?.mobile ||
+            "Not available";
+
+        const city =
+            order.city ||
+            order.customer?.city ||
+            "Not available";
+
+        const item =
+            order.item ||
+            order.items ||
+            "Not available";
+
+        const shoppingDate =
+            order.shoppingDate ||
+            order.date ||
+            order.createdAt;
+
+        const orderStatus =
+            order.currentStatus ||
+            order.status ||
+            "assistant_assigned";
+
+        const lastUpdated =
+            order.updatedAt ||
+            order.createdAt;
 
         row.appendChild(
             createTextCell(
@@ -500,21 +584,25 @@
 
         row.appendChild(
             createTextCell(
-                order.name ||
-                order.customerName ||
-                "Not available"
+                customerName
             )
         );
 
         row.appendChild(
             createTextCell(
-                order.city || "Not available"
+                customerMobile
             )
         );
 
         row.appendChild(
             createTextCell(
-                order.item || "Not available",
+                city
+            )
+        );
+
+        row.appendChild(
+            createTextCell(
+                item,
                 "item-cell"
             )
         );
@@ -522,8 +610,7 @@
         row.appendChild(
             createTextCell(
                 formatDate(
-                    order.date ||
-                    order.shoppingDate
+                    shoppingDate
                 )
             )
         );
@@ -535,17 +622,24 @@
             document.createElement("span");
 
         statusBadge.className =
-            `status-badge ${getStatusClass(order.status)}`;
+            `status-badge ${getStatusClass(orderStatus)}`;
 
         statusBadge.textContent =
-            formatStatus(order.status);
+            formatStatus(orderStatus);
 
-        statusCell.appendChild(statusBadge);
-        row.appendChild(statusCell);
+        statusCell.appendChild(
+            statusBadge
+        );
+
+        row.appendChild(
+            statusCell
+        );
 
         row.appendChild(
             createTextCell(
-                formatDateTime(order.updatedAt)
+                formatDateTime(
+                    lastUpdated
+                )
             )
         );
 
@@ -555,51 +649,88 @@
         const updateButton =
             document.createElement("button");
 
-        updateButton.type = "button";
-        updateButton.className = "update-button";
-        updateButton.textContent = "Update";
+        updateButton.type =
+            "button";
+
+        updateButton.className =
+            "update-button";
+
+        updateButton.textContent =
+            "Update";
+
+        if (!orderId) {
+            updateButton.disabled =
+                true;
+        }
 
         updateButton.addEventListener(
             "click",
             function () {
-                openUpdatePage(orderId);
+                openUpdatePage(
+                    orderId
+                );
             }
         );
 
-        actionCell.appendChild(updateButton);
-        row.appendChild(actionCell);
+        actionCell.appendChild(
+            updateButton
+        );
+
+        row.appendChild(
+            actionCell
+        );
 
         return row;
     }
 
     async function loadOrders() {
         const token =
-            localStorage.getItem("assistantToken");
+            localStorage.getItem(
+                "assistantToken"
+            );
 
         const tableBody =
-            document.getElementById("ordersTableBody");
+            document.getElementById(
+                "ordersTableBody"
+            );
 
         const tableWrapper =
-            document.getElementById("tableWrapper");
+            document.getElementById(
+                "tableWrapper"
+            );
 
         const emptyState =
-            document.getElementById("emptyState");
+            document.getElementById(
+                "emptyState"
+            );
 
         const refreshButton =
-            document.getElementById("refreshButton");
+            document.getElementById(
+                "refreshButton"
+            );
 
         if (!token) {
-            alert("Please log in as an assistant.");
+            alert(
+                "Please log in as an assistant."
+            );
+
             redirectToAssistantLogin();
             return;
         }
 
-        refreshButton.disabled = true;
-        refreshButton.textContent = "Loading...";
+        refreshButton.disabled =
+            true;
+
+        refreshButton.textContent =
+            "Loading...";
 
         tableBody.innerHTML = "";
-        tableWrapper.style.display = "none";
-        emptyState.style.display = "none";
+
+        tableWrapper.style.display =
+            "none";
+
+        emptyState.style.display =
+            "none";
 
         showMessage(
             "Loading assigned orders...",
@@ -607,24 +738,35 @@
         );
 
         try {
-            const response = await fetch(
-                `${API_BASE_URL}/assistant/orders`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`
-                    }
-                }
-            );
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/assistant/orders`,
+                    {
+                        method: "GET",
 
-            let data;
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+            let data = {};
 
             try {
-                data = await response.json();
-            } catch {
-                data = {};
+                data =
+                    await response.json();
+            } catch (error) {
+                console.error(
+                    "Invalid JSON response:",
+                    error
+                );
             }
+
+            console.log(
+                "Assigned orders response:",
+                data
+            );
 
             if (
                 response.status === 401 ||
@@ -653,25 +795,37 @@
                     ? data
                     : Array.isArray(data.orders)
                         ? data.orders
-                        : [];
+                        : Array.isArray(data.assignedOrders)
+                            ? data.assignedOrders
+                            : Array.isArray(data.data)
+                                ? data.data
+                                : [];
 
             if (orders.length === 0) {
                 showMessage("");
-                emptyState.style.display = "block";
+
+                emptyState.style.display =
+                    "block";
+
                 return;
             }
 
-            orders.forEach(function (order) {
-                tableBody.appendChild(
-                    createOrderRow(order)
-                );
-            });
+            orders.forEach(
+                function (order) {
+                    tableBody.appendChild(
+                        createOrderRow(order)
+                    );
+                }
+            );
 
-            tableWrapper.style.display = "block";
+            tableWrapper.style.display =
+                "block";
 
             showMessage(
                 `${orders.length} assigned order${
-                    orders.length === 1 ? "" : "s"
+                    orders.length === 1
+                        ? ""
+                        : "s"
                 } loaded.`,
                 "success"
             );
@@ -688,8 +842,11 @@
             );
 
         } finally {
-            refreshButton.disabled = false;
-            refreshButton.textContent = "Refresh";
+            refreshButton.disabled =
+                false;
+
+            refreshButton.textContent =
+                "Refresh";
         }
     }
 
@@ -699,6 +856,7 @@
                 "This order does not contain a valid order ID.",
                 "error"
             );
+
             return;
         }
 
@@ -712,20 +870,25 @@
     }
 
     document
-        .getElementById("refreshButton")
+        .getElementById(
+            "refreshButton"
+        )
         .addEventListener(
             "click",
             loadOrders
         );
 
     document
-        .getElementById("logoutButton")
+        .getElementById(
+            "logoutButton"
+        )
         .addEventListener(
             "click",
             function () {
-                const shouldLogout = confirm(
-                    "Are you sure you want to log out?"
-                );
+                const shouldLogout =
+                    confirm(
+                        "Are you sure you want to log out?"
+                    );
 
                 if (shouldLogout) {
                     redirectToAssistantLogin();
@@ -734,12 +897,15 @@
         );
 
     const savedAssistantName =
-        localStorage.getItem("assistantName");
+        localStorage.getItem(
+            "assistantName"
+        );
 
     document.getElementById(
         "assistantName"
     ).textContent =
-        savedAssistantName || "Assistant";
+        savedAssistantName ||
+        "Assistant";
 
     loadOrders();
 </script>
