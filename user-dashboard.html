@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -25,10 +26,10 @@
 
         header {
             position: relative;
-            background-color: #5c6bc0;
             padding: 18px 80px;
             color: white;
             text-align: center;
+            background-color: #5c6bc0;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
@@ -50,6 +51,10 @@
             font-size: 14px;
         }
 
+        .logout-btn:hover {
+            background-color: #b71c1c;
+        }
+
         .dashboard-container {
             width: calc(100% - 30px);
             max-width: 620px;
@@ -62,16 +67,16 @@
 
         .welcome-message {
             margin-bottom: 8px;
-            text-align: center;
             color: #3f51b5;
+            text-align: center;
             font-size: 21px;
             font-weight: bold;
         }
 
         .description {
             margin-bottom: 25px;
-            text-align: center;
             color: #666;
+            text-align: center;
             line-height: 1.5;
         }
 
@@ -139,6 +144,10 @@
             font-size: 14px;
         }
 
+        .find-assistant-btn:hover {
+            background-color: #3f51b5;
+        }
+
         .find-assistant-btn:disabled {
             background-color: #a7add4;
             cursor: not-allowed;
@@ -167,6 +176,10 @@
             font-size: 16px;
         }
 
+        .button:hover {
+            background-color: #218838;
+        }
+
         .button:disabled {
             background-color: #94c6a0;
             cursor: not-allowed;
@@ -174,6 +187,10 @@
 
         .cancel-btn {
             background-color: #dc3545;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c82333;
         }
 
         .message {
@@ -208,6 +225,7 @@
         .assistant-result p {
             margin: 7px 0;
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .result-actions {
@@ -227,8 +245,17 @@
             font-weight: bold;
         }
 
+        .result-link:hover {
+            opacity: 0.9;
+        }
+
         .secondary-link {
             background-color: #5c6bc0;
+        }
+
+        .disabled-link {
+            opacity: 0.6;
+            pointer-events: none;
         }
 
         @media (max-width: 650px) {
@@ -290,6 +317,7 @@
 
         <div class="form-group">
             <label for="name">Full Name</label>
+
             <input
                 type="text"
                 id="name"
@@ -300,6 +328,7 @@
 
         <div class="form-group">
             <label for="address">Complete Address</label>
+
             <textarea
                 id="address"
                 placeholder="Enter house number, street and locality"
@@ -308,8 +337,10 @@
         </div>
 
         <div class="form-row">
+
             <div class="form-group">
                 <label for="city">City</label>
+
                 <input
                     type="text"
                     id="city"
@@ -320,6 +351,7 @@
 
             <div class="form-group">
                 <label for="state">State</label>
+
                 <input
                     type="text"
                     id="state"
@@ -327,6 +359,7 @@
                     required
                 >
             </div>
+
         </div>
 
         <div class="form-group">
@@ -335,6 +368,7 @@
             </label>
 
             <div class="assistant-search-row">
+
                 <select
                     id="assistantSelect"
                     required
@@ -353,6 +387,7 @@
                 >
                     Find Assistants
                 </button>
+
             </div>
 
             <p
@@ -363,6 +398,7 @@
 
         <div class="form-group">
             <label for="pincode">Pincode</label>
+
             <input
                 type="text"
                 id="pincode"
@@ -374,8 +410,12 @@
         </div>
 
         <div class="form-row">
+
             <div class="form-group">
-                <label for="shopping-date">Shopping Date</label>
+                <label for="shopping-date">
+                    Shopping Date
+                </label>
+
                 <input
                     type="date"
                     id="shopping-date"
@@ -384,17 +424,22 @@
             </div>
 
             <div class="form-group">
-                <label for="shopping-time">Shopping Time</label>
+                <label for="shopping-time">
+                    Shopping Time
+                </label>
+
                 <input
                     type="time"
                     id="shopping-time"
                     required
                 >
             </div>
+
         </div>
 
         <div class="form-group">
             <label for="mobile">Mobile Number</label>
+
             <input
                 type="tel"
                 id="mobile"
@@ -406,7 +451,10 @@
         </div>
 
         <div class="form-group">
-            <label for="item">Items You Want to Purchase</label>
+            <label for="item">
+                Items You Want to Purchase
+            </label>
+
             <textarea
                 id="item"
                 placeholder="Example: Medicines, groceries, clothes"
@@ -415,7 +463,10 @@
         </div>
 
         <div class="form-group">
-            <label for="language">Preferred Language</label>
+            <label for="language">
+                Preferred Language
+            </label>
+
             <select id="language" required>
                 <option value="">Select a language</option>
                 <option value="English">English</option>
@@ -432,6 +483,7 @@
         </div>
 
         <div class="button-container">
+
             <button
                 type="submit"
                 class="button"
@@ -447,7 +499,9 @@
             >
                 Clear Form
             </button>
+
         </div>
+
     </form>
 
     <p
@@ -478,9 +532,10 @@
         </p>
 
         <div class="result-actions">
+
             <a
                 id="whatsappLink"
-                class="result-link"
+                class="result-link disabled-link"
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -489,18 +544,19 @@
             </a>
 
             <a
-                href="track order.html"
+                href="orderUpdates.html"
                 class="result-link secondary-link"
             >
                 Track Order
             </a>
 
             <a
-                href="confirmation page.html"
+                href="confirmation.html"
                 class="result-link secondary-link"
             >
                 Confirm Delivery
             </a>
+
         </div>
     </section>
 
@@ -557,15 +613,33 @@
                 );
             }
 
+            /*
+             * Supports both:
+             * { name: "User" }
+             * and
+             * { user: { name: "User" } }
+             */
+            const userName =
+                data.user?.name ||
+                data.name ||
+                localStorage.getItem("name") ||
+                localStorage.getItem("username") ||
+                "User";
+
             document.getElementById(
                 "username"
-            ).textContent = data.name || "User";
+            ).textContent = userName;
 
             document.getElementById(
                 "name"
-            ).value = data.name || "";
+            ).value = userName;
 
         } catch (error) {
+            console.error(
+                "Fetch user information error:",
+                error
+            );
+
             alert(
                 "Your session has expired. Please log in again."
             );
@@ -575,7 +649,11 @@
     }
 
     function logout() {
-        if (!confirm("Are you sure you want to log out?")) {
+        const confirmed = confirm(
+            "Are you sure you want to log out?"
+        );
+
+        if (!confirmed) {
             return;
         }
 
@@ -625,7 +703,8 @@
                 "assistantSearchMessage"
             );
 
-        const token = localStorage.getItem("token");
+        const token =
+            localStorage.getItem("token");
 
         if (!city || !state) {
             message.textContent =
@@ -644,11 +723,14 @@
         button.textContent = "Searching...";
 
         select.disabled = true;
+
         select.innerHTML = `
             <option value="">
                 Searching assistants...
             </option>
         `;
+
+        message.textContent = "";
 
         try {
             const url =
@@ -687,17 +769,37 @@
                 return;
             }
 
+            const assistants =
+                Array.isArray(data.assistants)
+                    ? data.assistants
+                    : [];
+
+            if (assistants.length === 0) {
+                select.innerHTML = `
+                    <option value="">
+                        No assistants available
+                    </option>
+                `;
+
+                message.textContent =
+                    "No available assistants found for this location.";
+
+                message.style.color = "#d32f2f";
+                return;
+            }
+
             select.innerHTML = `
                 <option value="">
                     Select an assistant
                 </option>
             `;
 
-            data.assistants.forEach((assistant) => {
+            assistants.forEach((assistant) => {
                 const option =
                     document.createElement("option");
 
-                option.value = assistant._id;
+                option.value =
+                    assistant._id || assistant.id;
 
                 option.textContent =
                     `${assistant.name} - ` +
@@ -709,12 +811,15 @@
             select.disabled = false;
 
             message.textContent =
-                `${data.assistants.length} assistant(s) available.`;
+                `${assistants.length} assistant(s) available.`;
 
             message.style.color = "#2e7d32";
 
         } catch (error) {
-            console.error(error);
+            console.error(
+                "Load assistants error:",
+                error
+            );
 
             select.innerHTML = `
                 <option value="">
@@ -758,14 +863,22 @@
             return "Mobile number must contain exactly 10 digits.";
         }
 
-        const selectedDate =
-            new Date(`${data.date}T00:00:00`);
+        const selectedDateTime =
+            new Date(`${data.date}T${data.time}`);
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        if (
+            Number.isNaN(
+                selectedDateTime.getTime()
+            )
+        ) {
+            return "Please select a valid shopping date and time.";
+        }
 
-        if (selectedDate < today) {
-            return "Shopping date cannot be in the past.";
+        if (
+            selectedDateTime.getTime() <=
+            Date.now()
+        ) {
+            return "Shopping date and time must be in the future.";
         }
 
         return "";
@@ -849,7 +962,11 @@
                     validateForm(formData);
 
                 if (validationError) {
-                    showMessage(validationError, "error");
+                    showMessage(
+                        validationError,
+                        "error"
+                    );
+
                     return;
                 }
 
@@ -858,13 +975,20 @@
                         "submitButton"
                     );
 
+                const resultSection =
+                    document.getElementById(
+                        "assistantResult"
+                    );
+
                 submitButton.disabled = true;
+
                 submitButton.textContent =
                     "Booking assistant...";
 
-                document.getElementById(
-                    "assistantResult"
-                ).style.display = "none";
+                resultSection.style.display =
+                    "none";
+
+                showMessage("", "error");
 
                 try {
                     const response = await fetch(
@@ -880,11 +1004,18 @@
                                     `Bearer ${token}`
                             },
 
-                            body: JSON.stringify(formData)
+                            body:
+                                JSON.stringify(formData)
                         }
                     );
 
-                    const data = await response.json();
+                    const data =
+                        await response.json();
+
+                    console.log(
+                        "Booking API response:",
+                        data
+                    );
 
                     if (
                         response.status === 401 ||
@@ -904,36 +1035,77 @@
                         return;
                     }
 
+                    /*
+                     * Correct backend response:
+                     *
+                     * data.order.id
+                     * data.assistant.name
+                     * data.assistant.phonenumber
+                     * data.whatsappUrl
+                     */
+
+                    const orderId =
+                        data.order?.id || "";
+
+                    const assistantName =
+                        data.assistant?.name || "";
+
+                    const assistantPhone =
+                        data.assistant?.phonenumber || "";
+
+                    const whatsappUrl =
+                        data.whatsappUrl || "";
+
                     localStorage.setItem(
                         "currentOrderId",
-                        data.orderId
+                        orderId
                     );
 
                     document.getElementById(
                         "resultOrderId"
                     ).textContent =
-                        data.orderId || "Not available";
+                        orderId || "Not available";
 
                     document.getElementById(
                         "resultAssistantName"
                     ).textContent =
-                        data.assistantName ||
+                        assistantName ||
                         "Not available";
 
                     document.getElementById(
                         "resultAssistantPhone"
                     ).textContent =
-                        data.assistantPhone ||
+                        assistantPhone ||
                         "Not available";
 
-                    document.getElementById(
-                        "whatsappLink"
-                    ).href =
-                        data.whatsappLink || "#";
+                    const whatsappLink =
+                        document.getElementById(
+                            "whatsappLink"
+                        );
 
-                    document.getElementById(
-                        "assistantResult"
-                    ).style.display = "block";
+                    if (whatsappUrl) {
+                        whatsappLink.href =
+                            whatsappUrl;
+
+                        whatsappLink.classList.remove(
+                            "disabled-link"
+                        );
+
+                        whatsappLink.textContent =
+                            "Contact on WhatsApp";
+                    } else {
+                        whatsappLink.href = "#";
+
+                        whatsappLink.classList.add(
+                            "disabled-link"
+                        );
+
+                        whatsappLink.textContent =
+                            "WhatsApp unavailable";
+                    }
+
+                    resultSection.style.display =
+                        "block";
 
                     showMessage(
                         data.message ||
@@ -941,8 +1113,16 @@
                         "success"
                     );
 
+                    resultSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
                 } catch (error) {
-                    console.error(error);
+                    console.error(
+                        "Booking request error:",
+                        error
+                    );
 
                     showMessage(
                         "Unable to connect to the server.",
@@ -951,6 +1131,7 @@
 
                 } finally {
                     submitButton.disabled = false;
+
                     submitButton.textContent =
                         "Book Assistant";
                 }
@@ -958,7 +1139,11 @@
         );
 
     function cancelForm() {
-        if (!confirm("Clear all entered shopping details?")) {
+        const confirmed = confirm(
+            "Clear all entered shopping details?"
+        );
+
+        if (!confirmed) {
             return;
         }
 
@@ -969,8 +1154,9 @@
             .getElementById("shoppingForm")
             .reset();
 
-        document.getElementById("name").value =
-            savedName;
+        document.getElementById(
+            "name"
+        ).value = savedName;
 
         resetAssistantSelection();
 
@@ -978,17 +1164,39 @@
             "assistantResult"
         ).style.display = "none";
 
+        const whatsappLink =
+            document.getElementById(
+                "whatsappLink"
+            );
+
+        whatsappLink.href = "#";
+
+        whatsappLink.classList.add(
+            "disabled-link"
+        );
+
+        whatsappLink.textContent =
+            "Contact on WhatsApp";
+
         showMessage("", "error");
+
         setMinimumShoppingDate();
     }
 
     function setMinimumShoppingDate() {
-        const today =
-            new Date().toISOString().split("T")[0];
+        const now = new Date();
+
+        const localDate =
+            new Date(
+                now.getTime() -
+                now.getTimezoneOffset() * 60000
+            )
+            .toISOString()
+            .split("T")[0];
 
         document.getElementById(
             "shopping-date"
-        ).min = today;
+        ).min = localDate;
     }
 
     document
