@@ -587,11 +587,7 @@
                         .getElementById("status")
                         .value;
 
-                const note =
-                    document
-                        .getElementById("note")
-                        .value
-                        .trim();
+                // The current backend does not store the optional note.
 
                 const submitButton =
                     document.getElementById(
@@ -637,9 +633,9 @@
                 try {
                     const response =
                         await fetch(
-                            `${API_BASE_URL}/assistant_update`,
+                            `${API_BASE_URL}/assistant/orders/${orderId}/status`,
                             {
-                                method: "POST",
+                                method: "PATCH",
 
                                 headers: {
                                     "Content-Type":
@@ -651,9 +647,7 @@
 
                                 body:
                                     JSON.stringify({
-                                        orderId,
-                                        status,
-                                        note
+                                        status
                                     })
                             }
                         );
